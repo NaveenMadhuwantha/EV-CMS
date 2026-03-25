@@ -1,42 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import RegSidebar from '../components/RegSidebar';
 import RegStepper from '../components/RegStepper';
 import ReviewConfirmForm from '../components/ReviewConfirmForm';
 
 const RegisterStep4 = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-dm bg-[#050F1C]">
-      {/* LEFT PANEL - Hidden on success */}
-      {!isSuccess && (
-        <RegSidebar 
-          image="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=900&q=80"
-          stepTag="Final Step"
-          tagColor="text-[#8B5CF6]"
-          tagBg="bg-[#8B5CF6]/10"
-          tagBorder="border-[#8B5CF6]/25"
-          title={<><span className="text-white">Almost</span><br /><span className="text-[#8B5CF6]">There!</span><br /><span className="text-white">Review All</span></>}
-          description="Take a moment to review all your information before completing registration. You can go back to edit any section."
-          opacity="opacity-25"
-        />
-      )}
+    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-dm bg-[#050F1C] overflow-x-hidden">
+      <RegSidebar 
+        image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1000"
+        title={<><span className="text-white">Review Your</span><br /><span className="text-[#00D4AA]">Ecosystem</span><br /><span className="text-white">Deployment</span></>}
+        stepTag="Finalization Module"
+        tagColor="text-[#00D4AA]"
+        tagBg="bg-[#00D4AA]/10"
+        tagBorder="border-[#00D4AA]/20"
+        description="Verify your configuration before deploying your profile to the Sri Lankan EV Grid."
+      />
 
-      {/* RIGHT PANEL - Full width on success */}
-      <div className={`flex-1 flex items-center justify-center px-6 py-12 overflow-y-auto ${isSuccess ? 'w-full px-4' : ''}`}>
-        <div className={`w-full ${isSuccess ? 'max-w-none' : 'max-w-[500px]'}`}>
-          {!isSuccess && (
-            <div className="mb-10">
-              <RegStepper currentStep={4} />
-            </div>
-          )}
-          <ReviewConfirmForm onComplete={() => setIsSuccess(true)} />
+      <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
+        <div className="w-full max-w-[500px] animate-fade-in">
+          <div className="mb-12">
+            <RegStepper currentStep={4} />
+          </div>
+          <div className="relative">
+             <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#00D4AA]/5 blur-[100px] pointer-events-none"></div>
+             <ReviewConfirmForm onBack={() => navigate('/register/step3')} onComplete={() => console.log('Done')} />
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-
 
 export default RegisterStep4;

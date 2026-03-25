@@ -68,3 +68,16 @@ export const resetPassword = async (email) => {
     throw error;
   }
 };
+
+/**
+ * Log out the current user
+ * @returns {Promise<void>}
+ */
+export const logout = async () => {
+  try {
+    await auth.signOut();
+  } catch (error) {
+    console.error("Firebase Logout Error:", error);
+    throw error;
+  }
+};

@@ -8,26 +8,26 @@ const RegisterStep3 = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-dm bg-[#050F1C]">
-      {/* LEFT PANEL */}
+    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-dm bg-[#050F1C] overflow-x-hidden">
       <RegSidebar 
-        image="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=900&q=80"
-        stepTag="Vehicle Verification"
-        tagColor="text-[#F59E0B]"
-        tagBg="bg-[#F59E0B]/10"
-        tagBorder="border-[#F59E0B]/25"
-        title={<><span className="text-white">Vehicle</span><br /><span className="text-[#F59E0B]">Details</span><br /><span className="text-white">Required</span></>}
-        description="Providing accurate vehicle information helps us match you with the right chargers and calculate charging costs effectively."
-        opacity="opacity-30"
+        image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1000"
+        title={<><span className="text-white">Configure Your</span><br /><span className="text-amber-500">Hardware</span><br /><span className="text-white">Node</span></>}
+        stepTag="Vehicle Configuration"
+        tagColor="text-amber-500"
+        tagBg="bg-amber-500/10"
+        tagBorder="border-amber-500/20"
+        description="Register your electric vehicle to optimize charging schedules and find compatible power ports."
       />
 
-      {/* RIGHT PANEL */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 overflow-y-auto">
-        <div className="w-full max-w-[500px]">
-          <div className="mb-10">
+      <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
+        <div className="w-full max-w-[500px] animate-fade-in">
+          <div className="mb-12">
             <RegStepper currentStep={3} />
           </div>
-          <EVDetailsForm onBack={() => navigate('/register/step2')} onNext={() => navigate('/register/step4')} />
+          <div className="relative">
+             <div className="absolute -top-20 -left-20 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none"></div>
+             <EVDetailsForm onBack={() => navigate('/register/step2')} onNext={() => navigate('/register/step4')} />
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ProvPricingForm = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const fields = ['rateHour', 'minBooking', 'openTime', 'closeTime', 'bankName', 'accountNo', 'accountName'];
@@ -39,8 +38,8 @@ const ProvPricingForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const e_s = {};
-    if (!formData.rateHour || parseFloat(formData.rateHour) < 100) e_s.rateHour = 'Rate required (Min 100)';
-    if (!formData.is247 && formData.operatingDays.length === 0) e_s.operatingDays = 'Select at least one operating day';
+    if (!formData.rateHour || parseFloat(formData.rateHour) < 100) e_s.rateHour = 'Min rate: 100 LKR';
+    if (!formData.is247 && formData.operatingDays.length === 0) e_s.operatingDays = 'Select operating days';
     ['bankName', 'accountNo', 'accountName'].forEach(f => { if (!formData[f]) e_s[f] = 'Required'; });
 
     setErrors(e_s);
@@ -52,152 +51,137 @@ const ProvPricingForm = () => {
     }
   };
 
-  const renderSection = (icon, title, optional = false) => (
-    <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest pb-3 mb-4 text-[#475569] border-b border-white/7">
-      <span className="text-[#A78BFA]">{icon}</span> {title} {!optional && <span className="text-rose-500">*</span>}
-    </div>
-  );
-
   const rate = parseFloat(formData.rateHour);
   const showPreview = !isNaN(rate) && rate >= 100;
 
   return (
-    <div className="w-full font-dm animate-[fadeUp_0.4s_ease_both]">
-      <div className="mb-7">
-        <div className="text-[11px] font-semibold uppercase tracking-widest mb-2 text-[#475569]">Step 4 of 5</div>
-        <h2 className="font-syne text-3xl font-extrabold text-white mb-2">Pricing & Schedule</h2>
-        <p className="text-sm text-[#64748B]">Set your charging rates and operating hours.</p>
+    <div className="w-full animate-fade-up">
+      <div className="mb-8 p-6 rounded-[32px] glass-panel border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-transparent pointer-events-none"></div>
+        <div className="text-[10px] font-black uppercase tracking-[4px] mb-3 text-purple-400 opacity-80">Phase 04 · Economics</div>
+        <h2 className="font-syne text-3xl font-extrabold text-white mb-2 leading-none uppercase tracking-tight">Financial Hub</h2>
+        <p className="text-sm text-[#8AAFC8] font-medium leading-relaxed">Establish your pricing model and secure payout gateway.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          {renderSection('💰', 'Charging Rates')}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Rate per Hour (LKR) <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">💰</span>
-                <input name="rateHour" type="number" min="100" placeholder="e.g. 700" value={formData.rateHour} onChange={handleChange} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${errors.rateHour ? 'border-rose-500/50 bg-rose-500/5' : formData.rateHour ? 'border-[#A78BFA]/45' : ''}`}/>
+      <form onSubmit={handleSubmit} className="space-y-10 pb-10">
+        
+        {/* Market Pricing */}
+        <div className="space-y-6">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Rate (LKR / Hour)</label>
+                 <div className="relative group">
+                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-xl opacity-40">💰</div>
+                    <input name="rateHour" type="number" min="100" placeholder="700" className={`w-full py-5 px-6 pl-14 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all ${errors.rateHour ? 'border-rose-500/30' : 'border-white/10 focus:border-purple-400'}`} value={formData.rateHour} onChange={handleChange} />
+                 </div>
               </div>
-              {errors.rateHour && <div className="text-[11px] mt-1 text-rose-500">⚠ {errors.rateHour}</div>}
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Min. Booking (hrs) <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none z-10">⏱</span>
-                <select name="minBooking" value={formData.minBooking} onChange={handleChange} className="w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none appearance-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5">
-                  <option value="0.5" className="bg-[#0A0F1E]">0.5 hour</option>
-                  <option value="1" className="bg-[#0A0F1E]">1 hour</option>
-                  <option value="1.5" className="bg-[#0A0F1E]">1.5 hours</option>
-                  <option value="2" className="bg-[#0A0F1E]">2 hours</option>
-                </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#475569] pointer-events-none">▾</span>
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Booking Threshold</label>
+                 <div className="relative group">
+                    <select name="minBooking" className="w-full py-5 px-6 bg-white/5 border-2 border-white/10 rounded-[24px] text-white font-bold outline-none appearance-none focus:border-purple-400 transition-all" value={formData.minBooking} onChange={handleChange}>
+                       <option value="0.5" className="bg-[#050F1C]">0.5 Hour Min</option>
+                       <option value="1" className="bg-[#050F1C]">1 Hour Min</option>
+                       <option value="2" className="bg-[#050F1C]">2 Hour Min</option>
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">▼</div>
+                 </div>
               </div>
-            </div>
-          </div>
+           </div>
 
-          {showPreview && (
-            <div className="rounded-xl p-4 mb-4 bg-[#A78BFA]/10 border border-[#A78BFA]/20 animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="text-[11px] font-bold uppercase tracking-wider mb-3 text-[#A78BFA]">Estimated Earnings Preview</div>
-              <div className="flex justify-between text-sm mb-1.5"><span className="text-[#94A3B8]">Rate per hour</span><span className="text-white font-semibold">LKR {rate.toFixed(0)}/hr</span></div>
-              <div className="flex justify-between text-sm mb-1.5"><span className="text-[#94A3B8]">Platform commission (15%)</span><span className="text-rose-400 font-semibold">− LKR {(rate * 0.15).toFixed(0)}</span></div>
-              <div className="h-[1px] bg-white/10 my-2"></div>
-              <div className="flex justify-between text-sm"><span className="text-white font-semibold">Your hourly payout</span><span className="text-emerald-400 font-bold text-base">LKR {(rate * 0.85).toFixed(0)}/hr</span></div>
-            </div>
-          )}
+           {showPreview && (
+              <div className="glass-panel p-6 rounded-[32px] border-purple-500/20 animate-fade-in relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-bl-[100px]"></div>
+                 <div className="text-[10px] font-black uppercase tracking-[3px] mb-4 text-purple-400">Profit Projection</div>
+                 <div className="space-y-3">
+                    <div className="flex justify-between text-sm"><span className="text-[#8AAFC8]">Market Rate</span><span className="text-white font-bold">LKR {rate.toFixed(0)}</span></div>
+                    <div className="flex justify-between text-sm"><span className="text-[#8AAFC8]">Network Fee (15%)</span><span className="text-rose-400 font-bold">- LKR {(rate * 0.15).toFixed(0)}</span></div>
+                    <div className="h-px bg-white/5 my-2"></div>
+                    <div className="flex justify-between text-sm font-black"><span className="text-white">Hourly Yield</span><span className="text-emerald-400 text-lg">LKR {(rate * 0.85).toFixed(0)}</span></div>
+                 </div>
+              </div>
+           )}
 
-          <div className="mb-4">
-            <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Payment Methods Accepted</label>
-            <div className="flex flex-wrap gap-2">
-              {['Card', 'Mobile Pay', 'Cash', 'Online'].map(m => (
-                <div key={m} onClick={() => toggleArrayItem('paymentMethods', m)} className={`border-[1.5px] rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-wider cursor-pointer transition-all ${formData.paymentMethods.includes(m) ? 'border-[#A78BFA] bg-[#A78BFA]/15 text-[#A78BFA] shadow-[0_0_12px_rgba(167,139,250,0.18)]' : 'border-white/10 bg-white/3 text-[#94A3B8] hover:border-[#A78BFA]/35 hover:text-[#EFF6FF]'}`}>
-                  {m === 'Card' ? '💳' : m === 'Mobile Pay' ? '📱' : m === 'Cash' ? '💵' : '🌐'} {m}
-                </div>
-              ))}
-            </div>
-          </div>
+           <div className="space-y-4">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Supported Protocols</label>
+              <div className="flex flex-wrap gap-2">
+                 {['Card', 'Mobile Pay', 'Cash', 'Online'].map(m => (
+                   <div key={m} onClick={() => toggleArrayItem('paymentMethods', m)} className={`px-5 py-3 rounded-full border-2 cursor-pointer transition-all text-[11px] font-black tracking-widest uppercase ${formData.paymentMethods.includes(m) ? 'border-purple-400 bg-purple-400/10 text-purple-400 shadow-[0_0_20px_rgba(167,139,250,0.1)]' : 'border-white/10 bg-white/5 text-[#4E7A96] hover:border-white/30'}`}>
+                      {m}
+                   </div>
+                 ))}
+              </div>
+           </div>
         </div>
 
-        <div>
-          {renderSection('📅', 'Operating Days')}
-          <div className="grid grid-cols-7 gap-1.5 mb-2">
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-              <div key={d} onClick={() => toggleArrayItem('operatingDays', d)} className={`border-[1.5px] rounded-lg py-2 text-center text-[11px] font-bold uppercase tracking-wider cursor-pointer transition-all ${formData.operatingDays.includes(d) ? 'border-[#A78BFA] bg-[#A78BFA]/15 text-[#A78BFA] shadow-[0_0_12px_rgba(167,139,250,0.18)]' : 'border-white/10 bg-white/3 text-[#94A3B8] hover:border-[#A78BFA]/35 hover:text-[#EFF6FF]'}`}>
-                {d}
+        {/* Operational Availability */}
+        <div className="space-y-6">
+           <div className="space-y-4">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Grid Presence (Days)</label>
+              <div className="grid grid-cols-4 xs:grid-cols-7 gap-2">
+                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+                   <div key={d} onClick={() => toggleArrayItem('operatingDays', d)} className={`py-3 rounded-xl border-2 text-center text-[10px] font-black uppercase tracking-tighter cursor-pointer transition-all ${formData.operatingDays.includes(d) ? 'border-purple-400 bg-purple-400/10 text-purple-400' : 'border-white/10 bg-white/5 text-[#4E7A96] hover:border-white/20'}`}>
+                      {d}
+                   </div>
+                 ))}
               </div>
-            ))}
-          </div>
-          {errors.operatingDays && <div className="text-[11px] mb-3 text-rose-500">⚠ {errors.operatingDays}</div>}
+           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Opening Time <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">🌅</span>
-                <input name="openTime" type="time" value={formData.openTime} onChange={handleChange} disabled={formData.is247} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${formData.is247 ? 'opacity-50' : ''}`} style={{ colorScheme: 'dark' }}/>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Start Cycle</label>
+                 <input name="openTime" type="time" value={formData.openTime} onChange={handleChange} disabled={formData.is247} className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all [color-scheme:dark] ${formData.is247 ? 'opacity-30' : 'border-white/10 focus:border-purple-400'}`} />
               </div>
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Closing Time <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">🌙</span>
-                <input name="closeTime" type="time" value={formData.closeTime} onChange={handleChange} disabled={formData.is247} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${formData.is247 ? 'opacity-50' : ''}`} style={{ colorScheme: 'dark' }}/>
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">End Cycle</label>
+                 <input name="closeTime" type="time" value={formData.closeTime} onChange={handleChange} disabled={formData.is247} className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all [color-scheme:dark] ${formData.is247 ? 'opacity-30' : 'border-white/10 focus:border-purple-400'}`} />
               </div>
-            </div>
-          </div>
+           </div>
 
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10 cursor-pointer" onClick={() => setFormData(p => ({ ...p, is247: !p.is247 }))}>
-            <div className={`w-[22px] h-[22px] min-w-[22px] rounded-md border-[1.5px] flex items-center justify-center transition-all ${formData.is247 ? 'bg-[#A78BFA] border-[#A78BFA] shadow-[0_0_10px_rgba(167,139,250,0.4)]' : 'bg-white/5 border-white/15'}`}>
-              {formData.is247 && <span className="text-[#0A0F1E] text-xs font-bold leading-none">✓</span>}
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-white">Open 24/7</div>
-              <div className="text-xs text-[#475569]">Station is available around the clock, all days</div>
-            </div>
-          </div>
+           <div onClick={() => setFormData(p => ({ ...p, is247: !p.is247 }))} className={`p-6 rounded-[32px] border-2 cursor-pointer transition-all flex items-center gap-5 ${formData.is247 ? 'border-blue-400 bg-blue-400/5' : 'border-white/10 bg-white/5 hover:border-white/20'}`}>
+              <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all ${formData.is247 ? 'bg-blue-400 border-blue-400 text-[#050F1C]' : 'border-white/10'}`}>
+                 {formData.is247 && <span className="font-black">✓</span>}
+              </div>
+              <div>
+                 <div className="text-sm font-black text-white uppercase tracking-widest">Constant Uplink (24/7)</div>
+                 <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-wider">Operational throughout all cycles</div>
+              </div>
+           </div>
         </div>
 
-        <div>
-          {renderSection('🏦', 'Bank Account (for Payouts)')}
-          <div className="rounded-xl p-3 mb-4 flex items-start gap-2 bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-sm mt-0.5">🔒</span>
-            <div className="text-[12px] text-[#94A3B8]">Bank details are encrypted and used only for transferring your earnings.</div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Bank Name <span className="text-rose-500">*</span></label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none z-10">🏦</span>
-              <select name="bankName" value={formData.bankName} onChange={handleChange} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none appearance-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${errors.bankName ? 'border-rose-500/50 bg-rose-500/5' : formData.bankName ? 'border-[#A78BFA]/45' : ''}`}>
-                <option value="" className="bg-[#0A0F1E]">Select bank</option>
-                {["Bank of Ceylon", "People's Bank", "Commercial Bank", "Sampath Bank", "HNB", "NSB", "Seylan Bank", "Nations Trust Bank", "Pan Asia Bank", "Union Bank"].map(b => <option key={b} value={b} className="bg-[#0A0F1E]">{b}</option>)}
-              </select>
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#475569] pointer-events-none">▾</span>
-            </div>
-            {errors.bankName && <div className="text-[11px] mt-1 text-rose-500">⚠ Required</div>}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Account Number <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">🔢</span>
-                <input name="accountNo" type="text" placeholder="e.g. 1234567890" value={formData.accountNo} onChange={handleChange} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${errors.accountNo ? 'border-rose-500/50 bg-rose-500/5' : formData.accountNo ? 'border-[#A78BFA]/45' : ''}`}/>
+        {/* Financial Gateway */}
+        <div className="space-y-6">
+           <div className="space-y-2">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Payout Settlement Entity</label>
+              <div className="relative group">
+                 <select name="bankName" className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none appearance-none transition-all ${errors.bankName ? 'border-rose-500/30' : 'border-white/10 focus:border-purple-400'}`} value={formData.bankName} onChange={handleChange}>
+                    <option value="" className="bg-[#050F1C]">Select Payout Node</option>
+                    {["Bank of Ceylon", "People's Bank", "Commercial Bank", "Sampath Bank", "HNB", "NSB", "Seylan Bank", "Nations Trust Bank", "Pan Asia Bank", "Union Bank"].map(b => <option key={b} value={b} className="bg-[#050F1C]">{b}</option>)}
+                 </select>
+                 <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">▼</div>
               </div>
-              {errors.accountNo && <div className="text-[11px] mt-1 text-rose-500">⚠ Required</div>}
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider mb-2 text-[#475569]">Account Name <span className="text-rose-500">*</span></label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base pointer-events-none">👤</span>
-                <input name="accountName" type="text" placeholder="Holder name" value={formData.accountName} onChange={handleChange} className={`w-full py-3 px-4 pl-10 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-[#A78BFA]/60 focus:bg-[#A78BFA]/5 ${errors.accountName ? 'border-rose-500/50 bg-rose-500/5' : formData.accountName ? 'border-[#A78BFA]/45' : ''}`}/>
+           </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Network Interface ID (Account)</label>
+                 <input name="accountNo" type="text" placeholder="Settlement ID" className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all ${errors.accountNo ? 'border-rose-500/30' : 'border-white/10 focus:border-purple-400'}`} value={formData.accountNo} onChange={handleChange} />
               </div>
-              {errors.accountName && <div className="text-[11px] mt-1 text-rose-500">⚠ Required</div>}
-            </div>
-          </div>
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Account Holder Key</label>
+                 <input name="accountName" type="text" placeholder="Entity Name" className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all ${errors.accountName ? 'border-rose-500/30' : 'border-white/10 focus:border-purple-400'}`} value={formData.accountName} onChange={handleChange} />
+              </div>
+           </div>
+           
+           <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-center">
+              <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-[2px]">Encrypted Financial Layer Active 🛡️</p>
+           </div>
         </div>
 
-        <div className="flex gap-4 pt-4 font-syne">
-          <button type="button" onClick={() => navigate('/provider/register/step3')} className="px-8 py-3 rounded-xl font-semibold text-sm bg-white/5 border border-white/10 text-[#94A3B8] hover:text-white transition-all">← Back</button>
-          <button type="submit" disabled={loading} className="flex-1 py-3 rounded-xl font-bold text-[15px] bg-gradient-to-br from-[#3B82F6] to-[#2563EB] text-white shadow-[0_6px_24px_rgba(59,130,246,0.3)] hover:-translate-y-0.5 transition-all">Review & Submit →</button>
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+           <button type="button" onClick={() => navigate('/provider/register/step3')} className="order-2 sm:order-1 px-10 py-5 rounded-[24px] font-black uppercase tracking-[2px] transition-all bg-white/5 border-2 border-white/10 text-white hover:bg-white/10">← Prev</button>
+           <button type="submit" className="order-1 sm:order-2 flex-1 py-5 rounded-[24px] font-black uppercase tracking-[3px] transition-all bg-gradient-to-br from-purple-500 to-indigo-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-purple-500/20 group flex items-center justify-center gap-3">
+              Final System Audit <span className="group-hover:translate-x-2 transition-transform">→</span>
+           </button>
         </div>
       </form>
     </div>

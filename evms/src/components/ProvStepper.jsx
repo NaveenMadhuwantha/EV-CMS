@@ -1,59 +1,81 @@
 import React from 'react';
 
-const ProvStepper = ({ activeStep }) => {
+const ProvStepper = ({ activeStep = 1 }) => {
   const steps = [
-    { num: 1, label: 'Account', sub: 'Credentials' },
-    { num: 2, label: 'Business', sub: 'Company Info' },
-    { num: 3, label: 'Station', sub: 'Details' },
-    { num: 4, label: 'Pricing', sub: '& Schedule' },
-    { num: 5, label: 'Confirm', sub: 'Review' }
+    { num: 1, label: 'Account' },
+    { num: 2, label: 'Business' },
+    { num: 3, label: 'Station' },
+    { num: 4, label: 'Pricing' },
+    { num: 5, label: 'Review' }
   ];
 
+  const colors = {
+    1: '#3B82F6',
+    2: '#10B981',
+    3: '#F59E0B',
+    4: '#8B5CF6',
+    5: '#3B82F6'
+  };
+
+  const currentColor = colors[activeStep] || '#3B82F6';
+
   return (
-    <div className="flex items-center mb-10 w-full overflow-x-auto no-scrollbar pb-2">
-      {steps.map((s, i) => (
-        <React.Fragment key={s.num}>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div 
-              className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${
-                activeStep > s.num 
-                  ? 'border-[#3B82F6] bg-[#3B82F6] text-white shadow-[0_0_14px_rgba(59,130,246,0.35)]' 
-                  : activeStep === s.num
-                  ? (activeStep === 4 ? 'border-[#A78BFA] bg-[#A78BFA]/12 text-[#A78BFA] shadow-[0_0_14px_rgba(167,139,250,0.25)]'
-                    : activeStep === 3 ? 'border-[#FBBF24] bg-[#FBBF24]/12 text-[#FBBF24] shadow-[0_0_14px_rgba(251,191,36,0.25)]'
-                    : activeStep === 2 ? 'border-[#34D399] bg-[#34D399]/12 text-[#34D399] shadow-[0_0_14px_rgba(52,211,153,0.25)]'
-                    : 'border-[#3B82F6] bg-[#3B82F6]/12 text-[#3B82F6] shadow-[0_0_14px_rgba(59,130,246,0.25)]')
-                  : 'bg-white/4 border-white/10 text-[#475569]'
-              }`}
-            >
-              {activeStep > s.num ? '✓' : s.num}
-            </div>
-            <div className="hidden sm:block">
-              <div 
-                className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                  activeStep > s.num ? 'text-[#3B82F6]' 
-                  : activeStep === s.num ? (activeStep === 4 ? 'text-[#A78BFA]' : activeStep === 3 ? 'text-[#FBBF24]' : activeStep === 2 ? 'text-[#34D399]' : 'text-[#3B82F6]')
-                  : 'text-[#475569]'
-                }`}
-              >
-                {s.label}
+    <div className="w-full flex-col font-dm relative z-10">
+      <div className="flex items-center justify-between mb-8 px-4 relative lg:px-0">
+        {steps.map((s, i) => {
+          const isActive = activeStep === s.num;
+          const isCompleted = activeStep > s.num;
+
+          return (
+            <React.Fragment key={s.num}>
+              <div className="flex flex-col items-center relative z-10 group">
+                {/* Visual Circle */}
+                <div 
+                   className={`w-10 h-10 lg:w-12 lg:h-12 rounded-2xl flex items-center justify-center text-sm lg:text-base font-black border-2 transition-all duration-500 transform ${
+                      isActive
+                        ? `shadow-[0_0_30px_rgba(59,130,246,0.3)] scale-110` 
+                        : isCompleted
+                        ? 'text-[#050F1C]'
+                        : 'bg-white/5 border-white/10 text-[#4E7A96]'
+                   }`}
+                   style={{ 
+                      borderColor: (isActive || isCompleted) ? colors[s.num] : 'rgba(255,255,255,0.1)',
+                      backgroundColor: isActive ? `${colors[s.num]}20` : isCompleted ? colors[s.num] : 'rgba(255,255,255,0.05)',
+                      color: isActive ? colors[s.num] : isCompleted ? '#050F1C' : '#4E7A96'
+                   }}
+                >
+                  {isCompleted ? '✓' : s.num}
+                </div>
+
+                {/* Subtitle / Title (Responsive Desktop) */}
+                <div className={`absolute -bottom-7 w-20 text-center whitespace-nowrap transition-all duration-300 ${
+                   isActive ? 'font-bold text-[10px] lg:text-[11px] opacity-100 translate-y-0' 
+                   : 'text-[#4E7A96] font-semibold text-[10px] opacity-0 lg:opacity-60 -translate-y-1'
+                }`} style={{ color: isActive ? colors[s.num] : '#4E7A96' }}>
+                   {s.label}
+                </div>
               </div>
-              <div 
-                className={`text-[11px] whitespace-nowrap transition-colors ${
-                  activeStep > s.num ? 'text-[#60A5FA]' : activeStep === s.num ? 'text-[#94A3B8]' : 'text-[#475569]'
-                }`}
-              >
-                {activeStep > s.num ? 'Done' : s.sub}
-              </div>
-            </div>
-          </div>
-          {i < steps.length - 1 && (
-            <div className={`h-[2px] flex-1 min-w-[20px] mx-2 rounded-full transition-colors duration-500 ${
-              activeStep > s.num ? 'bg-[#3B82F6] shadow-[0_0_6px_rgba(59,130,246,0.4)]' : 'bg-white/5'
-            }`}></div>
-          )}
-        </React.Fragment>
-      ))}
+
+              {/* Progress Line */}
+              {i < steps.length - 1 && (
+                <div className="flex-1 h-0.5 mx-2 lg:mx-4 relative overflow-hidden bg-white/10 rounded-full top-[1px]">
+                  <div 
+                    className="absolute inset-0 transition-all duration-700 ease-in-out shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                    style={{ 
+                       width: isCompleted ? '100%' : '0%',
+                       backgroundColor: colors[s.num]
+                    }}
+                  />
+                  {isActive && <div className="absolute inset-0 animate-pulse transition-opacity" style={{ backgroundColor: `${currentColor}30` }}></div>}
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+      
+      {/* Divider */}
+      <div className="h-px bg-white/5 mx-2 mb-10 mt-12 hidden lg:block" />
     </div>
   );
 };

@@ -5,12 +5,16 @@ import ProvBusinessForm from '../components/ProvBusinessForm';
 
 const ProviderRegisterStep2 = () => {
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#0A0F1E] text-white selection:bg-[#34D399]/30">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#050F1C] text-white selection:bg-emerald-500/30 overflow-x-hidden">
       <ProvSidebar activeStep={2} />
-      <div className="flex-1 overflow-y-auto px-6 py-12 flex justify-center items-start lg:items-center">
-        <div className="w-full max-w-[500px] fade-up">
+      
+      <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
+        <div className="w-full max-w-[500px] animate-fade-in text-left">
           <ProvStepper activeStep={2} />
-          <ProvBusinessForm />
+          <div className="relative">
+             <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/5 blur-[100px] pointer-events-none"></div>
+             <ProvBusinessForm />
+          </div>
         </div>
       </div>
     </div>

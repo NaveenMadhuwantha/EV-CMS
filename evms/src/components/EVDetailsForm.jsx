@@ -48,7 +48,6 @@ const EVDetailsForm = ({ onNext, onBack }) => {
     if (!formData.vehicleMake) newErrors.vehicleMake = true;
     if (!formData.plateNo.trim()) newErrors.plateNo = true;
     if (!formData.connectorType) newErrors.connectorType = true;
-    if (formData.batteryCapacity && parseFloat(formData.batteryCapacity) <= 0) newErrors.batteryCapacity = true;
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -64,108 +63,99 @@ const EVDetailsForm = ({ onNext, onBack }) => {
   const brands = ["Tesla", "BYD", "Nissan", "Hyundai", "Kia", "Toyota", "BMW", "Audi", "Volkswagen", "MG", "Tata", "Chery", "Other"];
   const years = Array.from({ length: 11 }, (_, i) => 2025 - i);
 
-  const inputBase = "w-full py-3 px-4 pl-12 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-amber-500/50 focus:bg-amber-500/5 placeholder:text-gray-500";
-  const labelBase = "block text-[11px] font-semibold uppercase tracking-wider mb-2 text-gray-500";
-  const sectionBase = "flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest pb-3 mb-5 border-b border-white/5 text-gray-500 font-dm";
-
   return (
-    <div className="w-full animate-[fadeInUp_0.4s_ease_both]">
-      <div className="mb-8">
-        <div className="text-[11px] font-semibold uppercase tracking-widest mb-2 text-gray-500">Step 3 of 4</div>
-        <h2 className="font-syne text-3xl font-extrabold text-white mb-2">Your EV Details</h2>
-        <p className="text-sm text-gray-400">Register your electric vehicle for the correct charging setup.</p>
+    <div className="w-full animate-fade-up">
+      <div className="mb-8 p-6 rounded-[32px] glass-panel border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-transparent pointer-events-none"></div>
+        <div className="text-[10px] font-black uppercase tracking-[4px] mb-3 text-amber-500 opacity-80">Phase 03 · Hardware</div>
+        <h2 className="font-syne text-3xl font-extrabold text-white mb-2 leading-none uppercase tracking-tight">EV Ecosystem</h2>
+        <p className="text-sm text-[#8AAFC8] font-medium leading-relaxed">Register your electric vehicle for the correct charging setup.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Type */}
-        <div>
-          <div className={sectionBase}><span className="text-amber-500">🚗</span> Vehicle Type *</div>
-          <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
+      <form onSubmit={handleSubmit} className="space-y-10 pb-10">
+        
+        {/* Vehicle Classification */}
+        <div className="space-y-4">
+          <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Vehicle Class</label>
+          <div className="grid grid-cols-2 xs:grid-cols-3 gap-3">
             {vehicleTypes.map(t => (
-              <div key={t.id} onClick={() => selectType(t.id)} className={`border rounded-2xl p-4 text-center cursor-pointer transition-all bg-white/5 hover:border-[#00D4AA]/40 hover:bg-[#00D4AA]/5 ${formData.vehicleType === t.id ? 'border-[#00D4AA] bg-[#00D4AA]/10 shadow-[0_0_20px_rgba(0,212,170,0.15)]' : 'border-white/10'}`}>
-                <div className="text-3xl mb-1">{t.icon}</div>
-                <div className="text-[10px] font-bold uppercase text-white/70">{t.id}</div>
+              <div key={t.id} onClick={() => selectType(t.id)} className={`group relative h-28 rounded-[28px] flex flex-col items-center justify-center transition-all duration-300 border-2 cursor-pointer
+                ${formData.vehicleType === t.id ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-white/10 bg-white/5 hover:border-white/20 hover:scale-[1.02]'}
+              `}>
+                <div className={`text-3xl mb-2 transition-transform duration-300 ${formData.vehicleType === t.id ? 'scale-110' : 'group-hover:scale-110'}`}>{t.icon}</div>
+                <div className={`text-[10px] font-black uppercase tracking-widest ${formData.vehicleType === t.id ? 'text-amber-500' : 'text-[#4E7A96]'}`}>{t.id}</div>
               </div>
             ))}
           </div>
-          {errors.vehicleType && <p className="text-[11px] mt-2 text-rose-500">⚠ Please select a vehicle type</p>}
+          {errors.vehicleType && <p className="ml-4 text-[11px] font-bold text-rose-400">Please select a class</p>}
         </div>
 
-        {/* Details */}
-        <div>
-          <div className={sectionBase}><span className="text-amber-500">⚙</span> Vehicle Details</div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 font-dm">
-            <div>
-              <label className={labelBase}>Make / Brand *</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none z-10">🏭</span>
-                <select id="vehicleMake" className={`${inputBase} appearance-none pr-10 ${errors.vehicleMake ? 'border-rose-500/50 bg-rose-500/5' : ''}`} value={formData.vehicleMake} onChange={handleInputChange}>
-                  <option value="" className="bg-[#050F1C]">Select brand</option>
-                  {brands.map(b => <option key={b} value={b} className="bg-[#050F1C]">{b}</option>)}
-                </select>
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs pointer-events-none text-gray-500">▾</span>
+        {/* Technical Specifications */}
+        <div className="space-y-6">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Manufacturer</label>
+                 <div className="relative group">
+                    <select id="vehicleMake" className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none appearance-none transition-all ${errors.vehicleMake ? 'border-rose-500/30' : 'border-white/10 focus:border-amber-500'}`} value={formData.vehicleMake} onChange={handleInputChange}>
+                       <option value="" className="bg-[#050F1C]">Select maker</option>
+                       {brands.map(b => <option key={b} value={b} className="bg-[#050F1C]">{b}</option>)}
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-focus-within:text-amber-500">▼</div>
+                 </div>
               </div>
-            </div>
-            <div>
-              <label className={labelBase}>Model</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">🚘</span>
-                <input id="vehicleModel" type="text" placeholder="e.g. Model 3" className={inputBase} value={formData.vehicleModel} onChange={handleInputChange} />
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Model Identifier</label>
+                 <input id="vehicleModel" type="text" placeholder="e.g. Model Y" className="w-full py-5 px-6 bg-white/5 border-2 border-white/10 rounded-[24px] text-white font-bold outline-none focus:border-amber-500 transition-all" value={formData.vehicleModel} onChange={handleInputChange} />
               </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div className="font-dm">
-              <label className={labelBase}>Year</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none z-10">📅</span>
-                <select id="vehicleYear" className={`${inputBase} appearance-none pr-10`} value={formData.vehicleYear} onChange={handleInputChange}>
-                  <option value="" className="bg-[#050F1C]">Select year</option>
-                  {years.map(y => <option key={y} value={y} className="bg-[#050F1C]">{y}</option>)}
-                </select>
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs pointer-events-none text-gray-500">▾</span>
+           </div>
+
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Production Year</label>
+                 <div className="relative group">
+                    <select id="vehicleYear" className="w-full py-5 px-6 bg-white/5 border-2 border-white/10 rounded-[24px] text-white font-bold outline-none appearance-none focus:border-amber-500 transition-all font-dm" value={formData.vehicleYear} onChange={handleInputChange}>
+                       <option value="" className="bg-[#050F1C]">Select year</option>
+                       {years.map(y => <option key={y} value={y} className="bg-[#050F1C]">{y}</option>)}
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-focus-within:text-amber-500">▼</div>
+                 </div>
               </div>
-            </div>
-            <div>
-              <label className={labelBase}>Battery Capacity (kWh)</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">🔋</span>
-                <input id="batteryCapacity" type="number" step="0.1" min="0" placeholder="e.g. 60" className={`${inputBase} ${errors.batteryCapacity ? 'border-rose-500/50 bg-rose-500/5' : ''}`} value={formData.batteryCapacity} onChange={handleInputChange} />
+              <div className="space-y-2">
+                 <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Battery Capacity (kWh)</label>
+                 <input id="batteryCapacity" type="number" step="0.1" placeholder="e.g. 75.0" className="w-full py-5 px-6 bg-white/5 border-2 border-white/10 rounded-[24px] text-white font-bold outline-none focus:border-amber-500 transition-all" value={formData.batteryCapacity} onChange={handleInputChange} />
               </div>
-            </div>
-          </div>
-          <div>
-            <label className={labelBase}>Number Plate *</label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">🔢</span>
-              <input id="plateNo" type="text" placeholder="e.g. CAB 1234" className={`${inputBase} uppercase ${errors.plateNo ? 'border-rose-500/50 bg-rose-500/5' : ''}`} value={formData.plateNo} onChange={handleInputChange} />
-            </div>
-            {errors.plateNo && <p className="text-[11px] mt-1.5 text-rose-500">⚠ Number plate required</p>}
-          </div>
+           </div>
+
+           <div className="space-y-2">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Vehicle License Plate</label>
+              <input id="plateNo" type="text" placeholder="e.g. CBA-1234" className={`w-full py-5 px-6 bg-white/5 border-2 rounded-[24px] text-white font-bold outline-none transition-all uppercase placeholder:normal-case ${errors.plateNo ? 'border-rose-500/30' : 'border-white/10 focus:border-amber-500'}`} value={formData.plateNo} onChange={handleInputChange} />
+           </div>
         </div>
 
-        {/* Connector */}
-        <div>
-          <div className={sectionBase}><span className="text-amber-500">🔌</span> Connector Type *</div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {connectorTypes.map(c => (
-              <div key={c.id} onClick={() => selectConnector(c.id)} className={`border rounded-2xl p-4 text-center cursor-pointer transition-all bg-white/5 hover:border-[#00D4AA]/40 hover:bg-[#00D4AA]/5 ${formData.connectorType === c.id ? 'border-[#00D4AA] bg-[#00D4AA]/10' : 'border-white/10'}`}>
-                <div className="text-2xl mb-1">{c.icon}</div>
-                <div className={`text-[10px] font-bold transition-colors ${formData.connectorType === c.id ? 'text-[#00D4AA]' : 'text-white/50'}`}>{c.id}</div>
-              </div>
-            ))}
-          </div>
-          {errors.connectorType && <p className="text-[11px] mt-2 text-rose-500">⚠ Please select a connector type</p>}
+        {/* Charging Connection */}
+        <div className="space-y-4">
+           <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Port Standard</label>
+           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {connectorTypes.map(c => (
+                <div key={c.id} onClick={() => selectConnector(c.id)} className={`h-24 rounded-[24px] flex flex-col items-center justify-center transition-all duration-300 border-2 cursor-pointer bg-white/5
+                  ${formData.connectorType === c.id ? 'border-[#00D4AA] bg-[#00D4AA]/10 shadow-[0_0_20px_rgba(0,212,170,0.15)]' : 'border-white/10 hover:border-white/20'}
+                `}>
+                  <div className={`text-2xl mb-1 transition-transform ${formData.connectorType === c.id ? 'scale-110' : ''}`}>{c.icon}</div>
+                  <div className={`text-[10px] font-black tracking-widest uppercase ${formData.connectorType === c.id ? 'text-[#00D4AA]' : 'text-[#4E7A96]'}`}>{c.id}</div>
+                </div>
+              ))}
+           </div>
+           {errors.connectorType && <p className="ml-4 text-[11px] font-bold text-rose-400">Port specification required</p>}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 pt-2 font-syne">
-          <button type="button" onClick={onBack} className="order-2 sm:order-1 px-8 py-4 rounded-xl font-bold text-sm transition-all bg-white/5 border border-white/10 text-gray-400 hover:border-[#00D4AA]/30 hover:text-white">← Back</button>
-          <button type="submit" className="order-1 sm:order-2 flex-1 py-4 rounded-xl font-bold text-sm transition-all shadow-[0_6px_24px_rgba(0,212,170,0.3)] bg-gradient-to-br from-[#00D4AA] to-[#00A882] text-[#050F1C] hover:-translate-y-0.5 hover:shadow-[0_10px_32px_rgba(0,212,170,0.4)]">Review & Confirm →</button>
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button type="button" onClick={onBack} className="order-2 sm:order-1 px-10 py-5 rounded-[24px] font-black uppercase tracking-[2px] transition-all bg-white/5 border-2 border-white/10 text-white hover:bg-white/10">← Back</button>
+          <button type="submit" className="order-1 sm:order-2 flex-1 py-5 rounded-[24px] font-black uppercase tracking-[3px] transition-all bg-gradient-to-br from-amber-500 to-orange-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-amber-500/20 group">Finalize Data <span className="group-hover:translate-x-2 transition-transform ml-1">→</span></button>
         </div>
       </form>
     </div>
   );
 };
-
 
 export default EVDetailsForm;
