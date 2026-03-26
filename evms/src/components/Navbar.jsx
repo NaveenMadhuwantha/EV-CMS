@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { logout } from '../services/authService';
-import { Zap, LayoutDashboard, Fuel, Network, BarChart3, User, LogOut, Power, AlertTriangle } from 'lucide-react';
+import { Zap, LayoutDashboard, Fuel, Map as MapIcon, BarChart3, User, LogOut, Power } from 'lucide-react';
 
 const Navbar = () => {
   const { user, profile } = useAuth();
@@ -25,38 +25,38 @@ const Navbar = () => {
   if (!user) return null;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050F1C]/40 backdrop-blur-2xl border-b border-white/5 lg:px-12 px-6 py-5 selection:bg-blue-500/20">
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050F1C]/60 backdrop-blur-3xl border-b border-white/5 lg:px-12 px-6 py-5 selection:bg-blue-500/30 font-inter shadow-sm">
+      <div className="max-w-[1440px] mx-auto flex items-center justify-between">
         
         {/* Brand System */}
         <Link to="/dashboard" className="flex items-center gap-4 group">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#00D4AA] to-blue-500 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+          <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#00D4AA] to-blue-500 shadow-xl group-hover:scale-110 transition-transform duration-500">
             <Zap className="w-6 h-6 text-white fill-white/20" />
           </div>
-          <div className="hidden sm:block">
-            <div className="font-syne text-xl font-black text-white tracking-tight leading-none">VoltWay</div>
-            <div className="text-[9px] text-[#4E7A96] font-black uppercase tracking-[3px] mt-1 opacity-60">National Grid</div>
+          <div className="hidden sm:block font-manrope">
+            <div className="text-xl font-extrabold text-white tracking-tight leading-none uppercase">VoltWay</div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1.5 opacity-60">Charging System</div>
           </div>
         </Link>
 
         {/* Global Navigation Nodes */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12 font-manrope">
           {[
             { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
             { label: 'Stations', path: '/stations', icon: Fuel },
-            { label: 'Network', path: '/network', icon: Network },
+            { label: 'Map', path: '/map', icon: MapIcon },
             { label: 'Analytics', path: '/analytics', icon: BarChart3 }
           ].map((link) => (
             <Link 
               key={link.label}
               to={link.path} 
-              className={`text-[10px] font-black uppercase tracking-[3px] transition-all hover:text-white relative group flex items-center gap-2
+              className={`text-[12px] font-extrabold uppercase tracking-widest transition-all hover:text-white relative group flex items-center gap-2.5
                 ${activeLink(link.path) ? 'text-white' : 'text-[#4E7A96]'}
               `}
             >
-              <link.icon className={`w-3.5 h-3.5 ${activeLink(link.path) ? 'text-blue-400' : 'text-[#4E7A96] group-hover:text-white'}`} />
+              <link.icon className={`w-4 h-4 ${activeLink(link.path) ? 'text-[#00D4AA]' : 'text-[#3a5a7a] group-hover:text-white'} transition-all`} strokeWidth={2.5} />
               {link.label}
-              <span className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-500 transition-all duration-300
+              <span className={`absolute -bottom-3 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#00D4AA] shadow-[0_0_8px_#00D4AA] transition-all duration-300
                 ${activeLink(link.path) ? 'opacity-100 scale-100' : 'opacity-0 scale-0 group-hover:opacity-40 group-hover:scale-100'}
               `}></span>
             </Link>
@@ -64,48 +64,48 @@ const Navbar = () => {
         </div>
 
         {/* Identity & Session Control */}
-        <div className="relative">
+        <div className="relative font-inter">
           <div 
-            className="flex items-center gap-4 pl-4 pr-1.5 py-1.5 rounded-2xl glass-panel border border-white/5 hover:border-white/20 transition-all cursor-pointer group"
+            className="flex items-center gap-4 pl-5 pr-2 py-2 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all cursor-pointer group shadow-sm hover:bg-white/[0.05]"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="text-right hidden sm:block">
-              <div className="text-[11px] font-black text-white uppercase tracking-tight leading-none group-hover:text-blue-400 transition-colors">
+            <div className="text-right hidden sm:block font-manrope">
+              <div className="text-[13px] font-extrabold text-white tracking-tight leading-none group-hover:text-[#00D4AA] transition-colors uppercase">
                 {profile?.fullName || profile?.businessName || user.email.split('@')[0]}
               </div>
-              <div className="text-[8px] text-[#4E7A96] font-black uppercase tracking-[2px] mt-1">
-                Node {localStorage.getItem('user_role')?.toUpperCase() || 'MEMBER'}
+              <div className="text-[9px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1.5 opacity-60">
+                ROLE: {localStorage.getItem('user_role')?.toUpperCase() || 'USER'}
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-white font-black overflow-hidden group-hover:border-blue-500/50 transition-all">
+            <div className="w-11 h-11 rounded-[1.25rem] bg-slate-900 border border-white/10 flex items-center justify-center text-white font-extrabold overflow-hidden group-hover:border-[#00D4AA]/40 transition-all shadow-inner ring-4 ring-transparent group-hover:ring-[#00D4AA]/5">
               {user.photoURL ? (
-                <img src={user.photoURL} alt="Node" className="w-full h-full object-cover" />
+                <img src={user.photoURL} alt="User" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               ) : (
-                <span className="text-sm">{(profile?.fullName || user.email)[0].toUpperCase()}</span>
+                <span className="text-lg font-extrabold font-manrope text-white">{(profile?.fullName || user.email)[0].toUpperCase()}</span>
               )}
             </div>
           </div>
 
-          {/* Identity Dropdown Logic */}
+          {/* Identity Dropdown */}
           {showDropdown && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)}></div>
-              <div className="absolute right-0 mt-4 w-64 rounded-[32px] glass-panel bg-[#061221] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-3 z-50 animate-fade-down overflow-hidden">
+              <div className="absolute right-0 mt-5 w-64 rounded-3xl bg-[#0a1628]/95 border border-white/10 shadow-2xl p-3 z-50 animate-fade-up backdrop-blur-3xl overflow-hidden font-manrope">
                 <Link 
                   to="/profile" 
-                  className="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-colors text-[#8AAFC8] hover:text-white group"
+                  className="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/[0.05] transition-all text-[#8AAFC8] hover:text-white group"
                   onClick={() => setShowDropdown(false)}
                 >
-                  <User className="w-5 h-5 text-[#4E7A96] group-hover:text-blue-400" />
-                  <span className="text-[10px] font-black uppercase tracking-[3px]">System Profile</span>
+                  <User className="w-5 h-5 text-[#4E7A96] group-hover:text-[#00D4AA] transition-colors" strokeWidth={2.5} />
+                  <span className="text-[12px] font-extrabold uppercase tracking-widest">My Profile</span>
                 </Link>
                 <div className="h-px bg-white/5 my-2 mx-3" />
                 <button 
                   onClick={() => { setShowDropdown(false); setShowLogoutConfirm(true); }}
-                  className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-rose-500/10 transition-colors text-rose-400 group"
+                  className="w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-red-500/10 transition-all text-red-400 hover:text-red-300 group text-left"
                 >
-                  <LogOut className="w-5 h-5 opacity-70 group-hover:opacity-100" />
-                  <span className="text-[10px] font-black uppercase tracking-[3px]">Purge Session</span>
+                  <LogOut className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" strokeWidth={2.5} />
+                  <span className="text-[12px] font-extrabold uppercase tracking-widest">Logout</span>
                 </button>
               </div>
             </>
@@ -113,29 +113,30 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Logic Purge Confirmation */}
+      {/* Logout Confirmation */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#050F1C]/90 backdrop-blur-xl animate-fade-in">
-          <div className="glass-panel border-white/5 rounded-[48px] p-10 max-w-sm w-full shadow-[0_0_100px_rgba(0,0,0,0.5)] animate-scale-up border-2 border-dashed border-white/10">
-            <div className="w-20 h-20 rounded-[32px] bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-10 shadow-2xl">
-               <Power className="w-10 h-10" />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-8 bg-[#050F1C]/95 backdrop-blur-2xl animate-fade-in font-inter">
+          <div className="bg-[#0a1628]/80 border-2 border-dashed border-white/10 rounded-[3rem] p-12 max-w-sm w-full shadow-2xl animate-fade-up">
+            <div className="w-20 h-20 rounded-[2.5rem] bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-10 shadow-inner group relative">
+               <Power className="w-10 h-10 group-hover:animate-pulse transition-all" strokeWidth={2.5} />
+               <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full -z-10 animate-pulse"></div>
             </div>
-            <h3 className="font-syne text-2xl font-black text-white text-center mb-4 uppercase tracking-tighter">Exit Node?</h3>
-            <p className="text-center text-[#4E7A96] font-medium text-sm mb-12 leading-relaxed">
-              Terminating your connection will disconnect all active grid telemetry modules. Confirm session purge?
+            <h3 className="font-manrope text-3xl font-extrabold text-white text-center mb-4 tracking-tighter uppercase leading-none">Confirm Logout?</h3>
+            <p className="text-center text-[#8AAFC8] font-medium text-[15px] mb-12 leading-relaxed px-2 opacity-80">
+              Are you sure you want to end your current session? You will need to log in again to access the dashboard.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4 font-manrope">
               <button 
                 onClick={handleLogout}
-                className="w-full py-5 rounded-2xl bg-rose-500 text-white font-black text-[10px] uppercase tracking-[4px] shadow-2xl hover:bg-rose-600 active:scale-95 transition-all"
+                className="w-full py-5 rounded-2xl bg-red-500 text-white font-extrabold text-[12px] uppercase tracking-widest shadow-xl shadow-red-500/10 hover:brightness-110 active:scale-95 transition-all"
               >
-                Confirm Purge
+                Yes, Logout
               </button>
               <button 
                 onClick={() => setShowLogoutConfirm(false)}
-                className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-[#4E7A96] font-black text-[10px] uppercase tracking-[4px] hover:text-white transition-all"
+                className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-[#4E7A96] font-extrabold text-[12px] uppercase tracking-widest hover:text-white hover:bg-white/10 transition-all shadow-sm"
               >
-                Abort Protocol
+                Cancel
               </button>
             </div>
           </div>

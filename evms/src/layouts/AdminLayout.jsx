@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Zap, LayoutDashboard, BarChart3, Map as MapIcon, 
   Fuel, Calendar, Users, Receipt, PieChart, 
-  Search, Bell, Settings, Menu, ChevronRight, User
+  Search, Bell, Settings, Menu
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -11,60 +11,60 @@ const Sidebar = () => {
   const active = (path) => location.pathname === path;
 
   const NavItem = ({ to, icon: Icon, label, badge }) => (
-    <Link to={to} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative ${
-      active(to) ? 'bg-[#00d2b4]/10 text-[#00d2b4] font-medium' : 'text-[#7a9bbf] hover:bg-[#00d2b4]/5 hover:text-white'
+    <Link to={to} className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group relative font-inter mb-1 ${
+      active(to) ? 'bg-[#00d2b4]/10 text-[#00d2b4] font-extrabold shadow-sm shadow-[#00d2b4]/5' : 'text-[#4E7A96] hover:bg-[#00d2b4]/5 hover:text-white'
     }`}>
-      <Icon className={`w-4 h-4 ${active(to) ? 'text-[#00d2b4]' : 'group-hover:text-white'}`} />
-      <span className="text-[14px]">{label}</span>
-      {badge && <span className="ml-auto bg-[#00d2b4] text-[#050c14] text-[10px] font-bold px-2 py-0.5 rounded-full">{badge}</span>}
-      {active(to) && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#00d2b4] rounded-r shadow-[0_0_8px_#00d2b4]" />}
+      <Icon className={`w-4.5 h-4.5 transition-colors ${active(to) ? 'text-[#00d2b4]' : 'group-hover:text-white'}`} strokeWidth={2.5} />
+      <span className={`text-[13px] uppercase tracking-widest ${active(to) ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{label}</span>
+      {badge && <span className="ml-auto bg-[#00d2b4] text-[#050c14] text-[9px] font-black px-2 py-0.5 rounded-lg uppercase shadow-sm">{badge}</span>}
+      {active(to) && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#00d2b4] rounded-r-full shadow-[0_0_12px_#00d2b4]" />}
     </Link>
   );
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-[#0a1628] border-r border-[#00d2b4]/10 flex flex-col z-[100]">
-      <div className="p-7 border-b border-[#00d2b4]/10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#00d2b4] to-[#0094ff] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,210,180,0.3)]">
-            <Zap className="w-6 h-6 text-[#050c14] fill-current" />
+    <aside className="fixed left-0 top-0 bottom-0 w-[280px] bg-[#0a2038]/50 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[100] font-inter">
+      <div className="p-8 border-b border-white/5">
+        <Link to="/admin/dashboard" className="flex items-center gap-4 group">
+          <div className="w-11 h-11 bg-gradient-to-br from-[#00d2b4] to-[#0094ff] rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500">
+            <Zap className="w-6 h-6 text-white fill-white/20" />
           </div>
           <div>
-            <div className="font-syne font-extrabold text-[18px] tracking-tight text-white leading-none">VoltWay</div>
-            <div className="text-[9px] text-[#7a9bbf] uppercase tracking-[1.2px] mt-1 font-bold whitespace-nowrap">Charging Management</div>
+            <div className="font-manrope font-extrabold text-[20px] tracking-tighter text-white leading-none uppercase">VoltWay</div>
+            <div className="text-[10px] text-[#4E7A96] uppercase tracking-[3px] mt-2 font-bold whitespace-nowrap opacity-60">Admin Panel</div>
           </div>
-        </div>
+        </Link>
       </div>
 
-      <nav className="flex-1 p-3 overflow-y-auto space-y-6">
+      <nav className="flex-1 p-4 overflow-y-auto space-y-8 custom-scrollbar">
         <div>
-          <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-[1.8px] px-3 mb-2">Overview</div>
-          <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">Main Menu</div>
+          <NavItem to="/admin/dashboard" icon={LayoutDashboard} label="Dashboard" />
           <NavItem to="/admin/analytics" icon={BarChart3} label="Analytics" />
         </div>
 
         <div>
-          <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-[1.8px] px-3 mb-2">Charging</div>
+          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">System Assets</div>
           <NavItem to="/admin/map" icon={MapIcon} label="Station Map" />
           <NavItem to="/admin/stations" icon={Fuel} label="Stations" />
-          <NavItem to="/admin/booking" icon={Calendar} label="Book Slot" badge="New" />
+          <NavItem to="/admin/booking" icon={Calendar} label="Bookings" badge="Live" />
         </div>
 
         <div>
-          <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-[1.8px] px-3 mb-2">Management</div>
+          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">Management</div>
           <NavItem to="/admin/users" icon={Users} label="Users" />
           <NavItem to="/admin/transactions" icon={Receipt} label="Transactions" />
-          <NavItem to="/admin/commission" icon={PieChart} label="Commission" badge="0" />
+          <NavItem to="/admin/commission" icon={PieChart} label="Commission" badge="Set" />
         </div>
       </nav>
 
-      <div className="p-3 border-t border-[#00d2b4]/10">
-        <div className="flex items-center gap-3 p-3 bg-[#0f2040] rounded-xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer">
-          <div className="w-9 h-9 bg-gradient-to-br from-[#0094ff] to-[#00d2b4] rounded-lg flex items-center justify-center font-syne font-bold text-white">SA</div>
-          <div className="flex-1 min-w-0">
-            <div className="text-[13px] font-medium text-white truncate">System Admin</div>
-            <div className="text-[11px] text-[#00d2b4] uppercase tracking-wide">Administrator</div>
+      <div className="p-4 border-t border-white/5 mt-auto">
+        <div className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#0094ff] to-[#00d2b4] rounded-xl flex items-center justify-center font-manrope font-extrabold text-[#050c14] shadow-lg shadow-[#000]/30 transform group-hover:rotate-12 transition-transform">AD</div>
+          <div className="flex-1 min-w-0 font-inter">
+            <div className="text-[13px] font-extrabold text-white truncate font-manrope">Administrator</div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1 opacity-60">System Lead</div>
           </div>
-          <Menu className="w-4 h-4 text-[#3a5a7a]" />
+          <Menu className="w-4 h-4 text-[#4E7A96] group-hover:text-white transition-colors" />
         </div>
       </div>
     </aside>
@@ -72,34 +72,36 @@ const Sidebar = () => {
 };
 
 const Topbar = ({ title }) => (
-  <header className="sticky top-0 z-50 h-[64px] bg-[#050c14]/85 backdrop-blur-xl border-b border-[#00d2b4]/10 flex items-center px-8 gap-4">
-    <div className="font-syne font-bold text-[20px] flex-1 text-white">{title}</div>
-    <div className="flex items-center gap-3 bg-[#0a1628] border border-[#00d2b4]/10 rounded-lg px-3.5 py-2 w-[240px] focus-within:border-[#00d2b4] focus-within:ring-2 focus-within:ring-[#00d2b4]/10 transition-all">
-      <Search className="w-4 h-4 text-[#3a5a7a]" />
-      <input type="text" placeholder="Search..." className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder:text-[#3a5a7a]" />
+  <header className="sticky top-0 z-50 h-[80px] bg-[#050c14]/80 backdrop-blur-2xl border-b border-white/5 flex items-center px-12 gap-8 font-inter shadow-sm">
+    <div className="font-manrope font-extrabold text-[24px] flex-1 text-white tracking-tighter uppercase leading-none">{title}</div>
+    <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-3 w-[320px] focus-within:border-[#00d2b4]/40 transition-all group shadow-inner">
+      <Search className="w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00d2b4]" />
+      <input type="text" placeholder="Search Stations..." className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder:text-[#4E7A96] placeholder:uppercase placeholder:tracking-widest placeholder:text-[9px] font-bold" />
     </div>
-    <button className="w-9 h-9 flex items-center justify-center bg-[#0a1628] border border-[#00d2b4]/10 rounded-lg text-[#7a9bbf] hover:text-white relative transition-all">
-      <Bell className="w-4 h-4" />
-      <div className="absolute top-2 right-2 w-2 h-2 bg-[#00d2b4]/40 rounded-full border-2 border-[#050c14]" />
-    </button>
-    <button className="w-9 h-9 flex items-center justify-center bg-[#0a1628] border border-[#00d2b4]/10 rounded-lg text-[#7a9bbf] hover:text-white transition-all">
-      <Settings className="w-4 h-4" />
-    </button>
+    <div className="flex items-center gap-4">
+       <button className="w-12 h-12 flex items-center justify-center bg-white/[0.03] border border-white/5 rounded-2xl text-[#4E7A96] hover:text-white hover:border-[#00d2b4]/30 relative transition-all shadow-sm">
+         <Bell className="w-4.5 h-4.5" />
+         <div className="absolute top-4 right-4 w-2 h-2 bg-emerald-500 rounded-full border-2 border-[#050c14] shadow-[0_0_8px_#10b981]" />
+       </button>
+       <button className="w-12 h-12 flex items-center justify-center bg-white/[0.03] border border-white/5 rounded-2xl text-[#4E7A96] hover:text-white hover:border-[#00d2b4]/30 transition-all shadow-sm">
+         <Settings className="w-4.5 h-4.5" />
+       </button>
+    </div>
   </header>
 );
 
 const AdminLayout = ({ children, title }) => {
   return (
-    <div className="min-h-screen bg-[#050c14] text-[#e2eaf8]">
-      <div className="fixed inset-0 pointer-events-none opacity-60 overflow-hidden">
-        <div className="absolute -top-[100px] -right-[100px] w-[600px] h-[400px] bg-[#00d2b4]/5 blur-[80px]" />
-        <div className="absolute bottom-0 left-[200px] w-[400px] h-[400px] bg-[#0094ff]/3 blur-[80px]" />
+    <div className="min-h-screen bg-[#050c14] text-[#e2eaf8] font-inter selection:bg-[#00d2b4]/30 overflow-x-hidden">
+      <div className="fixed inset-0 pointer-events-none opacity-40 overflow-hidden z-0">
+        <div className="absolute -top-[100px] -right-[100px] w-[600px] h-[500px] bg-[#00d2b4]/5 blur-[140px]" />
+        <div className="absolute bottom-0 left-[300px] w-[500px] h-[500px] bg-[#0094ff]/3 blur-[140px]" />
       </div>
       
       <Sidebar />
-      <main className="ml-[260px] min-h-screen relative z-10">
+      <main className="ml-[280px] min-h-screen relative z-10 flex flex-col">
         <Topbar title={title} />
-        <div className="p-8 animate-fade-up">
+        <div className="p-12 animate-fade-up flex-1">
           {children}
         </div>
       </main>

@@ -8,7 +8,7 @@ const RegisterStep1 = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-dm bg-[#050F1C] overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
       {/* SIDEBAR / HEADER */}
       <RegSidebar 
         title={<><span className="text-white">Power Up Your</span><br /><span className="text-[#00D4AA]">EV Journey</span><br /><span className="text-white">Today</span></>}
@@ -16,9 +16,9 @@ const RegisterStep1 = () => {
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
-        <div className="w-full max-w-[500px] animate-fade-in">
+        <div className="w-full max-w-[500px] animate-fade-in shadow-sm">
           {/* Stepper Header */}
-          <div className="mb-12">
+          <div className="mb-14">
             <RegStepper currentStep={1} />
           </div>
 

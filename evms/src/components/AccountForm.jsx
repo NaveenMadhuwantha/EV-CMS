@@ -69,61 +69,61 @@ const AccountForm = ({ onNext }) => {
   const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
 
   return (
-    <div className="w-full animate-fade-up">
-      <div className="mb-8 p-6 rounded-[32px] glass-panel border-white/5 relative overflow-hidden group">
+    <div className="w-full animate-fade-up font-inter">
+      <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden group shadow-sm">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#00D4AA]/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-black uppercase tracking-[4px] mb-3 text-[#00D4AA] opacity-80">Phase 01 · Auth</div>
-        <h2 className="font-syne text-3xl font-extrabold text-white mb-2 leading-none uppercase tracking-tight">Create Account</h2>
-        <p className="text-sm text-[#8AAFC8] font-medium leading-relaxed">Secure your access to Sri Lanka\'s premier EV ecosystem.</p>
+        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-[#00D4AA] opacity-80">Phase 01 · Authentication</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none">CREATE ACCOUNT</h2>
+        <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Secure your access to Sri Lanka's premier EV ecosystem.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {fbError && (
-          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold animate-pulse flex items-center gap-3">
+          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[13px] font-bold animate-shake flex items-center gap-3 shadow-lg">
             <span className="text-lg">⚠</span> {fbError}
           </div>
         )}
 
         {/* Email Input */}
-        <div className="space-y-2">
-          <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Institutional Email</label>
+        <div className="space-y-3">
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Institutional Email</label>
           <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-xl opacity-40 group-focus-within:opacity-100 transition-opacity">📧</div>
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">📧</div>
             <input
               type="email"
               placeholder="name@example.com"
-              className={`w-full py-5 px-6 pl-14 bg-white/5 border-2 rounded-[24px] text-white text-[15px] font-bold outline-none transition-all duration-300
-                ${emailStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/10 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 focus:shadow-[0_0_20px_rgba(0,212,170,0.15)]'}
+              className={`w-full py-5 px-6 pl-14 bg-white/5 border-2 rounded-2xl text-white text-[15px] font-bold outline-none transition-all duration-300
+                ${emailStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/5 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 shadow-sm'}
               `}
               value={email}
               onChange={(e) => checkEmail(e.target.value)}
             />
           </div>
-          {emailStatus === 'err' && <p className="ml-4 text-[11px] font-bold text-rose-400">Invalid account format</p>}
+          {emailStatus === 'err' && <p className="ml-2 text-[11px] font-bold text-rose-400">Invalid account format</p>}
         </div>
 
         {/* Password Input */}
-        <div className="space-y-2">
-          <label className="block text-[10px] font-black uppercase tracking-[3px] ml-4 text-[#4E7A96]">Security Password</label>
+        <div className="space-y-3">
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Security Password</label>
           <div className="relative group">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-xl opacity-40 group-focus-within:opacity-100 transition-opacity">🔒</div>
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
               type={showPass ? 'text' : 'password'}
               placeholder="Minimum 8 characters"
-              className={`w-full py-5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-[24px] text-white text-[15px] font-bold outline-none transition-all duration-300
-                ${passStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/10 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 focus:shadow-[0_0_20px_rgba(0,212,170,0.15)]'}
+              className={`w-full py-5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white text-[15px] font-bold outline-none transition-all duration-300
+                ${passStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/5 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 shadow-sm'}
               `}
               value={password}
               onChange={(e) => checkStrength(e.target.value)}
             />
-            <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-5 top-1/2 -translate-y-1/2 opacity-40 hover:opacity-100 transition-opacity p-2">
+            <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity p-2">
               {showPass ? '🙈' : '👁'}
             </button>
           </div>
           
           {password && (
-            <div className="px-4 mt-3">
-              <div className="flex gap-1.5 h-1.5 mb-2">
+            <div className="px-2 mt-4">
+              <div className="flex gap-1.5 h-1.5 mb-2.5">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? colors[strength] : 'bg-white/5'}`}></div>
                 ))}
@@ -136,19 +136,19 @@ const AccountForm = ({ onNext }) => {
         </div>
 
         {/* Action Button */}
-        <div className="pt-4">
+        <div className="pt-6 font-manrope">
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-5 rounded-[24px] text-[15px] font-black uppercase tracking-[3px] transition-all bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] text-[#050F1C] hover:scale-[1.02] active:scale-[0.98] shadow-2xl shadow-[#00D4AA]/20 flex items-center justify-center gap-3 relative overflow-hidden group
+            className={`w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] text-[#050F1C] hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-[#00D4AA]/20 flex items-center justify-center gap-3 relative overflow-hidden group
               ${loading ? 'opacity-70 cursor-not-allowed' : ''}
             `}
           >
             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
             {loading ? (
-              <div className="w-5 h-5 border-3 border-[#050F1C]/30 border-t-[#050F1C] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-4 border-[#050F1C]/20 border-t-[#050F1C] rounded-full animate-spin"></div>
             ) : (
-              <>Initiate Profile Setup <span className="text-xl group-hover:translate-x-2 transition-transform">→</span></>
+              <>Initiate Profile Setup <span className="text-xl group-hover:translate-x-2 transition-transform duration-300">→</span></>
             )}
           </button>
         </div>

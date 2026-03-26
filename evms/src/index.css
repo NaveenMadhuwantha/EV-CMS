@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+  --font-inter: "Inter", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
   --font-syne: "Syne", sans-serif;
-  --font-dm: "DM Sans", sans-serif;
   --color-brand: #00e5d4;
   --color-dark-bg: #050f1c;
 }
 
 :root {
-  font-family: var(--font-dm);
+  font-family: var(--font-inter);
   background-color: var(--color-dark-bg);
   color: white;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -26,65 +28,39 @@ body {
 .glass-panel {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.glass-pill {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Premium Animations */
+/* Base Typography - Standardized */
+h1, h2, h3, h4 {
+  font-family: var(--font-manrope);
+  letter-spacing: -0.02em;
+}
+
+/* Animations */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scale-up {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 .animate-fade-up {
-  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
-}
-
-.animate-scale-up {
-  animation: scale-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Custom Scrollbar */
+/* Custom Scrollbar - Consistent with Modern UI */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: #050f1c;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
 }
 
 @layer base {
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus, 
-  input:-webkit-autofill:active{
+  input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px #091825 inset !important;
     -webkit-text-fill-color: white !important;
   }
