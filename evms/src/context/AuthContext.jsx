@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { getUserProfile } from '../firestore/authDb';
+import { doc, onSnapshot, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -13,19 +12,53 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-        // We might need to know the role to fetch the correct profile.
-        // For now, let's try 'owner' first, then 'provider'.
-        // Or better yet, we can store the role in localStorage during login.
-        const savedRole = localStorage.getItem('user_role') || 'owner';
+    let unsubscribeProfile = null;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (unsubscribeProfile) unsubscribeProfile();
+
+      if (currentUser) {
+        let savedRole = localStorage.getItem('user_role');
+        
+        // Helper to setup/sync and listen
+        const syncAndListen = async (role, id) => {
+           const coll = role === 'provider' ? 'providers' : 'users';
+           const ref = doc(db, coll, id);
+           
+           // Ensure document exists/is updated
+           try {
+             const snap = await getDoc(ref);
+             if (!snap.exists()) {
+               await setDoc(ref, {
+                 fullName: currentUser.displayName || '',
+                 email: currentUser.email,
+                 role: role,
+                 createdAt: serverTimestamp(),
+                 lastSeen: serverTimestamp()
+               });
+             } else {
+               await updateDoc(ref, { lastSeen: serverTimestamp() });
+             }
+           } catch (e) { console.error("Sync upsert error:", e); }
+
+           return onSnapshot(ref, (snap) => {
+              if (snap.exists()) {
+                 setProfile({ ...snap.data(), id: snap.id, role });
+                 localStorage.setItem('user_role', role);
+              }
+           });
+        };
+
         try {
-          const dbProfile = await getUserProfile(user.uid, savedRole);
-          setProfile(dbProfile);
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-        }
+          if (savedRole) {
+            unsubscribeProfile = await syncAndListen(savedRole, currentUser.uid);
+          } else {
+            const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+            let role = uSnap.exists() ? (uSnap.data().role || 'owner') : 'owner';
+            unsubscribeProfile = await syncAndListen(role, currentUser.uid);
+          }
+        } catch (err) { console.error("Sync Error:", err); }
       } else {
         setProfile(null);
         localStorage.removeItem('user_role');
@@ -33,17 +66,14 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeProfile) unsubscribeProfile();
+    };
   }, []);
 
-  const value = {
-    user,
-    profile,
-    loading
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, profile, role: profile?.role, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

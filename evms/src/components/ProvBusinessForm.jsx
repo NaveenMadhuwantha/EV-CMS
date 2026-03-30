@@ -22,7 +22,7 @@ const ProvBusinessForm = () => {
     e.preventDefault();
     const e_s = {};
     ['bizType', 'companyName', 'contactPerson'].forEach(f => { if (!formData[f]) e_s[f] = 'Required'; });
-    if (!/^0\d{9}$/.test(formData.phone)) e_s.phone = 'Invalid phone format';
+    if (!/^0\d{9}$/.test(formData.phone.replace(/\s/g, ''))) e_s.phone = 'Invalid phone format';
     if (!/\S+@\S+\.\S+/.test(formData.bizEmail)) e_s.bizEmail = 'Invalid email format';
     setErrors(e_s);
 

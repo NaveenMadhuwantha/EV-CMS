@@ -1,10 +1,11 @@
 import { db } from "../config/firebase";
-import { collection, getDocs, query, orderBy, limit, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 
 /**
- * Fetch a summary of Grid Dashboard statistics and recent telemetry.
- * Minimum lines, simple and direct for the VoltWay UI.
+ * VoltWay Telemetry Engine (Database Side)
+ * Fetch all reporting and metrics from Firestore.
  */
+
 export const getDashboardTelemetry = async () => {
   try {
      const [stations, bookings, sessions] = await Promise.all([
@@ -17,10 +18,10 @@ export const getDashboardTelemetry = async () => {
         activeNodes: stations.size,
         totalBookings: bookings.size,
         recentSessions: sessions.docs.map(doc => ({ id: doc.id, ...doc.data() })),
-        commissionRate: 8.5 // Baseline platform fee if no doc exists
+        commissionRate: 8.5
      };
   } catch (error) {
-     console.error("Telemetry Link Failure:", error);
+     console.error("Telemetry failure:", error);
      return { activeNodes: 0, totalBookings: 0, recentSessions: [], commissionRate: 0 };
   }
 };

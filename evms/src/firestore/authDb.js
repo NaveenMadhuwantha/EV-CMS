@@ -1,25 +1,20 @@
-import { db } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { db } from "../config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 /**
- * Fetches user profile data from Firestore after authentication.
- * @param {string} uid - Firebase Auth UID
- * @param {string} roleType - The requested role ('owner', 'provider', 'admin')
- * @returns {Promise<Object|null>} The user document data or null if not found
+ * VoltWay Database-centric Auth Profile fetcher
  */
-export const getUserProfile = async (uid, roleType) => {
-  if (!uid) throw new Error("User UID is required for database query.");
+
+export const getUserProfile = async (uid) => {
+  if (!uid) return null;
   
-  const collectionName = roleType === 'provider' ? 'providers' : 'users';
-  const userRef = doc(db, collectionName, uid);
+  // Try users col
+  let snap = await getDoc(doc(db, "users", uid));
+  if (snap.exists()) return { ...snap.data(), role: snap.data().role || 'owner' };
   
-  const docSnap = await getDoc(userRef);
+  // Try providers col
+  snap = await getDoc(doc(db, "providers", uid));
+  if (snap.exists()) return { ...snap.data(), role: 'provider' };
   
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    // Expected behavior if Google login is new and hasn't registered yet
-    console.warn(`No Firestore document found for UID ${uid} in ${collectionName}`);
-    return null;
-  }
+  return null;
 };

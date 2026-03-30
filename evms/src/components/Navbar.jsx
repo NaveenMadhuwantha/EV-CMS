@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { logout } from '../services/authService';
+import { logoutUser } from '../firebase/auth';
 import { Zap, LayoutDashboard, Fuel, Map as MapIcon, BarChart3, User, LogOut, Power } from 'lucide-react';
 
 const Navbar = () => {
@@ -13,7 +13,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logoutUser();
       navigate('/login');
     } catch (error) {
       console.error("Logout failed", error);

@@ -34,9 +34,18 @@ const ReviewConfirmForm = ({ onComplete }) => {
       return;
     }
 
+    const rawData = {};
+    Object.keys(sessionStorage).forEach(k => {
+      if (k.startsWith('reg_')) {
+        let val = sessionStorage.getItem(k);
+        try { val = JSON.parse(val); } catch(e) {}
+        rawData[k.replace('reg_', '')] = val;
+      }
+    });
+
     setLoading(true);
     try {
-      await saveOwnerProfile(uid, data, newsChecked);
+      await saveOwnerProfile(uid, rawData, newsChecked);
       setIsSuccess(true);
       Object.keys(sessionStorage).forEach(key => {
         if (key.startsWith('reg_')) sessionStorage.removeItem(key);

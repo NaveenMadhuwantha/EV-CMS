@@ -1,0 +1,99 @@
+import React from 'react';
+import AdminLayout from '../../layouts/AdminLayout';
+import { useAuth } from '../../context/AuthContext';
+import { 
+  Zap, MapPin, Calendar, PieChart, 
+  Activity, ShieldCheck
+} from 'lucide-react';
+
+const StatCard = ({ icon: Icon, color, value, label, delay }) => (
+  <div className={`p-6 bg-[#0a1628] border border-[#00d2b4]/10 rounded-2xl relative overflow-hidden group hover:border-[#00d2b4]/40 hover:-translate-y-1 transition-all animate-fade-up ${delay} shadow-sm font-inter`}>
+    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00d2b4] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="flex justify-between items-start mb-6">
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-[18px] ${color} shadow-lg shadow-[#000]/10`}>
+        <Icon className="w-5 h-5" />
+      </div>
+    </div>
+    <div className="font-manrope text-[32px] font-extrabold text-[#e2eaf8] leading-none mb-1.5 tracking-tight">{value}</div>
+    <div className="text-[13px] text-[#7a9bbf] font-semibold opacity-70 uppercase tracking-wider">{label}</div>
+  </div>
+);
+
+const SectionHeader = ({ title, subtitle, action }) => (
+  <div className="flex justify-between items-center mb-6 px-1">
+    <div>
+      <h3 className="font-manrope font-bold text-[16px] text-white tracking-tight">{title}</h3>
+      <p className="text-[12px] text-[#7a9bbf] mt-0.5 font-medium opacity-60 font-inter">{subtitle}</p>
+    </div>
+    {action && <button className="text-[12px] font-bold text-[#00d2b4] hover:brightness-125 transition-all font-inter uppercase tracking-widest">{action}</button>}
+  </div>
+);
+
+const ProviderDashboard = () => {
+  const { user, profile } = useAuth();
+  const userName = profile?.businessName || user?.email?.split('@')[0] || 'Provider';
+
+  return (
+    <AdminLayout title="Node Control">
+      <div className="mb-10 pl-1 flex justify-between items-start">
+         <div>
+            <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
+               Node <span className="text-[#00d2b4]">Telemetry.</span>
+            </h1>
+            <p className="text-[#7a9bbf] mt-2 font-medium font-inter opacity-70">
+               Authenticated as <span className="text-white font-bold">{userName}</span> 
+               <span className="mx-2 opacity-30">|</span> 
+               <span className="text-[#00d2b4] font-bold lowercase tracking-tighter">@provider</span>
+            </p>
+         </div>
+         <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 shadow-inner">
+            <ShieldCheck className="w-5 h-5 text-[#00d2b4]" />
+            <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Enterprise Verified</span>
+         </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" value="0" label="Active Hubs" delay="delay-0" />
+        <StatCard icon={PieChart} color="bg-[#0094ff]/10 text-[#0094ff]" value="Rs. 0" label="Daily Yield" delay="delay-75" />
+        <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" value="0" label="Reservations" delay="delay-150" />
+        <StatCard icon={Activity} color="bg-purple-500/10 text-purple-500" value="98%" label="Uptime Health" delay="delay-200" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+        <div className="lg:col-span-2 bg-[#0a1628] border border-[#00d2b4]/10 rounded-3xl overflow-hidden p-8 hover:border-[#00d2b4]/30 transition-all shadow-xl relative font-inter">
+          <SectionHeader title="Revenue Insights" subtitle="Monthly grid performance vs. platform overhead" action="Full Report →" />
+          <div className="h-[200px] flex items-end gap-3 mt-12 px-2 group opacity-30">
+            {[20, 35, 48, 28, 45, 32, 50].map((v, i) => (
+              <div key={i} className="flex-1 flex items-end gap-1.5 h-full">
+                <div style={{ height: `${v}%` }} className="flex-1 bg-gradient-to-t from-[#00d2b4]/20 to-[#00d2b4] rounded-t-lg transition-all cursor-pointer"></div>
+                <div style={{ height: `${v * 0.25}%` }} className="flex-1 bg-gradient-to-t from-[#0094ff]/20 to-[#0094ff] rounded-t-lg transition-all cursor-pointer"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-[#0a1628] border border-[#00d2b4]/10 rounded-3xl p-8 hover:border-[#00d2b4]/30 transition-all shadow-xl font-inter">
+          <SectionHeader title="Profit Matrix" subtitle="Ecosystem fee allocation per session" />
+          <div className="flex justify-center p-6 my-4">
+             <div className="relative w-36 h-36 flex items-center justify-center group">
+                <svg className="w-full h-full -rotate-90 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 100 100">
+                   <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="10"/>
+                   <circle cx="50" cy="50" r="42" fill="none" stroke="#00d2b4" strokeWidth="10" strokeLinecap="round" strokeDasharray="264" strokeDashoffset="200" />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center font-manrope">
+                   <div className="font-extrabold text-[28px] text-white tracking-tight leading-none">25%</div>
+                   <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-widest mt-1">Fee</div>
+                </div>
+             </div>
+          </div>
+          <div className="space-y-4 border-t border-white/5 pt-8 mt-6">
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Platform Fee</span><span className="text-[#00d2b4] font-bold">25.0%</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Your Margin</span><span className="text-white font-extrabold font-manrope">Rs. 0.00</span></div>
+          </div>
+        </div>
+      </div>
+    </AdminLayout>
+  );
+};
+
+export default ProviderDashboard;

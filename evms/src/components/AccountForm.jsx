@@ -14,6 +14,9 @@ const AccountForm = ({ onNext }) => {
   const [strength, setStrength] = useState(0);
   const [loading, setLoading] = useState(false);
   const [fbError, setFbError] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpError, setOtpError] = useState('');
 
   const checkEmail = (val) => {
     setEmail(val);
@@ -53,7 +56,13 @@ const AccountForm = ({ onNext }) => {
         const user = userCredential.user;
         sessionStorage.setItem('reg_email', email);
         sessionStorage.setItem('reg_uid', user.uid);
-        onNext();
+        localStorage.setItem('user_role', 'owner');
+        
+        // Trigger Firebase Email Verification
+        const { sendEmailVerification } = await import('firebase/auth');
+        await sendEmailVerification(user);
+        
+        setShowVerification(true);
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') setFbError('This email is already registered.');
         else if (error.code === 'auth/invalid-email') setFbError('Invalid email format.');
@@ -135,6 +144,27 @@ const AccountForm = ({ onNext }) => {
           )}
         </div>
 
+        {/* Confirm Password Input */}
+        <div className="space-y-3">
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Access Key</label>
+          <div className="relative group">
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
+            <input
+              type={showConfirm ? 'text' : 'password'}
+              placeholder="Repeat Passphrase"
+              className={`w-full py-5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white text-[15px] font-bold outline-none transition-all duration-300
+                ${matchStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/5 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 shadow-sm'}
+              `}
+              value={confirm}
+              onChange={(e) => checkMatch(e.target.value)}
+            />
+            <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity p-2">
+              {showConfirm ? '🙈' : '👁'}
+            </button>
+          </div>
+          {matchStatus === 'err' && confirm && <p className="ml-2 text-[11px] font-bold text-rose-400">Passwords do not match</p>}
+        </div>
+
         {/* Action Button */}
         <div className="pt-6 font-manrope">
           <button
@@ -153,6 +183,78 @@ const AccountForm = ({ onNext }) => {
           </button>
         </div>
       </form>
+
+      {/* VERIFICATION OVERLAY */}
+      {showVerification && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#050F1C]/90 backdrop-blur-xl animate-fade-in">
+           <div className="w-full max-w-[500px] bg-[#0A1628] rounded-[40px] border border-white/10 p-10 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#00D4AA]/10 blur-[80px] -z-10"></div>
+              
+              <div className="text-center mb-10">
+                 <div className="w-20 h-20 rounded-[28px] bg-[#00D4AA]/10 flex items-center justify-center text-4xl mb-6 mx-auto border border-[#00D4AA]/20 animate-pulse">⚡</div>
+                 <h3 className="font-manrope text-3xl font-extrabold text-white mb-3 uppercase tracking-tight">Verify Node</h3>
+                 <p className="text-[#8AAFC8] text-[15px] font-medium leading-relaxed">
+                    We've deployed a security key to <span className="text-white font-bold">{email}</span>. Please authorize this node to continue.
+                 </p>
+                 <p className="text-[10px] text-[#00D4AA]/60 font-bold uppercase tracking-widest mt-4 italic">
+                    Development Bypass Key: 123456
+                 </p>
+              </div>
+
+              <div className="flex justify-between gap-3 mb-8">
+                 {otp.map((digit, i) => (
+                    <input
+                       key={i}
+                       type="text"
+                       maxLength="1"
+                       value={digit}
+                       onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, '');
+                          const newOtp = [...otp];
+                          newOtp[i] = val;
+                          setOtp(newOtp);
+                          if (val && e.target.nextSibling) e.target.nextSibling.focus();
+                       }}
+                       onKeyDown={(e) => {
+                          if (e.key === 'Backspace' && !otp[i] && e.target.previousSibling) {
+                             e.target.previousSibling.focus();
+                          }
+                       }}
+                       className={`w-full aspect-square bg-white/5 border-2 rounded-2xl text-center text-2xl font-black text-white outline-none transition-all
+                          ${otpError ? 'border-rose-500/30' : 'border-white/5 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5'}`
+                       }
+                    />
+                 ))}
+              </div>
+
+              {otpError && <p className="text-center text-rose-400 text-[11px] font-bold uppercase tracking-widest mb-8 animate-shake">Invalid Node Access Key</p>}
+
+              <button 
+                 onClick={() => {
+                    const code = otp.join('');
+                    if (code === '123456') { // Mock check
+                       onNext();
+                    } else {
+                       setOtpError(true);
+                       setTimeout(() => setOtpError(false), 2000);
+                    }
+                 }}
+                 className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-[#00D4AA] text-[#050F1C] hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-[#00D4AA]/20"
+              >
+                 AUTHORIZE ACCESS →
+              </button>
+
+              <div className="mt-8 text-center">
+                 <button 
+                  onClick={() => setShowVerification(false)}
+                  className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] hover:text-[#00D4AA] transition-colors"
+                 >
+                    ← RE-ENTER EMAIL
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
     </div>
   );
 };

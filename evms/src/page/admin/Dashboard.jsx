@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { getDashboardTelemetry } from '../../firestore/dashboardDb';
-import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3 } from 'lucide-react';
+import { performBackup, performRecovery } from '../../firestore/backupDb';
+import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3, Database, Download, Upload } from 'lucide-react';
 
 const StatCard = ({ icon: Icon, color, change, value, label, delay }) => (
   <div className={`p-8 bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-3xl relative overflow-hidden group hover:border-[#00d2b4]/40 hover:-translate-y-1 transition-all animate-fade-up ${delay} shadow-sm font-inter`}>
@@ -31,14 +32,61 @@ const SectionHeader = ({ title, subtitle, action }) => (
 
 const AdminDashboard = () => {
   const [data, setData] = useState({ activeNodes: 0, totalBookings: 0, recentSessions: [], commissionRate: 0, loading: true });
+  const [bkpMsg, setBkpMsg] = useState('');
 
   useEffect(() => {
      getDashboardTelemetry().then(res => setData({ ...res, loading: false }));
   }, []);
 
+  const handleBackup = async () => {
+    try {
+      await performBackup();
+      setBkpMsg('Backup successful.');
+    } catch (e) { setBkpMsg('Backup failed.'); }
+  };
+
+  const handleRestore = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          await performRecovery(ev.target.result);
+          setBkpMsg('Recovery successful. Refreshing...');
+          setTimeout(() => window.location.reload(), 2000);
+        } catch (err) { setBkpMsg('Recovery failed.'); }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <AdminLayout title="System Overview">
       <div className="font-inter">
+        {/* ── MAINTENANCE BAR ── */}
+        <div className="mb-10 p-6 bg-[#00d2b4]/5 border border-[#00d2b4]/20 rounded-3xl flex flex-wrap items-center justify-between gap-6 animate-fade-in shadow-inner relative overflow-hidden">
+           <div className="flex items-center gap-4 relative z-10">
+              <Database className="w-8 h-8 text-[#00d2b4]" />
+              <div>
+                 <h4 className="text-[12px] font-black text-white uppercase tracking-[3px]">Grid Maintenance Engine</h4>
+                 <p className="text-[10px] text-[#8AAFC8] font-bold uppercase tracking-widest mt-1 opacity-70">Automated synchronization and manual snapshot recovery active.</p>
+              </div>
+           </div>
+           
+           <div className="flex items-center gap-4 relative z-10">
+              {bkpMsg && <span className="text-[10px] font-bold text-[#00d2b4] uppercase tracking-widest mr-4 animate-pulse italic">{bkpMsg}</span>}
+              <button onClick={handleBackup} className="px-6 py-3 bg-[#0a2038] border border-white/5 rounded-xl text-white text-[10px] font-black uppercase tracking-widest hover:border-[#00d2b4]/40 transition-all flex items-center gap-3">
+                 <Download className="w-4 h-4" /> Snapshot Backup
+              </button>
+              <label className="px-6 py-3 bg-[#00d2b4] rounded-xl text-[#050c14] text-[10px] font-black uppercase tracking-widest hover:brightness-110 cursor-pointer transition-all flex items-center gap-3">
+                 <Upload className="w-4 h-4" /> Restore Data
+                 <input type="file" onChange={handleRestore} className="hidden" accept=".json" />
+              </label>
+           </div>
+           
+           <div className="absolute top-0 right-0 w-64 h-full bg-[#00d2b4]/5 blur-[60px] pointer-events-none"></div>
+        </div>
+
         {/* ── STATS GRID ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" change="↑ 0.0%" value={data.recentSessions.length} label="Active Sessions" delay="delay-0" />

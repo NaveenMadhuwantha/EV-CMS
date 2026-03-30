@@ -35,10 +35,20 @@ const ProvReviewForm = () => {
     const uid = sessionStorage.getItem('prov_uid');
     if (!uid) { alert('Session expired. Please start over.'); return; }
 
+    const rawData = {};
+    Object.keys(sessionStorage).forEach(k => {
+      if (k.startsWith('prov_')) {
+        let val = sessionStorage.getItem(k);
+        try { val = JSON.parse(val); } catch(e) {}
+        rawData[k.replace('prov_', '')] = val;
+      }
+    });
+
     setLoading(true);
     try {
-      await saveProviderProfile(uid, data);
+      await saveProviderProfile(uid, rawData);
       setIsSuccess(true);
+      Object.keys(sessionStorage).forEach(k => k.startsWith('prov_') && sessionStorage.removeItem(k));
       window.scrollTo(0, 0);
     } catch (err) {
       alert('Failed to save. Please try again.');
