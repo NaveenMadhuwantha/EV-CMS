@@ -1,9 +1,11 @@
-import React from 'react';
-import AdminLayout from '../../layouts/AdminLayout';
+import React, { useState, useEffect } from 'react';
+import ProviderLayout from '../../layouts/ProviderLayout';
 import { useAuth } from '../../context/AuthContext';
+import { getStationsByProvider } from '../../firestore/stationDb';
+import { getAllBookings } from '../../firestore/bookingDb';
 import { 
   Zap, MapPin, Calendar, PieChart, 
-  Activity, ShieldCheck
+  Activity, ShieldCheck, Loader2
 } from 'lucide-react';
 
 const StatCard = ({ icon: Icon, color, value, label, delay }) => (
@@ -32,13 +34,60 @@ const SectionHeader = ({ title, subtitle, action }) => (
 const ProviderDashboard = () => {
   const { user, profile } = useAuth();
   const userName = profile?.businessName || user?.email?.split('@')[0] || 'Provider';
+  
+  const [stats, setStats] = useState({
+     hubs: 0,
+     dailyEarnings: 0,
+     totalEarnings: 0,
+     reservations: 0,
+     loading: true
+  });
+
+  useEffect(() => {
+    const loadStats = async () => {
+       if (!user) return;
+       try {
+          const stations = await getStationsByProvider(user.uid);
+          const sIds = stations.map(s => s.id);
+          const allBk = await getAllBookings();
+          const providerBk = allBk.filter(b => sIds.includes(b.stationId));
+          
+          const today = new Date().toISOString().split('T')[0];
+          const todayBk = providerBk.filter(b => b.date === today);
+          
+          const dYld = todayBk.reduce((sum, b) => sum + (b.providerEarnings || 0), 0);
+          const tYld = providerBk.reduce((sum, b) => sum + (b.providerEarnings || 0), 0);
+          
+          setStats({
+             hubs: stations.length,
+             dailyEarnings: dYld,
+             totalEarnings: tYld,
+             reservations: providerBk.length,
+             loading: false
+          });
+       } catch (err) {
+          console.error(err);
+          setStats(s => ({ ...s, loading: false }));
+       }
+    };
+    loadStats();
+  }, [user]);
+
+  if (stats.loading) return (
+     <AdminLayout title="Station Control">
+        <div className="flex flex-col items-center justify-center py-40 opacity-30">
+           <Loader2 className="w-12 h-12 text-[#00d2b4] animate-spin mb-4" />
+           <div className="text-[12px] font-bold uppercase tracking-widest text-[#4E7A96]">Syncing Provider Matrix...</div>
+        </div>
+     </AdminLayout>
+  );
 
   return (
-    <AdminLayout title="Node Control">
+    <ProviderLayout title="Station Control">
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
-               Node <span className="text-[#00d2b4]">Telemetry.</span>
+               Station <span className="text-[#00d2b4]">Overview.</span>
             </h1>
             <p className="text-[#7a9bbf] mt-2 font-medium font-inter opacity-70">
                Authenticated as <span className="text-white font-bold">{userName}</span> 
@@ -48,14 +97,14 @@ const ProviderDashboard = () => {
          </div>
          <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 shadow-inner">
             <ShieldCheck className="w-5 h-5 text-[#00d2b4]" />
-            <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Enterprise Verified</span>
+            <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Verified Provider</span>
          </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" value="0" label="Active Hubs" delay="delay-0" />
-        <StatCard icon={PieChart} color="bg-[#0094ff]/10 text-[#0094ff]" value="Rs. 0" label="Daily Yield" delay="delay-75" />
-        <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" value="0" label="Reservations" delay="delay-150" />
+        <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" value={stats.hubs} label="Active Stations" delay="delay-0" />
+        <StatCard icon={PieChart} color="bg-[#0094ff]/10 text-[#0094ff]" value={`Rs. ${stats.dailyEarnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}`} label="Daily Earnings" delay="delay-75" />
+        <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" value={stats.reservations} label="Reservations" delay="delay-150" />
         <StatCard icon={Activity} color="bg-purple-500/10 text-purple-500" value="98%" label="Uptime Health" delay="delay-200" />
       </div>
 
@@ -88,11 +137,11 @@ const ProviderDashboard = () => {
           </div>
           <div className="space-y-4 border-t border-white/5 pt-8 mt-6">
              <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Platform Fee</span><span className="text-[#00d2b4] font-bold">25.0%</span></div>
-             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Your Margin</span><span className="text-white font-extrabold font-manrope">Rs. 0.00</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Total Margin (You)</span><span className="text-white font-extrabold font-manrope">Rs. {stats.totalEarnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </ProviderLayout>
   );
 };
 

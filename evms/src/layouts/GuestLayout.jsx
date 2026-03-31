@@ -48,7 +48,7 @@ const GuestLayout = ({ children, title }) => {
       <main className="relative z-10 w-full max-w-[1440px] mx-auto p-12 lg:p-16">
          <div className="mb-14">
             <h1 className="font-manrope text-5xl font-extrabold text-white uppercase tracking-tighter mb-4">{title}</h1>
-            <p className="text-[#8AAFC8] text-lg max-w-2xl leading-relaxed opacity-60">Explore our dynamic charging infrastructure across Sri Lanka's leading EV-Grid ecosystem.</p>
+            <p className="text-[#8AAFC8] text-lg max-w-2xl leading-relaxed opacity-60">Explore our dynamic charging infrastructure across Sri Lanka's leading EV-Network ecosystem.</p>
          </div>
          {children}
       </main>
@@ -57,14 +57,14 @@ const GuestLayout = ({ children, title }) => {
       <footer className="relative z-10 w-full p-12 border-t border-white/5 bg-black/20 flex flex-col md:flex-row items-center justify-between gap-8 mt-20">
          <div className="flex items-center gap-10 text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px]">
             <div className="flex items-center gap-3">
-               <Globe className="w-4 h-4 text-emerald-400" /> Live Data Hub
+               <Globe className="w-4 h-4 text-emerald-400" /> Live Data Station
             </div>
             <div className="flex items-center gap-3">
                <ShieldCheck className="w-4 h-4 text-blue-400" /> Guest Authorization
             </div>
          </div>
          <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest italic opacity-50">
-            Powered by VoltWay Grid Systems © 2026
+            Powered by VoltWay Network Systems © 2026
          </div>
       </footer>
     </div>

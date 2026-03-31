@@ -11,7 +11,7 @@ const RegisterStep3 = () => {
     <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
       <RegSidebar 
         image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1000"
-        title={<><span className="text-white">Configure Your</span><br /><span className="text-amber-500">Hardware</span><br /><span className="text-white">Node</span></>}
+        title={<><span className="text-white">Configure Your</span><br /><span className="text-amber-500">Hardware</span><br /><span className="text-white">Station</span></>}
         stepTag="Vehicle Configuration"
         tagColor="text-amber-500"
         tagBg="bg-amber-500/10"

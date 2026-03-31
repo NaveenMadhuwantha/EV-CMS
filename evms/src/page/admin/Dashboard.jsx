@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../layouts/AdminLayout';
-import { getDashboardTelemetry } from '../../firestore/dashboardDb';
+import { getDashboardOverview } from '../../firestore/dashboardDb';
 import { performBackup, performRecovery } from '../../firestore/backupDb';
-import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3, Database, Download, Upload } from 'lucide-react';
+import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3, Database, Download, Upload, Receipt } from 'lucide-react';
 
 const StatCard = ({ icon: Icon, color, change, value, label, delay }) => (
   <div className={`p-8 bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-3xl relative overflow-hidden group hover:border-[#00d2b4]/40 hover:-translate-y-1 transition-all animate-fade-up ${delay} shadow-sm font-inter`}>
@@ -31,11 +31,11 @@ const SectionHeader = ({ title, subtitle, action }) => (
 );
 
 const AdminDashboard = () => {
-  const [data, setData] = useState({ activeNodes: 0, totalBookings: 0, recentSessions: [], commissionRate: 0, loading: true });
+  const [data, setData] = useState({ activeStations: 0, totalBookings: 0, recentSessions: [], commissionRate: 0, loading: true });
   const [bkpMsg, setBkpMsg] = useState('');
 
   useEffect(() => {
-     getDashboardTelemetry().then(res => setData({ ...res, loading: false }));
+     getDashboardOverview().then(res => setData({ ...res, loading: false }));
   }, []);
 
   const handleBackup = async () => {
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
            <div className="flex items-center gap-4 relative z-10">
               <Database className="w-8 h-8 text-[#00d2b4]" />
               <div>
-                 <h4 className="text-[12px] font-black text-white uppercase tracking-[3px]">Grid Maintenance Engine</h4>
+                 <h4 className="text-[12px] font-black text-white uppercase tracking-[3px]">Network Maintenance Engine</h4>
                  <p className="text-[10px] text-[#8AAFC8] font-bold uppercase tracking-widest mt-1 opacity-70">Automated synchronization and manual snapshot recovery active.</p>
               </div>
            </div>
@@ -90,9 +90,9 @@ const AdminDashboard = () => {
         {/* ── STATS GRID ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" change="↑ 0.0%" value={data.recentSessions.length} label="Active Sessions" delay="delay-0" />
-          <StatCard icon={MapPin} color="bg-[#0094ff]/10 text-[#0094ff]" change="↑ 0.0%" value={data.activeNodes} label="Node Clusters" delay="delay-75" />
+          <StatCard icon={MapPin} color="bg-[#0094ff]/10 text-[#0094ff]" change="↑ 0.0%" value={data.activeStations} label="Station Clusters" delay="delay-75" />
           <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" change="↑ 0.0%" value={data.totalBookings} label="Slot Bookings" delay="delay-150" />
-          <StatCard icon={PieChart} color="bg-purple-500/10 text-purple-500" change="↑ 0.0%" value={`Rs. 0`} label="Yield Earned" delay="delay-200" />
+          <StatCard icon={PieChart} color="bg-purple-500/10 text-purple-500" change="↑ 0.0%" value={`Rs. 0`} label="Earnings Earned" delay="delay-200" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
@@ -124,16 +124,18 @@ const AdminDashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl relative font-manrope">
-            <SectionHeader title="Station Overview" subtitle="Geographic distribution of stations." />
-            <div className="h-[280px] bg-[#050c14]/60 rounded-3xl flex items-center justify-center opacity-30 border border-white/5">
-               <div className="text-[12px] font-bold uppercase tracking-[5px] text-[#4E7A96] italic">Scanning network...</div>
-            </div>
-            <div className="grid grid-cols-4 gap-4 mt-10 font-manrope">
-              {[ { i: Fuel, l: 'Add Node' }, { i: Calendar, l: 'Book Unit' }, { i: Users, l: 'Registry' }, { i: BarChart3, l: 'Telemetry' } ].map(q => (
-                <button key={q.l} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm">
+            <SectionHeader title="Quick Links" subtitle="Navigate to admin modules." />
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10 font-manrope">
+              {[ 
+                { i: Users, l: 'Users', path: '/admin/users' }, 
+                { i: Zap, l: 'Providers', path: '/admin/providers' }, 
+                { i: Receipt, l: 'Ledger', path: '/admin/transactions' }, 
+                { i: PieChart, l: 'Revenue', path: '/admin/commission' } 
+              ].map(q => (
+                <a href={q.path} key={q.l} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm cursor-pointer">
                   <q.i className="w-5.5 h-5.5 text-[#4E7A96] group-hover:text-[#00d2b4] transition-colors" strokeWidth={2.5} />
                   <span className="text-[10px] font-bold text-[#4E7A96] group-hover:text-white uppercase tracking-widest transition-colors">{q.l}</span>
-                </button>
+                </a>
               ))}
             </div>
           </div>

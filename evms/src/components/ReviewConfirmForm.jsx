@@ -75,10 +75,10 @@ const ReviewConfirmForm = ({ onComplete }) => {
 
         <div className="bg-white/[0.03] rounded-3xl p-8 text-left mb-12 max-w-md mx-auto border border-white/10 relative overflow-hidden shadow-sm">
            <div className="absolute top-0 right-0 w-24 h-24 bg-[#00D4AA]/5 rounded-bl-[100px] pointer-events-none"></div>
-           <div className="text-[10px] font-bold uppercase tracking-widest text-[#00D4AA] mb-8 font-inter opacity-80">Digital Node Receipt</div>
+           <div className="text-[10px] font-bold uppercase tracking-widest text-[#00D4AA] mb-8 font-inter opacity-80">Digital Station Receipt</div>
            <div className="space-y-6">
               {[
-                ['Node Identifier', data.firstName + ' ' + data.lastName],
+                ['Station Identifier', data.firstName + ' ' + data.lastName],
                 ['Network Access', data.email],
                 ['System Status', '✓ OPERATIONAL'],
               ].map(([l, v], i) => (
@@ -136,8 +136,8 @@ const ReviewConfirmForm = ({ onComplete }) => {
 
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-1 gap-6 mb-10">
         <SummarySection 
-           title="Account Nodes" icon="🔐" color="#00D4AA"
-           items={[['Primary Node Email', data.email], ['Access Key Status', '•••••••• (Encrypted)']]}
+           title="Account Stations" icon="🔐" color="#00D4AA"
+           items={[['Primary Station Email', data.email], ['Password Status', '•••••••• (Encrypted)']]}
         />
         <SummarySection 
            title="Identity Profile" icon="👤" color="#3B82F6"

@@ -6,7 +6,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
   
   const content = {
     title: step === 2 ? <React.Fragment>Corporate<br/><span className="text-emerald-400">Merchant</span><br/>Entity</React.Fragment> 
-           : step === 3 ? <React.Fragment>Hardware<br/>Node <span className="text-amber-400">Grid</span><br/>Setup</React.Fragment>
+           : step === 3 ? <React.Fragment>Hardware<br/>Station <span className="text-amber-400">Network</span><br/>Setup</React.Fragment>
            : step === 4 ? <React.Fragment>Financial<br/><span className="text-purple-400">Earning</span><br/>Logic</React.Fragment>
            : step === 5 ? <React.Fragment>Final<br/><span className="text-blue-400">System</span><br/>Audit</React.Fragment>
            : <React.Fragment>Host Your<br/><span className="text-blue-400">Energy</span><br/>Portal</React.Fragment>,
@@ -16,7 +16,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
           : step === 5 ? "Verify all node parameters before deploying your entity to the national grid network."
           : "Register your infrastructure on Sri Lanka's leading EV network. Reach thousands of users and optimize your yield.",
     accent: step === 2 ? "#10B981" : step === 3 ? "#F59E0B" : step === 4 ? "#8B5CF6" : "#3B82F6",
-    dot: step === 2 ? "Merchant Profile" : step === 3 ? "Station Node" : step === 4 ? "Revenue Logic" : step === 5 ? "Entity Audit" : "Energy Provider",
+    dot: step === 2 ? "Merchant Profile" : step === 3 ? "Station Station" : step === 4 ? "Revenue Logic" : step === 5 ? "Entity Audit" : "Energy Provider",
     icon: step === 2 ? Building2 : step === 3 ? MapPin : step === 4 ? GaugeCircle : step === 5 ? ClipboardCheck : Zap
   };
 
@@ -79,7 +79,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
                       <div className="flex justify-between text-[14px]"><span className="text-[#8AAFC8] font-medium">Revenue Target</span><span className="text-white font-bold font-manrope">LKR X / HR</span></div>
                       <div className="flex justify-between text-[14px]"><span className="text-[#8AAFC8] font-medium">Network Levy</span><span className="text-red-400 font-bold font-manrope">- 15%</span></div>
                       <div className="h-px bg-white/5 my-4"></div>
-                      <div className="flex justify-between items-center"><span className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96]">Net Yield</span><span className="text-emerald-400 font-extrabold text-xl font-manrope">85% Settlement</span></div>
+                      <div className="flex justify-between items-center"><span className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96]">Net Earnings</span><span className="text-emerald-400 font-extrabold text-xl font-manrope">85% Settlement</span></div>
                    </div>
                 </div>
               )}
@@ -87,9 +87,9 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
               {step === 5 && (
                 <div className="grid grid-cols-1 gap-3.5 animate-fade-in">
                    {[
-                     { i: Lock, t: 'Access Keys Verified', c: 'text-blue-400', b: 'bg-blue-400/10' },
+                     { i: Lock, t: 'Passwords Verified', c: 'text-blue-400', b: 'bg-blue-400/10' },
                      { i: Building2, t: 'Merchant Identity SET', c: 'text-emerald-400', b: 'bg-emerald-400/10' },
-                     { i: MapPin, t: 'Station Node SET', c: 'text-amber-400', b: 'bg-amber-400/10' }
+                     { i: MapPin, t: 'Station Station SET', c: 'text-amber-400', b: 'bg-amber-400/10' }
                    ].map(s => (
                      <div key={s.t} className={`flex items-center gap-5 p-6 rounded-[24px] border border-white/10 ${s.b} group hover:scale-[1.02] shadow-sm transition-all`}>
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:bg-white/10 transition-all">
@@ -107,11 +107,11 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
            </div>
         </div>
 
-        {/* Node Footer */}
+        {/* Station Footer */}
         <div className="mt-16 lg:mt-0 pt-10 border-t border-white/10 w-full flex justify-between items-center text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest font-inter opacity-60">
           <div className="flex items-center gap-3">
              <ShieldCheck className="w-4 h-4" />
-             © 2026 VoltWay National Grid
+             © 2026 VoltWay National Network
           </div>
           <div className="flex gap-6">
              <span className="hover:text-blue-400 cursor-pointer transition-colors flex items-center gap-1.5 group">

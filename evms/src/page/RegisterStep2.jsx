@@ -11,7 +11,7 @@ const RegisterStep2 = () => {
     <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
       <RegSidebar 
         image="https://images.unsplash.com/photo-1510172951991-856a654063f9?auto=format&fit=crop&q=80&w=1000"
-        title={<><span className="text-white">Profile</span><br /><span className="text-blue-400">Identity Node</span><br /><span className="text-white">Setup</span></>}
+        title={<><span className="text-white">Profile</span><br /><span className="text-blue-400">Account</span><br /><span className="text-white">Setup</span></>}
         stepTag="Owner Identification"
         tagColor="text-blue-400"
         tagBg="bg-blue-400/10"

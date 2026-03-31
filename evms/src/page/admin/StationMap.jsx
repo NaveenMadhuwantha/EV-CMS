@@ -64,7 +64,7 @@ const StationFormModal = ({ onClose, onSubmit }) => {
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
-                   <label className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Node Capacity TYPE</label>
+                   <label className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Station Capacity TYPE</label>
                    <select 
                       value={formData.type}
                       onChange={e => setFormData({...formData, type: e.target.value})}
@@ -101,17 +101,17 @@ const StationFormModal = ({ onClose, onSubmit }) => {
 export const StationMap = () => {
   const { role } = useAuth();
   const isAdminOrProvider = role === 'admin' || role === 'provider';
-  const [nodes, setNodes] = useState([]);
+  const [nodes, setStations] = useState([]);
   const [search, setSearch] = useState('Sri Lanka');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetchNodes();
+    fetchStations();
   }, []);
 
-  const fetchNodes = async () => {
+  const fetchStations = async () => {
     try {
       setLoading(true);
       const sData = await getAllStations();
@@ -125,7 +125,7 @@ export const StationMap = () => {
           sourceType: 'Provider' 
         }))
       ];
-      setNodes(combined);
+      setStations(combined);
     } catch (err) {
       console.error(err);
     } finally {
@@ -137,13 +137,13 @@ export const StationMap = () => {
     try {
       await registerStation(data);
       setShowModal(false);
-      fetchNodes();
+      fetchStations();
     } catch (err) {
       alert("Failed to register station");
     }
   };
 
-  const filteredNodes = nodes.filter(n => 
+  const filteredStations = nodes.filter(n => 
     (n.name?.toLowerCase() || '').includes(query.toLowerCase()) || 
     (n.location?.toLowerCase() || '').includes(query.toLowerCase())
   );
@@ -153,21 +153,21 @@ export const StationMap = () => {
       <PageHeader 
         title="Station Map" 
         subtitle="View and manage all charging stations and providers on the map."
-        action={isAdminOrProvider ? "Register Node" : null}
+        action={isAdminOrProvider ? "Register Station" : null}
         onAction={isAdminOrProvider ? () => setShowModal(true) : null}
       />
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-inter">
         <div className="lg:col-span-4 space-y-8">
            <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[32px] p-8 hover:border-[#00d2b4]/30 transition-all shadow-xl">
-              <SectionHeader title="Live Node Registry" subtitle="Search and select registered nodes across the grid." />
+              <SectionHeader title="Live Station Registry" subtitle="Search and select registered nodes across the grid." />
               <div className="relative group mb-8">
                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00d2b4] transition-colors" />
                  <input 
                     type="text" 
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search Nodes..." 
+                    placeholder="Search Stations..." 
                     className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-5 pl-14 pr-6 text-white text-[14px] focus:outline-none focus:border-[#00d2b4] transition-all font-bold placeholder:text-[#4E7A96] placeholder:uppercase placeholder:tracking-widest placeholder:text-[10px]" 
                  />
               </div>
@@ -176,9 +176,9 @@ export const StationMap = () => {
                  {loading ? (
                     <div className="flex flex-col items-center justify-center py-10 opacity-30">
                        <Loader2 className="w-8 h-8 animate-spin mb-4" />
-                       <p className="text-[10px] font-bold uppercase tracking-widest">Scanning Grid...</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest">Scanning Network...</p>
                     </div>
-                 ) : filteredNodes.length > 0 ? filteredNodes.map((n) => (
+                 ) : filteredStations.length > 0 ? filteredStations.map((n) => (
                     <div key={n.id} className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00d2b4]/30 hover:bg-[#00d2b4]/5 transition-all cursor-pointer group shadow-sm">
                        <div className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-4">
@@ -211,14 +211,14 @@ export const StationMap = () => {
               <div className="w-20 h-20 rounded-[32px] bg-[#00d2b4]/10 border border-[#00d2b4]/20 flex items-center justify-center mb-8 shadow-2xl animate-pulse">
                  <Navigation className="w-10 h-10 text-[#00d2b4]" />
               </div>
-              <h2 className="text-3xl font-extrabold text-white font-manrope uppercase tracking-tighter mb-4">Initializing Grid Map</h2>
+              <h2 className="text-3xl font-extrabold text-white font-manrope uppercase tracking-tighter mb-4">Initializing Network Map</h2>
               <p className="text-[#8AAFC8] font-medium max-w-sm mx-auto leading-relaxed opacity-60">Synchronizing satellite telemetry with local infrastructure nodes...</p>
            </div>
            
            <iframe 
               src={`https://www.google.com/maps?q=${encodeURIComponent(search)}&output=embed`}
               className="w-full h-full border-none grayscale opacity-40 contrast-125 brightness-75 group-hover:opacity-80 group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-              title="Grid Telemetry Map"
+              title="Network Overview Map"
            />
            
            <div className="absolute top-8 left-8 z-20 flex gap-4">

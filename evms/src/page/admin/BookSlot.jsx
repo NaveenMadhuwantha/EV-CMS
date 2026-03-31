@@ -107,7 +107,7 @@ export const BookSlot = () => {
   const rate = parseFloat(selectedStation?.price || 0);
   const totalCost = rate * duration;
   const platformCommission = totalCost * 0.25;
-  const providerYield = totalCost - platformCommission;
+  const providerEarnings = totalCost - platformCommission;
 
   const handleBooking = async () => {
     if (!bookingData.userName || !bookingData.date || !bookingData.time) {
@@ -124,7 +124,7 @@ export const BookSlot = () => {
         duration: duration,
         totalCost: totalCost,
         platformCommission: platformCommission,
-        providerYield: providerYield
+        providerEarnings: providerEarnings
       });
       alert("Booking Confirmed!");
       setBookingData({ ...bookingData, userName: '', vehicleNo: '', date: '', time: '' });
@@ -143,7 +143,7 @@ export const BookSlot = () => {
     const elapsedHours = Math.max(0.01, (now - start) / (3600 * 1000));
     const actualTotalCost = b.rate * elapsedHours;
     const actualCommission = actualTotalCost * 0.25;
-    const actualYield = actualTotalCost - actualCommission;
+    const actualEarnings = actualTotalCost - actualCommission;
 
     try {
       setLoading(true);
@@ -153,7 +153,7 @@ export const BookSlot = () => {
         actualDuration: elapsedHours,
         totalCost: actualTotalCost,
         platformCommission: actualCommission,
-        providerYield: actualYield
+        providerEarnings: actualEarnings
       });
       alert(`Charging Terminated.\nDuration: ${(elapsedHours * 60).toFixed(0)} mins\nTotal: Rs. ${actualTotalCost.toFixed(2)}`);
       fetchData();
@@ -179,7 +179,7 @@ export const BookSlot = () => {
           <div className="lg:col-span-7 bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] p-12 hover:border-[#00d2b4]/30 transition-all shadow-xl font-inter">
             <div className="space-y-10">
               <div className="space-y-4">
-                 <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Subscriber Identity</label>
+                 <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Customer Identity</label>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <input 
                       type="text" 
@@ -200,7 +200,7 @@ export const BookSlot = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Registered Node Assignment</label>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Registered Station Assignment</label>
                   <div className="relative font-manrope">
                       <select 
                         value={bookingData.stationId}
@@ -228,7 +228,7 @@ export const BookSlot = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 font-inter">
                 <div className="space-y-4">
-                   <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Deployment Date</label>
+                   <label className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] ml-2">Setup Date</label>
                    <input 
                       type="date" 
                       value={bookingData.date}
@@ -248,12 +248,12 @@ export const BookSlot = () => {
               </div>
 
               <div className="bg-[#050c14]/80 border-2 border-dashed border-[#00d2b4]/10 rounded-3xl p-10 space-y-6 shadow-sm font-inter">
-                 <div className="text-[11px] font-bold uppercase tracking-[4px] text-[#00d2b4] mb-8 opacity-80">Grid Billing Summary</div>
+                 <div className="text-[11px] font-bold uppercase tracking-[4px] text-[#00d2b4] mb-8 opacity-80">Network Billing Summary</div>
                  <div className="space-y-4 text-sm md:text-base">
                     <div className="flex justify-between items-center text-[#8AAFC8]"><span>Base Rate (Rs/Hr)</span><span className="text-white font-extrabold font-manrope">Rs. {rate.toFixed(2)}</span></div>
                     <div className="flex justify-between items-center text-[#8AAFC8]"><span>Session Duration</span><span className="text-white font-extrabold font-manrope">{duration} HR</span></div>
                     <div className="flex justify-between items-center text-[#8AAFC8]"><span>Platform Commission (25%)</span><span className="text-red-400 font-extrabold font-manrope">- Rs. {platformCommission.toFixed(2)}</span></div>
-                    <div className="flex justify-between items-center text-[#8AAFC8] pt-4 border-t border-white/5"><span>Provider Yield</span><span className="text-[#00d2b4] font-extrabold font-manrope">Rs. {providerYield.toFixed(2)}</span></div>
+                    <div className="flex justify-between items-center text-[#8AAFC8] pt-4 border-t border-white/5"><span>Provider Earnings</span><span className="text-[#00d2b4] font-extrabold font-manrope">Rs. {providerEarnings.toFixed(2)}</span></div>
                  </div>
                  <div className="pt-8 border-t border-white/10 flex justify-between items-center font-manrope">
                     <span className="text-[#8AAFC8] text-[11px] font-bold uppercase tracking-widest">Total cost</span>
@@ -333,7 +333,7 @@ export const BookSlot = () => {
 
              <div className="space-y-6 animate-fade-up">
                 <div className="flex justify-between items-center pl-2">
-                   <h3 className="text-[13px] font-extrabold text-white uppercase tracking-tighter">Live Grid Operations</h3>
+                   <h3 className="text-[13px] font-extrabold text-white uppercase tracking-tighter">Live Network Operations</h3>
                    <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[9px] font-black text-[#4E7A96] uppercase tracking-widest">REAL-TIME MONITOR</div>
                 </div>
                 
@@ -374,7 +374,7 @@ export const BookSlot = () => {
                    ) : (
                       <div className="bg-[#0a2038]/20 border-2 border-dashed border-white/5 rounded-[32px] p-12 text-center opacity-30">
                          <Zap className="w-10 h-10 text-[#4E7A96] mx-auto mb-4 opacity-20" />
-                         <p className="text-[10px] font-bold uppercase tracking-[4px] text-[#4E7A96]">No Current Active Nodes</p>
+                         <p className="text-[10px] font-bold uppercase tracking-[4px] text-[#4E7A96]">No Current Active Stations</p>
                       </div>
                    )}
                 </div>

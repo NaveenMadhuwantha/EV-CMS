@@ -11,12 +11,12 @@ const RegisterStep4 = () => {
     <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
       <RegSidebar 
         image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1000"
-        title={<><span className="text-white">Review Your</span><br /><span className="text-[#00D4AA]">Ecosystem</span><br /><span className="text-white">Deployment</span></>}
+        title={<><span className="text-white">Review Your</span><br /><span className="text-[#00D4AA]">Ecosystem</span><br /><span className="text-white">Setup</span></>}
         stepTag="Finalization Module"
         tagColor="text-[#00D4AA]"
         tagBg="bg-[#00D4AA]/10"
         tagBorder="border-[#00D4AA]/20"
-        description="Verify your configuration before deploying your profile to the Sri Lankan EV Grid."
+        description="Verify your configuration before deploying your profile to the Sri Lankan EV Network."
       />
 
       {/* MAIN CONTENT AREA */}

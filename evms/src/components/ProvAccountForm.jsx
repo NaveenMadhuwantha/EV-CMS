@@ -103,7 +103,7 @@ const ProvAccountForm = () => {
         </div>
 
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Master Access Key</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Master Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
@@ -129,7 +129,7 @@ const ProvAccountForm = () => {
         </div>
 
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Access Key</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
@@ -149,7 +149,7 @@ const ProvAccountForm = () => {
         <div className="p-6 rounded-3xl bg-blue-500/5 border border-blue-500/20 flex items-start gap-4 animate-fade-in shadow-sm">
            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-xl shrink-0">🤝</div>
            <p className="text-[12px] font-bold text-[#8AAFC8] leading-relaxed italic opacity-80">
-             Provider entities undergo a rigorous <span className="text-white font-bold opacity-100">24-hour verification</span> cycle to maintain the integrity of the Sri Lankan EV Grid ecosystem.
+             Provider entities undergo a rigorous <span className="text-white font-bold opacity-100">24-hour verification</span> cycle to maintain the integrity of the Sri Lankan EV Network ecosystem.
            </p>
         </div>
 
@@ -174,7 +174,7 @@ const ProvAccountForm = () => {
                  <div className="w-20 h-20 rounded-[28px] bg-blue-500/10 flex items-center justify-center text-4xl mb-6 mx-auto border border-blue-500/20 animate-pulse">🏛️</div>
                  <h3 className="font-manrope text-3xl font-extrabold text-white mb-3 uppercase tracking-tight">ENTITY AUTH</h3>
                  <p className="text-[#8AAFC8] text-[15px] font-medium leading-relaxed">
-                    A security key has been dispatched to <span className="text-white font-bold">{formData.email}</span>. Authorize this entity to establish grid nodes.
+                    A security key has been dispatched to <span className="text-white font-bold">{formData.email}</span>. Authorize this entity to establish Charging Stations.
                  </p>
                  <p className="text-[10px] text-blue-400/60 font-bold uppercase tracking-widest mt-4 italic">
                     Development Bypass Key: 123456
@@ -207,7 +207,7 @@ const ProvAccountForm = () => {
                  ))}
               </div>
 
-              {otpError && <p className="text-center text-rose-400 text-[11px] font-bold uppercase tracking-widest mb-8 animate-shake">Invalid Entity Access Key</p>}
+              {otpError && <p className="text-center text-rose-400 text-[11px] font-bold uppercase tracking-widest mb-8 animate-shake">Invalid Entity Password</p>}
 
               <button 
                  onClick={() => {

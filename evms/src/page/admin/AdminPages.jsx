@@ -4,6 +4,7 @@ import { UserManagement } from './UserManagement';
 import { Transactions } from './Transactions';
 import { Analytics } from './Analytics';
 import { Commission } from './Commission';
+import { ServiceProviders } from './ServiceProviders';
 import { Stations } from './Stations';
 
 export {
@@ -13,5 +14,6 @@ export {
   Transactions,
   Analytics,
   Commission,
-  Stations
+  Stations,
+  ServiceProviders
 };

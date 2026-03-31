@@ -67,7 +67,7 @@ const EVDetailsForm = ({ onNext, onBack }) => {
     <div className="w-full animate-fade-up font-inter">
       <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden shadow-sm">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-amber-500 opacity-80">Phase 03 · Hardware Node</div>
+        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-amber-500 opacity-80">Phase 03 · Charging Station</div>
         <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">EV ECOSYSTEM</h2>
         <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Register your electric vehicle for the correct charging setup on the national grid.</p>
       </div>

@@ -38,7 +38,7 @@ const ProvBusinessForm = () => {
       <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden shadow-sm">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none"></div>
         <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-emerald-400 opacity-80">Phase 02 · Entity Profile</div>
-        <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">Business Node</h2>
+        <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">Business Station</h2>
         <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Define your organizational structure for legal grid operations.</p>
       </div>
 

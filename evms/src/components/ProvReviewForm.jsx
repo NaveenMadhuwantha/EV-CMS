@@ -194,7 +194,7 @@ const ProvReviewForm = () => {
               ${loading ? 'opacity-50 cursor-wait' : ''}
            `}
          >
-            {loading ? 'Establishing Node...' : 'Submit Registration'}
+            {loading ? 'Establishing Station...' : 'Submit Registration'}
             <span className="group-hover:translate-x-2 transition-transform duration-300">⚡</span>
          </button>
       </div>

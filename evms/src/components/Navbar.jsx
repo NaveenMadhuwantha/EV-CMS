@@ -39,7 +39,7 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* Global Navigation Nodes */}
+        {/* Global Navigation Stations */}
         <div className="hidden md:flex items-center gap-12 font-manrope">
           {[
             { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },

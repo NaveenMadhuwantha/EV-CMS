@@ -5,17 +5,17 @@ import { getAllProviders } from '../firestore/providerDb';
 import { Search, Loader2, MapPin, Navigation, Locate, ChevronRight, Globe, Zap } from 'lucide-react';
 
 const Explore = () => {
-  const [nodes, setNodes] = useState([]);
+  const [nodes, setStations] = useState([]);
   const [search, setSearch] = useState('Sri Lanka');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchNodes();
+    fetchStations();
     window.scrollTo(0, 0);
   }, []);
 
-  const fetchNodes = async () => {
+  const fetchStations = async () => {
     try {
       setLoading(true);
       const sData = await getAllStations();
@@ -29,7 +29,7 @@ const Explore = () => {
           sourceType: 'Provider' 
         }))
       ];
-      setNodes(combined);
+      setStations(combined);
     } catch (err) {
       console.error(err);
     } finally {
@@ -37,13 +37,13 @@ const Explore = () => {
     }
   };
 
-  const filteredNodes = nodes.filter(n => 
+  const filteredStations = nodes.filter(n => 
     (n.name?.toLowerCase() || '').includes(query.toLowerCase()) || 
     (n.location?.toLowerCase() || '').includes(query.toLowerCase())
   );
 
   return (
-    <GuestLayout title="Public Grid Network">
+    <GuestLayout title="Public Network">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-inter animate-fade-up">
         <div className="lg:col-span-4 space-y-8">
            <div className="bg-[#0a2038]/40 border border-white/5 rounded-[40px] p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
@@ -69,9 +69,9 @@ const Explore = () => {
                  {loading ? (
                     <div className="flex flex-col items-center justify-center py-10 opacity-30">
                        <Loader2 className="w-8 h-8 animate-spin mb-4" />
-                       <p className="text-[10px] font-bold uppercase tracking-widest">Scanning Grid Nodes...</p>
+                       <p className="text-[10px] font-bold uppercase tracking-widest">Scanning Charging Stations...</p>
                     </div>
-                 ) : filteredNodes.length > 0 ? filteredNodes.map((n) => (
+                 ) : filteredStations.length > 0 ? filteredStations.map((n) => (
                     <div key={n.id} className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-[#00d2b4]/30 hover:bg-[#00d2b4]/5 transition-all cursor-pointer group shadow-sm">
                        <div className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-5">
@@ -100,10 +100,10 @@ const Explore = () => {
 
            <div className="p-8 rounded-[40px] bg-gradient-to-br from-[#00d2b4]/10 to-blue-600/5 border border-white/5 shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-all cursor-pointer">
                 <Zap className="absolute -right-8 -bottom-8 w-40 h-40 text-[#00d2b4]/5 transform -rotate-12 group-hover:scale-110 transition-transform" />
-                <h4 className="text-white font-manrope font-extrabold text-2xl uppercase tracking-tighter mb-4">Want to Join the Grid?</h4>
+                <h4 className="text-white font-manrope font-extrabold text-2xl uppercase tracking-tighter mb-4">Want to Join the Network?</h4>
                 <p className="text-[#8AAFC8] text-[13px] leading-relaxed mb-8 opacity-80">Register your corporate entity or private vehicle infrastructure to starts managing nodes.</p>
                 <div className="flex items-center gap-4 text-[#00d2b4] text-[11px] font-black uppercase tracking-[3px]">
-                     Start Deployment <ChevronRight className="w-4 h-4" />
+                     Start Setup <ChevronRight className="w-4 h-4" />
                 </div>
            </div>
         </div>
@@ -115,14 +115,14 @@ const Explore = () => {
               <div className="w-24 h-24 rounded-[36px] bg-[#00d2b4]/10 border border-[#00d2b4]/20 flex items-center justify-center mb-10 shadow-2xl animate-[pulse_3s_infinite]">
                  <Navigation className="w-12 h-12 text-[#00d2b4]" />
               </div>
-              <h2 className="text-4xl font-extrabold text-white font-manrope uppercase tracking-tighter mb-5">Grid Telemetry</h2>
+              <h2 className="text-4xl font-extrabold text-white font-manrope uppercase tracking-tighter mb-5">Network Overview</h2>
               <p className="text-[#8AAFC8] font-medium max-w-sm mx-auto leading-relaxed opacity-60 text-lg">Synchronizing satellite telemetry with local infrastructure nodes...</p>
            </div>
            
            <iframe 
               src={`https://www.google.com/maps?q=${encodeURIComponent(search)}&output=embed`}
               className="w-full h-full border-none grayscale opacity-40 contrast-125 brightness-75 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-              title="Grid Telemetry Map"
+              title="Network Overview Map"
            />
            
            <div className="absolute top-10 left-10 z-20 flex gap-6">
@@ -130,7 +130,7 @@ const Explore = () => {
                 onClick={() => setSearch('Sri Lanka')} 
                 className="px-8 py-4 rounded-2xl bg-[#050c14]/80 backdrop-blur-2xl border border-white/10 text-white text-[11px] font-black uppercase tracking-[4px] hover:border-[#00d2b4]/40 hover:bg-[#00d2b4] hover:text-[#050c14] transition-all shadow-2xl"
               >
-                Grid Center
+                Map Center
               </button>
               <button className="w-14 h-14 rounded-2xl bg-[#050c14]/80 backdrop-blur-2xl border border-white/10 flex items-center justify-center text-white hover:text-blue-400 hover:border-blue-400/40 transition-all shadow-2xl">
                  <Locate className="w-6 h-6" />

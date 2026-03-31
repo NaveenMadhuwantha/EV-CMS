@@ -72,9 +72,24 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  const params = new URLSearchParams(window.location.search);
+  let devRole = params.get('devRole');
+  if (devRole === 'clear') {
+    sessionStorage.removeItem('devRole');
+    devRole = null;
+  } else if (devRole) {
+    sessionStorage.setItem('devRole', devRole);
+  } else {
+    devRole = sessionStorage.getItem('devRole');
+  }
+  
+  const ctxUser = devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user;
+  const ctxProfile = devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole } : profile;
+  const ctxRole = devRole || profile?.role;
+
   return (
-    <AuthContext.Provider value={{ user, profile, role: profile?.role, loading }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user: ctxUser, profile: ctxProfile, role: ctxRole, loading: devRole ? false : loading }}>
+      {(!loading || devRole) && children}
     </AuthContext.Provider>
   );
 };

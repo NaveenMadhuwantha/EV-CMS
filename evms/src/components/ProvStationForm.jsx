@@ -64,7 +64,7 @@ const ProvStationForm = () => {
     <div className="w-full animate-fade-up font-inter">
       <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden shadow-sm">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-500/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-amber-500 opacity-80">Phase 03 · Infrastructure Hub</div>
+        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-amber-500 opacity-80">Phase 03 · Infrastructure Station</div>
         <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">Station Setup</h2>
         <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Define your physical charging location and hardware specifications.</p>
       </div>
@@ -76,7 +76,7 @@ const ProvStationForm = () => {
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-3">
                  <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Station Name</label>
-                 <input name="stationName" type="text" placeholder="e.g. Wattala Super Hub" className={`w-full py-4.5 px-6 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all ${errors.stationName ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stationName} onChange={handleChange} />
+                 <input name="stationName" type="text" placeholder="e.g. Wattala Super Station" className={`w-full py-4.5 px-6 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all ${errors.stationName ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stationName} onChange={handleChange} />
               </div>
               <div className="space-y-3">
                  <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Charging Slots</label>
@@ -125,7 +125,7 @@ const ProvStationForm = () => {
            {errors.connectors && <p className="ml-2 text-[11px] font-bold text-red-400">Select at least one connector</p>}
         </div>
 
-        {/* Geospatial Deployment */}
+        {/* Geospatial Setup */}
         <div className="space-y-6">
            <div className="space-y-3">
               <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Station Address</label>

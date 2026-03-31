@@ -38,7 +38,7 @@ const Login = () => {
           <div className="hidden md:flex items-center gap-10 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96]">
             <a href="/explore" className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group">
               <Globe className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform opacity-60 group-hover:opacity-100" />
-              Global Grid
+              Global Network
             </a>
             <a href="#" className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group">
               <ShieldCheck className="w-3.5 h-3.5 group-hover:scale-110 transition-transform opacity-60 group-hover:opacity-100" />
@@ -154,7 +154,7 @@ const Login = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050F1C] via-[#050F1C]/20 to-transparent"></div>
               </div>
 
-              {/* Floating Data Nodes */}
+              {/* Floating Data Stations */}
               <div className="absolute top-[12%] -left-[10%] bg-[#0a1628]/95 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center gap-4 group hover:border-[#00D4AA]/40 transition-all font-inter">
                 <div className="w-12 h-12 rounded-2xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-inner">
                   <BarChart3 className="w-6 h-6" strokeWidth={2.5} />

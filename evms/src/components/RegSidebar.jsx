@@ -20,7 +20,7 @@ const RegSidebar = ({
         <img
           src={image}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${opacity}`}
-          alt="Node BG"
+          alt="Station BG"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#050F1C] via-[#050F1C]/90 to-transparent"></div>
       </div>
@@ -62,7 +62,7 @@ const RegSidebar = ({
 
            {children}
 
-           {/* Metrics Grid */}
+           {/* Metrics Network */}
            <div className="hidden lg:grid grid-cols-1 gap-5 mt-14 animate-fade-in font-inter">
               {infoCards.length > 0 ? infoCards.map((card, i) => (
                 <div key={i} className="bg-white/[0.03] rounded-3xl p-6 border border-white/5 hover:border-white/20 transition-all group flex items-center gap-5 shadow-sm">
@@ -77,7 +77,7 @@ const RegSidebar = ({
               )) : (
                 <div className="grid grid-cols-2 gap-4 w-full">
                    {[
-                     { l: 'Verified Nodes', v: '2,400+', c: '#00D4AA', i: ShieldCheck },
+                     { l: 'Verified Stations', v: '2,400+', c: '#00D4AA', i: ShieldCheck },
                      { l: 'System Uptime', v: '99.9%', c: '#3B82F6', i: BarChart3 }
                    ].map(s => (
                      <div key={s.l} className="bg-white/[0.03] p-6 rounded-[32px] border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-sm">
@@ -95,7 +95,7 @@ const RegSidebar = ({
         <div className="mt-16 lg:mt-0 pt-10 border-t border-white/10 w-full flex justify-between items-center text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest font-inter opacity-60">
           <div className="flex items-center gap-3">
              <Lock className="w-3.5 h-3.5" />
-             © 2026 VoltWay National Grid
+             © 2026 VoltWay National Network
           </div>
           <div className="flex gap-6">
              <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>

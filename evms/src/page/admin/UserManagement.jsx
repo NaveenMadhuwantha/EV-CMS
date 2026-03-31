@@ -151,7 +151,7 @@ export const UserManagement = () => {
         {loading ? (
           <div className="py-20 text-center opacity-30">
              <Loader2 className="w-10 h-10 animate-spin mx-auto mb-4" />
-             <p className="text-[10px] font-bold uppercase tracking-widest leading-loose">Synchronizing User Grid...</p>
+             <p className="text-[10px] font-bold uppercase tracking-widest leading-loose">Synchronizing User Network...</p>
           </div>
         ) : (
           <table className="w-full text-left">

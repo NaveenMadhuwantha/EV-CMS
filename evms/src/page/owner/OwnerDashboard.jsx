@@ -1,5 +1,5 @@
-import React from 'react';
-import AdminLayout from '../../layouts/AdminLayout';
+import React, { useState, useEffect } from 'react';
+import OwnerLayout from '../../layouts/OwnerLayout';
 import { useAuth } from '../../context/AuthContext';
 import { 
   Zap, MapPin, Calendar, TrendingUp, 
@@ -35,11 +35,11 @@ const OwnerDashboard = () => {
   const userName = profile?.fullName || user?.email?.split('@')[0] || 'User';
 
   return (
-    <AdminLayout title="Owner Portal">
+    <OwnerLayout title="Station Control">
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
-               Active <span className="text-[#00d2b4]">Telemetry.</span>
+               Active <span className="text-[#00d2b4]">Overview.</span>
             </h1>
             <p className="text-[#7a9bbf] mt-2 font-medium font-inter opacity-70">
                Authenticated as <span className="text-white font-bold">{userName}</span> 
@@ -93,7 +93,7 @@ const OwnerDashboard = () => {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </OwnerLayout>
   );
 };
 

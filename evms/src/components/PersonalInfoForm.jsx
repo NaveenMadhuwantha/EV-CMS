@@ -84,7 +84,7 @@ const PersonalInfoForm = ({ onNext, onBack }) => {
             {uploading ? (
               <div className="flex flex-col items-center animate-fade-in font-inter">
                 <div className="w-10 h-10 border-4 border-blue-400/20 border-t-blue-400 rounded-full animate-spin mb-4"></div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400">Processing Node...</div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400">Processing Station...</div>
               </div>
             ) : photoPreview ? (
               <div className="relative group/img h-full w-full p-4 overflow-hidden rounded-3xl shadow-inner">

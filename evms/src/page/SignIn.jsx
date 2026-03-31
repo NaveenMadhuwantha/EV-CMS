@@ -173,7 +173,7 @@ export default function SignIn() {
             <h2 className="font-manrope text-5xl lg:text-6xl font-extrabold text-white leading-tight uppercase tracking-tight">Sign In</h2>
           </div>
 
-          {/* Role Grid */}
+          {/* Role Network */}
           <div className="mb-10 space-y-4">
             <div className="text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96] opacity-60 flex items-center gap-2">
               <Info className="w-4 h-4" /> Select Your Role

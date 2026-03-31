@@ -146,7 +146,7 @@ const AccountForm = ({ onNext }) => {
 
         {/* Confirm Password Input */}
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Access Key</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Password</label>
           <div className="relative group">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
@@ -192,7 +192,7 @@ const AccountForm = ({ onNext }) => {
               
               <div className="text-center mb-10">
                  <div className="w-20 h-20 rounded-[28px] bg-[#00D4AA]/10 flex items-center justify-center text-4xl mb-6 mx-auto border border-[#00D4AA]/20 animate-pulse">⚡</div>
-                 <h3 className="font-manrope text-3xl font-extrabold text-white mb-3 uppercase tracking-tight">Verify Node</h3>
+                 <h3 className="font-manrope text-3xl font-extrabold text-white mb-3 uppercase tracking-tight">Verify Station</h3>
                  <p className="text-[#8AAFC8] text-[15px] font-medium leading-relaxed">
                     We've deployed a security key to <span className="text-white font-bold">{email}</span>. Please authorize this node to continue.
                  </p>
@@ -227,7 +227,7 @@ const AccountForm = ({ onNext }) => {
                  ))}
               </div>
 
-              {otpError && <p className="text-center text-rose-400 text-[11px] font-bold uppercase tracking-widest mb-8 animate-shake">Invalid Node Access Key</p>}
+              {otpError && <p className="text-center text-rose-400 text-[11px] font-bold uppercase tracking-widest mb-8 animate-shake">Invalid Station Password</p>}
 
               <button 
                  onClick={() => {

@@ -2,11 +2,11 @@ import { db } from "../config/firebase";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 
 /**
- * VoltWay Telemetry Engine (Database Side)
+ * VoltWay Overview Engine (Database Side)
  * Fetch all reporting and metrics from Firestore.
  */
 
-export const getDashboardTelemetry = async () => {
+export const getDashboardOverview = async () => {
   try {
      const [stations, bookings, sessions] = await Promise.all([
         getDocs(collection(db, "stations")),
@@ -15,13 +15,13 @@ export const getDashboardTelemetry = async () => {
      ]);
 
      return {
-        activeNodes: stations.size,
+        activeStations: stations.size,
         totalBookings: bookings.size,
         recentSessions: sessions.docs.map(doc => ({ id: doc.id, ...doc.data() })),
         commissionRate: 8.5
      };
   } catch (error) {
-     console.error("Telemetry failure:", error);
-     return { activeNodes: 0, totalBookings: 0, recentSessions: [], commissionRate: 0 };
+     console.error("Overview failure:", error);
+     return { activeStations: 0, totalBookings: 0, recentSessions: [], commissionRate: 0 };
   }
 };
