@@ -92,7 +92,7 @@ const ProvReviewForm = () => {
         </div>
 
         <button 
-           onClick={() => navigate('/login')} 
+           onClick={() => navigate('/')} 
            className="w-full sm:w-auto px-12 py-5 rounded-2xl font-extrabold uppercase tracking-widest bg-blue-500 text-white shadow-xl hover:brightness-110 active:scale-95 transition-all font-manrope text-[13px]"
         >
           Return to Login

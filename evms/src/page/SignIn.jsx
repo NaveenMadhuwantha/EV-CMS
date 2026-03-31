@@ -107,7 +107,7 @@ export default function SignIn() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#050F1C] via-[#050F1C]/80 to-transparent"></div>
         <div className="relative flex flex-col h-full p-16 justify-between animate-fade-in">
 
-          <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/login')}>
+          <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-3xl relative bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] shadow-xl group-hover:scale-110 transition-transform duration-500">
               <Zap className="w-6 h-6 text-white fill-white/20" />
             </div>
