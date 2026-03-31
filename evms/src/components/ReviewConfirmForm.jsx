@@ -91,7 +91,7 @@ const ReviewConfirmForm = ({ onComplete }) => {
         </div>
 
         <button 
-           onClick={() => navigate('/login')} 
+           onClick={() => navigate('/')} 
            className="w-full sm:w-auto px-12 py-5 rounded-2xl font-extrabold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-xl hover:brightness-110 active:scale-95 transition-all font-manrope text-[13px]"
         >
           ENTER ECOSYSTEM →

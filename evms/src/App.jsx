@@ -29,7 +29,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (loading) return null;
   // If devRole is set, completely bypass real user check so user can see UI
-  if (!devRole && !user) return <Navigate to="/login" replace />;
+  if (!devRole && !user) return <Navigate to="/" replace />;
   if (allowedRoles && !allowedRoles.includes(activeRole) && activeRole !== 'all') return <Navigate to="/dashboard" replace />;
 
   return children;
@@ -42,7 +42,7 @@ const DevSwitcher = () => (
       <a href="/admin/dashboard?devRole=admin" className="hover:text-white transition-colors">👁 View as Admin</a>
       <a href="/provider/dashboard?devRole=provider" className="hover:text-white transition-colors">👁 View as Provider</a>
       <a href="/owner/dashboard?devRole=owner" className="hover:text-white transition-colors">👁 View as Owner</a>
-      <a href="/login?devRole=clear" className="ml-4 pl-4 border-l border-black/20 hover:text-white transition-colors">✕ Exit Config</a>
+      <a href="/?devRole=clear" className="ml-4 pl-4 border-l border-black/20 hover:text-white transition-colors">✕ Exit Config</a>
     </div>
   </div>
 );
@@ -52,7 +52,7 @@ const DashboardStation = () => {
   if (role === 'admin') return <Navigate to="/admin/dashboard" replace />;
   if (role === 'provider') return <Navigate to="/provider/dashboard" replace />;
   if (role === 'owner') return <Navigate to="/owner/dashboard" replace />;
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/" replace />;
 };
 
 const DevRedirect = ({ role, path }) => {
@@ -78,7 +78,7 @@ function App() {
           <Route path="/dev/provider" element={<DevRedirect role="provider" path="/provider/dashboard" />} />
           <Route path="/dev/owner" element={<DevRedirect role="owner" path="/owner/dashboard" />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/register" element={<RegisterStep1 />} />
@@ -109,7 +109,7 @@ function App() {
           <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'provider']}><Transactions /></ProtectedRoute>} />
           <Route path="/admin/commission" element={<ProtectedRoute allowedRoles={['admin', 'provider']}><Commission /></ProtectedRoute>} />
 
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>

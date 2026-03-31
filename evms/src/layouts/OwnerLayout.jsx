@@ -22,7 +22,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      navigate('/login');
+      navigate('/');
     } catch (err) { }
   };
 

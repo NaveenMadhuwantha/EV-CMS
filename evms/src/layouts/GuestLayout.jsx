@@ -15,7 +15,7 @@ const GuestLayout = ({ children, title }) => {
 
       {/* Header */}
       <header className="sticky top-0 z-[100] h-[90px] bg-[#050c14]/80 backdrop-blur-3xl border-b border-white/5 flex items-center px-12 gap-8 font-inter">
-        <Link to="/login" className="flex items-center gap-4 group">
+        <Link to="/" className="flex items-center gap-4 group">
           <div className="w-12 h-12 bg-gradient-to-br from-[#00d2b4] to-blue-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500">
             <Zap className="w-6 h-6 text-white fill-white/20" />
           </div>
@@ -33,7 +33,7 @@ const GuestLayout = ({ children, title }) => {
 
         <div className="flex items-center gap-6">
            <div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] mr-4">
-              <Link to="/login" className="hover:text-white transition-colors">Documentation</Link>
+              <Link to="/" className="hover:text-white transition-colors">Documentation</Link>
            </div>
            <button 
              onClick={() => navigate('/signin')}

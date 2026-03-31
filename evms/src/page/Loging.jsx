@@ -24,7 +24,7 @@ const Login = () => {
 
       {/* 1. Header */}
       <header className="w-full px-6 py-8 lg:px-20 lg:py-10 flex items-center justify-between z-50 animate-fade-in">
-        <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/login')}>
+        <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] shadow-xl group-hover:scale-105 transition-transform duration-500">
             <Zap className="w-6 h-6 text-white fill-white/20" />
           </div>
