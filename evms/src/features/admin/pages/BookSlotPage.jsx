@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllStations } from '../../../firestore/stationDb';
 import { createBooking, getAllBookings, updateBookingStatus } from '../../../firestore/bookingDb';
@@ -165,7 +165,7 @@ export const BookSlot = () => {
   };
 
   return (
-    <AdminLayout title="Bookings">
+    <DashboardLayout title="Bookings">
       <PageHeader title="Bookings" subtitle="Handle customer appointments and grid slot reservations." />
       
       {loading ? (
@@ -382,6 +382,6 @@ export const BookSlot = () => {
           </div>
         </div>
       )}
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

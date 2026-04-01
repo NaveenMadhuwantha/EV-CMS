@@ -51,13 +51,20 @@ export const AuthProvider = ({ children }) => {
         };
 
         try {
-          if (savedRole) {
-            unsubscribeProfile = await syncAndListen(savedRole, currentUser.uid);
+          let role = null;
+          
+          // 1. Fetch the definitive user record from the 'users' collection
+          const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+          
+          if (uSnap.exists()) {
+            role = (uSnap.data().role || 'owner').toLowerCase();
           } else {
-            const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
-            let role = uSnap.exists() ? (uSnap.data().role || 'owner') : 'owner';
-            unsubscribeProfile = await syncAndListen(role, currentUser.uid);
+            // 2. If not in main registry, check specialized provider collection
+            const pSnap = await getDoc(doc(db, 'providers', currentUser.uid));
+            role = pSnap.exists() ? 'provider' : 'owner';
           }
+          
+          unsubscribeProfile = await syncAndListen(role, currentUser.uid);
         } catch (err) { console.error("Sync Error:", err); }
       } else {
         setProfile(null);
@@ -85,7 +92,7 @@ export const AuthProvider = ({ children }) => {
   
   const ctxUser = devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user;
   const ctxProfile = devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole } : profile;
-  const ctxRole = devRole || profile?.role;
+  const ctxRole = (devRole || profile?.role || 'owner').toLowerCase();
 
   return (
     <AuthContext.Provider value={{ user: ctxUser, profile: ctxProfile, role: ctxRole, loading: devRole ? false : loading }}>

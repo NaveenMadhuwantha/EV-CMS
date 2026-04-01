@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader, SectionHeader } from '../components/AdminComponents';
 import { getAllBookings } from '../../../firestore/bookingDb';
 import { getStationsByProvider } from '../../../firestore/stationDb';
@@ -68,7 +68,7 @@ export const Commission = () => {
   const primaryMetric = role === 'provider' ? totalEarnings : totalCommission;
 
   return (
-    <AdminLayout title={role === 'provider' ? "Earnings" : "Commission"}>
+    <DashboardLayout title={role === 'provider' ? "Earnings" : "Commission"}>
       <PageHeader title={role === 'provider' ? "Earnings Station" : "Commission Station"} subtitle={role === 'provider' ? "Real-time earnings extracted from your node network." : "Real-time platform earnings extracted from provider yield."} />
       
       {/* Commission Stats */}
@@ -159,6 +159,6 @@ export const Commission = () => {
             <div className="text-[#00d2b4] font-black text-[13px] uppercase tracking-widest">Net Profit Rs. {primaryMetric.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
          </div>
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

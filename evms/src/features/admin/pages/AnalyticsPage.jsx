@@ -1,9 +1,9 @@
 import React from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader, SectionHeader } from '../components/AdminComponents';
 
 export const Analytics = () => (
-  <AdminLayout title="Analytics">
+  <DashboardLayout title="Analytics">
     <PageHeader title="Analytics" subtitle="Visual insights into system performance." />
     <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[48px] p-12 lg:p-16 hover:border-[#00d2b4]/30 transition-all font-inter shadow-2xl relative overflow-hidden">
        <div className="flex flex-wrap justify-between items-start gap-8 mb-12 relative z-10">
@@ -21,5 +21,5 @@ export const Analytics = () => (
        </div>
        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#00d2b4]/5 to-transparent pointer-events-none opacity-40"></div>
     </div>
-  </AdminLayout>
+  </DashboardLayout>
 );

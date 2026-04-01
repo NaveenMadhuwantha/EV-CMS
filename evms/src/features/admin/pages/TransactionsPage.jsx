@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllBookings } from '../../../firestore/bookingDb';
 import { getStationsByProvider } from '../../../firestore/stationDb';
@@ -42,7 +42,7 @@ export const Transactions = () => {
   const completedTx = transactions.filter(t => t.status === 'COMPLETED').length;
 
   return (
-    <AdminLayout title="Transactions">
+    <DashboardLayout title="Transactions">
       <PageHeader title={role === 'provider' ? "Your Ledger" : "Transactions"} subtitle="Track payment transactions & charging history." />
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 font-inter">
@@ -118,6 +118,6 @@ export const Transactions = () => {
           </table>
         )}
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

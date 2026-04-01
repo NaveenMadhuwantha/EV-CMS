@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ProviderLayout from '../../../shared/layouts/ProviderLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
 import { getStationsByProvider } from '../../../firestore/stationDb';
 import { getAllBookings } from '../../../firestore/bookingDb';
@@ -74,16 +74,16 @@ const ProviderDashboard = () => {
   }, [user]);
 
   if (stats.loading) return (
-     <AdminLayout title="Station Control">
+     <DashboardLayout title="Station Control">
         <div className="flex flex-col items-center justify-center py-40 opacity-30">
            <Loader2 className="w-12 h-12 text-[#00d2b4] animate-spin mb-4" />
            <div className="text-[12px] font-bold uppercase tracking-widest text-[#4E7A96]">Syncing Provider Matrix...</div>
         </div>
-     </AdminLayout>
+     </DashboardLayout>
   );
 
   return (
-    <ProviderLayout title="Station Control">
+    <DashboardLayout title="Station Control">
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
@@ -141,7 +141,7 @@ const ProviderDashboard = () => {
           </div>
         </div>
       </div>
-    </ProviderLayout>
+    </DashboardLayout>
   );
 };
 

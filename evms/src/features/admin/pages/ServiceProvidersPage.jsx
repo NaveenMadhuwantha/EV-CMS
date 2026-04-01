@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllProviders } from '../../../firestore/providerDb';
 import { Loader2, Briefcase, Mail, Phone, MapPin, Activity } from 'lucide-react';
@@ -25,7 +25,7 @@ export const ServiceProviders = () => {
   };
 
   return (
-    <AdminLayout title="Service Providers">
+    <DashboardLayout title="Service Providers">
       <div className="flex justify-between items-center mb-12">
         <PageHeader title="Service Providers" subtitle="Manage registered node operators and partner networks." />
       </div>
@@ -97,6 +97,6 @@ export const ServiceProviders = () => {
           </table>
         )}
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
