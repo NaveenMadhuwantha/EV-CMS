@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginWithEmail, loginWithGoogle } from '../../../firebase/auth';
 import { getUserProfile } from '../../../firestore/authDb';
-import { Car, Zap, Shield, Mail, Lock, Eye, EyeOff, ArrowRight, KeyRound, AlertCircle, Info, Activity, Fingerprint } from 'lucide-react';
+import { Car, Zap, Shield, Mail, Lock, Eye, EyeOff, ArrowRight, KeyRound, AlertCircle, Info, Activity, Fingerprint, Book } from 'lucide-react';
+import DocumentationModal from '../../../shared/components/DocumentationModal';
 
 const ROLES = {
   owner: { label: 'EV Owner', icon: Car, ac: '#00D4AA', hint: 'owner@ev.lk' },
@@ -55,6 +56,7 @@ export default function SignIn() {
   const [loading, setLoad] = useState(false);
   const [alert, setAlert] = useState('');
   const [forgot, setForgot] = useState(false);
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   const cfg = ROLES[role];
 
@@ -96,10 +98,11 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#050F1C] font-inter text-[#EFF6FF] overflow-x-hidden relative selection:bg-[#00D4AA]/30">
+    <>
+      {/* Documentation Modal */}
+      <DocumentationModal isOpen={isDocModalOpen} onClose={() => setIsDocModalOpen(false)} />
 
-      {/* Background Decor */}
-      <div className="fixed top-[-20%] right-[-10%] w-[1000px] h-[1000px] rounded-full bg-blue-500/5 blur-[180px] pointer-events-none"></div>
+      <div className="flex min-h-screen bg-[#050F1C] font-inter text-[#EFF6FF] overflow-x-hidden relative selection:bg-[#00D4AA]/30">
       <div className="fixed bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#00D4AA]/5 blur-[150px] pointer-events-none"></div>
 
       {/* LEFT PANEL */}
@@ -125,6 +128,19 @@ export default function SignIn() {
             <p className="text-lg text-[#8AAFC8] font-medium leading-relaxed opacity-80 animate-fade-up delay-100 border-l-2 border-white/10 pl-6">
               Please log in to your account to manage your charging experience and monitor charging stations.
             </p>
+
+            <button 
+              onClick={() => setIsDocModalOpen(true)}
+              className="group flex items-center gap-6 p-6 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 w-full text-left"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-[#00D4AA] group-hover:scale-110 transition-transform">
+                <Book className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-1">Architecture</div>
+                <div className="text-lg font-extrabold text-white uppercase tracking-tight">System Manual</div>
+              </div>
+            </button>
 
             <div className="grid grid-cols-1 gap-4 animate-fade-up delay-200">
               {STATS.map(s => (
@@ -276,9 +292,9 @@ export default function SignIn() {
             </div>
           </div>
         </div>
+        </div>
       </div>
-
       {forgot && <ForgotModal prefill={email} onClose={() => setForgot(false)} onSend={handlePasswordReset} />}
-    </div>
+    </>
   );
 }

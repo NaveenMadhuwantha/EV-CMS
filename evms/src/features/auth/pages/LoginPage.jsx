@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin } from 'lucide-react';
+import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin, BookOpen } from 'lucide-react';
+import DocumentationModal from '../../../shared/components/DocumentationModal';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   const handleRegisterClick = (role) => {
     if (role === 'EV Owner') {
@@ -17,13 +19,16 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#050F1C] text-white flex flex-col font-inter overflow-x-hidden relative selection:bg-[#00D4AA]/30">
+      
+      {/* Documentation Modal Overlay */}
+      <DocumentationModal isOpen={isDocModalOpen} onClose={() => setIsDocModalOpen(false)} />
 
       {/* Dynamic Background Elements */}
       <div className="fixed top-[-15%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#00D4AA]/5 blur-[140px] pointer-events-none"></div>
       <div className="fixed bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
 
       {/* 1. Header */}
-      <header className="w-full px-6 py-8 lg:px-20 lg:py-10 flex items-center justify-between z-50 animate-fade-in">
+      <header className="w-full px-6 py-8 lg:px-20 lg:py-10 flex items-center justify-between z-50 animate-fade-in text-white/90">
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] shadow-xl group-hover:scale-105 transition-transform duration-500">
             <Zap className="w-6 h-6 text-white fill-white/20" />
@@ -40,14 +45,17 @@ const Login = () => {
               <Globe className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform opacity-60 group-hover:opacity-100" />
               Global Network
             </a>
-            <a href="#" className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group">
+            <button 
+               onClick={() => setIsDocModalOpen(true)}
+               className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group cursor-pointer border-none bg-transparent h-auto p-0"
+            >
               <ShieldCheck className="w-3.5 h-3.5 group-hover:scale-110 transition-transform opacity-60 group-hover:opacity-100" />
               Documentation
-            </a>
+            </button>
           </div>
           <button
             onClick={() => navigate('/signin')}
-            className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope"
+            className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope whitespace-nowrap"
           >
             <Lock className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-[#00D4AA] transition-all" strokeWidth={2.5} />
             Login
