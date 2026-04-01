@@ -95,10 +95,19 @@ function App() {
           {/* Protected Main Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardStation /></ProtectedRoute>} />
           <Route path="/owner/dashboard" element={<ProtectedRoute allowedRoles={['owner']}><OwnerDashboard /></ProtectedRoute>} />
+          <Route path="/owner/map" element={<ProtectedRoute allowedRoles={['owner']}><StationMap /></ProtectedRoute>} />
+          <Route path="/owner/booking" element={<ProtectedRoute allowedRoles={['owner']}><BookSlot /></ProtectedRoute>} />
           <Route path="/provider/dashboard" element={<ProtectedRoute allowedRoles={['provider']}><ProviderDashboard /></ProtectedRoute>} />
           <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
 
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+
+          {/* Provider Specific Routes Aliases */}
+          <Route path="/provider/analytics" element={<ProtectedRoute allowedRoles={['provider']}><Analytics /></ProtectedRoute>} />
+          <Route path="/provider/stations" element={<ProtectedRoute allowedRoles={['provider']}><Stations /></ProtectedRoute>} />
+          <Route path="/provider/booking" element={<ProtectedRoute allowedRoles={['provider']}><BookSlot /></ProtectedRoute>} />
+          <Route path="/provider/transactions" element={<ProtectedRoute allowedRoles={['provider']}><Transactions /></ProtectedRoute>} />
+          <Route path="/provider/earnings" element={<ProtectedRoute allowedRoles={['provider']}><Commission /></ProtectedRoute>} />
 
           {/* Admin & Higher Level Routes */}
           <Route path="/admin/analytics" element={<ProtectedRoute allowedRoles={['admin', 'provider']}><Analytics /></ProtectedRoute>} />

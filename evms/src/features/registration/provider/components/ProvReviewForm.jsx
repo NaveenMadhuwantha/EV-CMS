@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { saveProviderProfile } from '../../../../firestore/providerDb';
+import { registerStation } from '../../../../firestore/stationDb';
 
 const ProvReviewForm = () => {
   const navigate = useNavigate();
@@ -46,7 +47,20 @@ const ProvReviewForm = () => {
 
     setLoading(true);
     try {
+      // 1. Save provider profile
       await saveProviderProfile(uid, rawData);
+      
+      // 2. Create initial station in the network
+      await registerStation({
+        name: rawData.stationName,
+        location: `${rawData.stCity}, ${rawData.stDistrict}`,
+        price: parseFloat(rawData.rateHour || 0),
+        type: rawData.chargeType,
+        providerId: uid,
+        ownerEmail: rawData.email,
+        status: 'LIVE'
+      });
+
       setIsSuccess(true);
       Object.keys(sessionStorage).forEach(k => k.startsWith('prov_') && sessionStorage.removeItem(k));
       window.scrollTo(0, 0);

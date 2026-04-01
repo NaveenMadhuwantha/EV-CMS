@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
 import { 
   User, Mail, Phone, MapPin, ShieldCheck, 
@@ -11,7 +11,7 @@ const Profile = () => {
   const { user, profile } = useAuth();
 
   return (
-    <AdminLayout title="My Profile">
+    <DashboardLayout title="My Profile">
       <div className="max-w-5xl mx-auto space-y-10 animate-fade-up font-inter">
         
         {/* Core Identity Sector */}
@@ -118,7 +118,7 @@ const Profile = () => {
 
         </div>
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
 

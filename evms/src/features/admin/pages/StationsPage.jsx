@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { registerStation, getAllStations, getStationsByProvider } from '../../../firestore/stationDb';
 import { useAuth } from '../../auth/context/AuthContext';
@@ -97,7 +97,7 @@ export const Stations = () => {
   };
 
   return (
-    <AdminLayout title="Stations">
+    <DashboardLayout title="Stations">
       <div className="flex justify-between items-center mb-12">
         <PageHeader title="Network Stations" subtitle={role === 'provider' ? "Manage your deployed charging hubs." : "Manage and monitor all charging nodes."} />
         {role === 'provider' && (
@@ -151,6 +151,6 @@ export const Stations = () => {
       </div>
 
       {showModal && <AddStationModal onClose={() => setShowModal(false)} onSubmit={handleRegisterStation} />}
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

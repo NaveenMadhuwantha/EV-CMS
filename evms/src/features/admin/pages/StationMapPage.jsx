@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
 import { PageHeader, SectionHeader } from '../components/AdminComponents';
 import { registerStation, getAllStations } from '../../../firestore/stationDb';
@@ -149,7 +149,7 @@ export const StationMap = () => {
   );
 
   return (
-    <AdminLayout title="Station Map">
+    <DashboardLayout title="Station Map">
       <PageHeader 
         title="Station Map" 
         subtitle="View and manage all charging stations and providers on the map."
@@ -229,6 +229,6 @@ export const StationMap = () => {
       </div>
 
       {showModal && <StationFormModal onClose={() => setShowModal(false)} onSubmit={handleAddStation} />}
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

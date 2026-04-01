@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import OwnerLayout from '../../../shared/layouts/OwnerLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
+import { Link } from 'react-router-dom';
 import { 
   Zap, MapPin, Calendar, TrendingUp, 
   Clock, Activity, Fuel, History, Car,
@@ -30,12 +31,31 @@ const SectionHeader = ({ title, subtitle, action }) => (
   </div>
 );
 
+import { requestProviderStatus } from '../../../firestore/providerDb';
+
 const OwnerDashboard = () => {
   const { user, profile } = useAuth();
   const userName = profile?.fullName || user?.email?.split('@')[0] || 'User';
 
+  const handleRequestStatus = async () => {
+    if (window.confirm("Do you want to request Provider status to monetize your charger? Admin will review your application.")) {
+       try {
+          await requestProviderStatus(user.uid, {
+             name: profile?.fullName || user.email,
+             email: user.email,
+             location: profile?.address || 'Private Home',
+             uid: user.uid
+          });
+          alert("Request sent successfully! Your application is now pending review.");
+       } catch (err) {
+          console.error(err);
+          alert("Failed to send request.");
+       }
+    }
+  };
+
   return (
-    <OwnerLayout title="Station Control">
+    <DashboardLayout title="Station Control">
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
@@ -93,7 +113,41 @@ const OwnerDashboard = () => {
           </div>
         </div>
       </div>
-    </OwnerLayout>
+
+      {/* Monetization Invite / Status */}
+      {!profile?.isProviderEnabled && (
+         <div className="bg-gradient-to-br from-[#00d2b4]/20 to-blue-600/10 border-2 border-dashed border-[#00d2b4]/20 rounded-[48px] p-12 lg:p-20 relative overflow-hidden group shadow-2xl animate-fade-up delay-300">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#00d2b4]/5 blur-[120px] pointer-events-none group-hover:bg-[#00d2b4]/10 transition-all duration-1000"></div>
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 text-center lg:text-left">
+               <div className="max-w-2xl">
+                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#00d2b4]/10 border border-[#00d2b4]/20 text-[#00d2b4] text-[10px] font-black uppercase tracking-[4px] mb-8 shadow-sm">Exclusive Opportunity</div>
+                  <h2 className="text-4xl lg:text-5xl font-extrabold text-white font-manrope uppercase tracking-tighter leading-none mb-6">Own a home charger? <span className="text-[#00d2b4]">Start Earning.</span></h2>
+                  <p className="text-[#8AAFC8] text-lg font-medium leading-relaxed opacity-80 max-w-xl font-inter">Join the VoltWay Grid as a Private Provider. Share your infrastructure with our network and earn passive income while supporting the EV ecosystem in Sri Lanka.</p>
+               </div>
+               <button 
+                 onClick={handleRequestStatus}
+                 className="px-12 py-6 rounded-[32px] bg-[#00d2b4] text-[#050c14] text-[13px] font-black uppercase tracking-[4px] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#00d2b4]/30 whitespace-nowrap"
+               >
+                 Request Provider Status
+               </button>
+            </div>
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none"></div>
+         </div>
+      )}
+
+      {profile?.isProviderEnabled && (
+         <div className="bg-[#00d2b4]/5 border border-[#00d2b4]/20 rounded-[32px] p-8 flex items-center justify-between font-inter mb-10">
+            <div className="flex items-center gap-6">
+               <div className="w-14 h-14 rounded-2xl bg-[#00d2b4]/10 flex items-center justify-center text-[#00d2b4] shadow-inner"><Fuel className="w-7 h-7" /></div>
+               <div>
+                  <h4 className="text-white font-black text-xl uppercase tracking-tighter">Your Hosting Node is Active</h4>
+                  <p className="text-[#4E7A96] font-bold text-sm opacity-70">You can now manage your station using the sidebar Host options.</p>
+               </div>
+            </div>
+            <Link to="/provider/stations" className="px-8 py-3 rounded-xl bg-[#00d2b4] text-[#050c14] font-black text-[11px] uppercase tracking-widest shadow-xl">MANAGE STATION</Link>
+         </div>
+      )}
+    </DashboardLayout>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllUsers, addUser, deleteUser } from '../../../firestore/userDb';
 import { Loader2, Trash2 } from 'lucide-react';
@@ -93,20 +93,28 @@ const UserFormModal = ({ onClose, onSubmit }) => {
   );
 };
 
+import { getAllProviderRequests, approveProviderRequest } from '../../../firestore/providerDb';
+import { UserPlus, Clock, CheckCircle } from 'lucide-react';
+
 export const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const data = await getAllUsers();
-      setUsers(data);
+      const [uData, rData] = await Promise.all([
+        getAllUsers(),
+        getAllProviderRequests()
+      ]);
+      setUsers(uData);
+      setRequests(rData.filter(r => r.status === 'PENDING'));
     } catch (err) {
       console.error(err);
     } finally {
@@ -114,11 +122,24 @@ export const UserManagement = () => {
     }
   };
 
+  const handleApprove = async (req) => {
+    if (window.confirm(`Approve provider status for ${req.name}?`)) {
+       try {
+          await approveProviderRequest(req.uid, req);
+          alert("User promoted to Provider successfully!");
+          fetchData();
+       } catch (err) {
+          console.error(err);
+          alert("Approval failed.");
+       }
+    }
+  };
+
   const handleAddUser = async (userData) => {
     try {
       await addUser(userData);
       setShowModal(false);
-      fetchUsers();
+      fetchData();
     } catch (err) {
       alert("Failed to add user.");
     }
@@ -128,7 +149,7 @@ export const UserManagement = () => {
     if (window.confirm("Are you sure you want to remove this user?")) {
       try {
         await deleteUser(id);
-        fetchUsers();
+        fetchData();
       } catch (err) {
         alert("Failed to delete user.");
       }
@@ -136,7 +157,30 @@ export const UserManagement = () => {
   };
 
   return (
-    <AdminLayout title="Users">
+    <DashboardLayout title="Users">
+      {/* Requests Section */}
+      {requests.length > 0 && (
+        <div className="mb-12 animate-fade-down font-inter">
+           <div className="flex items-center gap-4 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-sm"><Clock className="w-5 h-5" /></div>
+              <h3 className="text-lg font-black text-white uppercase tracking-tighter">Pending Provider Applications <span className="ml-2 px-3 py-1 rounded-full bg-amber-500 text-[#050c14] text-[10px] font-black">{requests.length}</span></h3>
+           </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {requests.map(req => (
+                <div key={req.id} className="bg-[#0a2038]/60 border-2 border-dashed border-amber-500/20 rounded-3xl p-6 hover:border-amber-500/40 transition-all group shadow-xl">
+                   <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center font-black text-white text-xl shadow-inner">{req.name?.charAt(0)}</div>
+                      <button onClick={() => handleApprove(req)} className="px-5 py-2.5 rounded-xl bg-amber-500 text-[#050c14] text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5" /> APPROVE</button>
+                   </div>
+                   <div className="text-white font-black text-[16px] uppercase tracking-tight mb-1">{req.name}</div>
+                   <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest opacity-60 mb-4">{req.email}</div>
+                   <div className="pt-4 border-t border-white/5 text-[9px] font-black text-[#4E7A96] uppercase tracking-[3px]">REQUESTED STATUS: PROVIDER</div>
+                </div>
+              ))}
+           </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-12">
         <PageHeader title="Users" subtitle="Manage user accounts and details." />
         <button 
@@ -203,6 +247,6 @@ export const UserManagement = () => {
       </div>
 
       {showModal && <UserFormModal onClose={() => setShowModal(false)} onSubmit={handleAddUser} />}
-    </AdminLayout>
+    </DashboardLayout>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../../../shared/layouts/AdminLayout';
+import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { getDashboardOverview } from '../../../firestore/dashboardDb';
 import { performBackup, performRecovery } from '../../../firestore/backupDb';
 import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3, Database, Download, Upload, Receipt } from 'lucide-react';
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <AdminLayout title="System Overview">
+    <DashboardLayout title="System Overview">
       <div className="font-inter">
         {/* ── MAINTENANCE BAR ── */}
         <div className="mb-10 p-6 bg-[#00d2b4]/5 border border-[#00d2b4]/20 rounded-3xl flex flex-wrap items-center justify-between gap-6 animate-fade-in shadow-inner relative overflow-hidden">
@@ -200,7 +200,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </DashboardLayout>
   );
 };
 
