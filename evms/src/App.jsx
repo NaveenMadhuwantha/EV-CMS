@@ -64,8 +64,9 @@ const DevRedirect = ({ role, path }) => {
 function App() {
   const { user } = useAuth();
   useEffect(() => {
-    console.log("hello");
+    console.log(user);
   }, []);
+
 
   return (
     <Router>

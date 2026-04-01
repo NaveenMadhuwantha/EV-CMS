@@ -69,7 +69,7 @@ export default function SignIn() {
       if (!dbProfile && role !== 'admin') throw new Error("firestore/missing-profile");
 
       localStorage.setItem('user_role', role);
-      navigate('/dashboard');
+      navigate(`/${role}/dashboard`);
     } catch (error) {
       setLoad(false);
       setAlert(error.code?.includes('password') ? 'Incorrect password.' : 'Login failed. Please try again.');
@@ -81,7 +81,7 @@ export default function SignIn() {
     try {
       const user = type === 'google' ? await loginWithGoogle() : await loginWithMicrosoft();
       localStorage.setItem('user_role', role);
-      navigate('/dashboard');
+      navigate(`/${role}/dashboard`);
     } catch (error) {
       setAlert(`${type} login failed.`);
     }

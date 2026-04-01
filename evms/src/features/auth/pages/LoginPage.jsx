@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin, BookOpen } from 'lucide-react';
+import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin, BookOpen, LogOut } from 'lucide-react';
 import DocumentationModal from '../../../shared/components/DocumentationModal';
+import { useAuth } from '../../../features/auth/context/AuthContext';
+import { logoutUser } from '../../../firebase/auth';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { user, profile, role } = useAuth();
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   const handleRegisterClick = (role) => {
@@ -14,6 +17,15 @@ const Login = () => {
     } else if (role === 'Provider') {
       localStorage.setItem('user_role', 'provider');
       navigate('/provider/register');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      navigate('/');
+    } catch (error) {
+      console.error("Logout failed", error);
     }
   };
 
@@ -28,7 +40,7 @@ const Login = () => {
       <div className="fixed bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
 
       {/* 1. Header */}
-      <header className="w-full px-6 py-8 lg:px-20 lg:py-10 flex items-center justify-between z-50 animate-fade-in text-white/90">
+      <header className="w-full px-6 py-8 lg:px-12 lg:py-10 flex items-center justify-between z-50 animate-fade-in text-white/90">
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] shadow-xl group-hover:scale-105 transition-transform duration-500">
             <Zap className="w-6 h-6 text-white fill-white/20" />
@@ -53,13 +65,36 @@ const Login = () => {
               Documentation
             </button>
           </div>
-          <button
-            onClick={() => navigate('/signin')}
-            className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope whitespace-nowrap"
-          >
-            <Lock className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-[#00D4AA] transition-all" strokeWidth={2.5} />
-            Login
-          </button>
+
+          {user ? (
+            <div className="flex items-center gap-8 pl-8 border-l border-white/10">
+              <div className="flex flex-col items-end group cursor-pointer" onClick={() => navigate(`/${role}/dashboard`)}>
+                <div className="text-[13px] font-black text-white uppercase tracking-tighter group-hover:text-[#00D4AA] transition-colors">
+                  {profile?.fullName || profile?.businessName || user.email.split('@')[0]}
+                </div>
+                <div className="text-[9px] text-[#4E7A96] font-extrabold uppercase tracking-[3px] opacity-60 flex items-center gap-2">
+                   <div className="w-1.5 h-1.5 rounded-full bg-[#00D4AA] shadow-[0_0_8px_#00D4AA]"></div>
+                   {(profile?.role || localStorage.getItem('user_role'))?.toUpperCase() || 'USER'}
+                </div>
+                <div className="text-[10px] text-[#4E7A96] font-bold tracking-tight opacity-40 mt-1">{user.email}</div>
+              </div>
+              <button 
+                onClick={handleLogout}
+                className="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center text-red-400 hover:bg-red-500/10 transition-all border border-white/5 active:scale-95 group shadow-xl"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate('/signin')}
+              className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope whitespace-nowrap"
+            >
+              <Lock className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-[#00D4AA] transition-all" strokeWidth={2.5} />
+              Login
+            </button>
+          )}
         </nav>
       </header>
 
