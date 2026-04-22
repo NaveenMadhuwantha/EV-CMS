@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
-import { getAllUsers, addUser, deleteUser } from '../../../firestore/userDb';
+import { getAllUsers, addUser, deleteUser, updateUserStatus } from '../../../firestore/userDb';
 import { Loader2, Trash2 } from 'lucide-react';
 
 const UserFormModal = ({ onClose, onSubmit }) => {
@@ -94,6 +94,7 @@ const UserFormModal = ({ onClose, onSubmit }) => {
 };
 
 import { getAllProviderRequests, approveProviderRequest } from '../../../firestore/providerDb';
+import { notificationDb } from '../../../firestore/notificationDb';
 import { UserPlus, Clock, CheckCircle } from 'lucide-react';
 
 export const UserManagement = () => {
@@ -183,12 +184,31 @@ export const UserManagement = () => {
 
       <div className="flex justify-between items-center mb-12">
         <PageHeader title="Users" subtitle="Manage user accounts and details." />
-        <button 
-          onClick={() => setShowModal(true)}
-          className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00d2b4] to-blue-500 text-[#050c14] text-[12px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-[#00d2b4]/20"
-        >
-          Add Admin / User
-        </button>
+        <div className="flex gap-4">
+           <button 
+              onClick={() => {
+                const msg = window.prompt("Enter broadcast message for all network users:");
+                if (msg) {
+                  notificationDb.send({
+                    recipientId: 'all',
+                    title: 'System Broadcast',
+                    message: msg,
+                    type: 'info',
+                    actionUrl: '/dashboard'
+                  }).then(() => alert("Broadcast sent successfully."));
+                }
+              }}
+              className="px-6 py-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 text-emerald-400 text-[12px] font-black uppercase tracking-widest hover:bg-emerald-500/10 transition-all shadow-sm"
+            >
+              BROADCAST
+            </button>
+            <button 
+              onClick={() => setShowModal(true)}
+              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00d2b4] to-blue-500 text-[#050c14] text-[12px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-[#00d2b4]/20"
+            >
+              Add Admin / User
+            </button>
+        </div>
       </div>
 
       <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] overflow-hidden shadow-2xl font-inter">
@@ -225,7 +245,23 @@ export const UserManagement = () => {
                       {u.status || 'ACTIVE'}
                     </span>
                   </td>
-                  <td className="px-12 py-8 text-right">
+                  <td className="px-12 py-8 text-right flex justify-end gap-3">
+                    <button 
+                      onClick={async () => {
+                        const newStatus = u.status === 'SUSPENDED' ? 'ACTIVE' : 'SUSPENDED';
+                        if (window.confirm(`Are you sure you want to change status to ${newStatus}?`)) {
+                           await updateUserStatus(u.id, newStatus);
+                           fetchData();
+                        }
+                      }}
+                      className={`px-4 py-2 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all ${
+                         u.status === 'SUSPENDED' 
+                           ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20' 
+                           : 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20'
+                      }`}
+                    >
+                      {u.status === 'SUSPENDED' ? 'ACTIVATE' : 'SUSPEND'}
+                    </button>
                     <button 
                       onClick={() => handleDelete(u.id)}
                       className="p-3 rounded-xl hover:bg-red-500/10 text-[#4E7A96] hover:text-red-400 transition-all"
