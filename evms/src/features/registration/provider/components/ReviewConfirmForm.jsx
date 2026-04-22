@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { saveOwnerProfile } from '../../../../firestore/ownerDb';
+import { notificationDb } from '../../../../firestore/notificationDb';
 
 const ReviewConfirmForm = ({ onComplete }) => {
   const navigate = useNavigate();
@@ -46,6 +47,16 @@ const ReviewConfirmForm = ({ onComplete }) => {
     setLoading(true);
     try {
       await saveOwnerProfile(uid, rawData, newsChecked);
+      
+      // Send Welcome Notification
+      await notificationDb.send({
+        recipientId: uid,
+        title: 'Registration Successful!',
+        message: 'Welcome to VoltWay! Your profile is now live and you can explore the network.',
+        type: 'success',
+        actionUrl: '/owner/dashboard'
+      });
+
       setIsSuccess(true);
       Object.keys(sessionStorage).forEach(key => {
         if (key.startsWith('reg_')) sessionStorage.removeItem(key);

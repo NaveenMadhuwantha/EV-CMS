@@ -29,6 +29,11 @@ export const coreDb = {
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
   },
 
+  get: async (coll, id) => {
+    const snap = await getDoc(doc(db, coll, id));
+    return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  },
+
   add: async (coll, data) => {
     const ref = collection(db, coll);
     return await addDoc(ref, { ...data, createdAt: serverTimestamp() });
