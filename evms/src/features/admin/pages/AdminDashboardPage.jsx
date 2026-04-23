@@ -3,6 +3,7 @@ import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { getDashboardOverview } from '../../../firestore/dashboardDb';
 import { performBackup, performRecovery } from '../../../firestore/backupDb';
 import { Zap, MapPin, Calendar, PieChart, Activity, Fuel, Users, BarChart3, Database, Download, Upload, Receipt } from 'lucide-react';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 
 const StatCard = ({ icon: Icon, color, change, value, label, delay }) => (
   <div className={`p-8 bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-3xl relative overflow-hidden group hover:border-[#00d2b4]/40 hover:-translate-y-1 transition-all animate-fade-up ${delay} shadow-sm font-inter`}>
@@ -33,6 +34,7 @@ const SectionHeader = ({ title, subtitle, action }) => (
 const AdminDashboard = () => {
   const [data, setData] = useState({ activeStations: 0, totalBookings: 0, recentSessions: [], commissionRate: 0, loading: true });
   const [bkpMsg, setBkpMsg] = useState('');
+  const { t } = useLanguage();
 
   useEffect(() => {
      getDashboardOverview().then(res => setData({ ...res, loading: false }));
@@ -61,25 +63,25 @@ const AdminDashboard = () => {
   };
 
   return (
-    <DashboardLayout title="System Overview">
+    <DashboardLayout title={t('systemOverview')}>
       <div className="font-inter">
         {/* ── MAINTENANCE BAR ── */}
         <div className="mb-10 p-6 bg-[#00d2b4]/5 border border-[#00d2b4]/20 rounded-3xl flex flex-wrap items-center justify-between gap-6 animate-fade-in shadow-inner relative overflow-hidden">
            <div className="flex items-center gap-4 relative z-10">
               <Database className="w-8 h-8 text-[#00d2b4]" />
               <div>
-                 <h4 className="text-[12px] font-black text-white uppercase tracking-[3px]">Network Maintenance Engine</h4>
-                 <p className="text-[10px] text-[#8AAFC8] font-bold uppercase tracking-widest mt-1 opacity-70">Automated synchronization and manual snapshot recovery active.</p>
+                 <h4 className="text-[12px] font-black text-white uppercase tracking-[3px]">{t('maintenanceEngine')}</h4>
+                 <p className="text-[10px] text-[#8AAFC8] font-bold uppercase tracking-widest mt-1 opacity-70">{t('maintenanceDesc')}</p>
               </div>
            </div>
            
            <div className="flex items-center gap-4 relative z-10">
               {bkpMsg && <span className="text-[10px] font-bold text-[#00d2b4] uppercase tracking-widest mr-4 animate-pulse italic">{bkpMsg}</span>}
               <button onClick={handleBackup} className="px-6 py-3 bg-[#0a2038] border border-white/5 rounded-xl text-white text-[10px] font-black uppercase tracking-widest hover:border-[#00d2b4]/40 transition-all flex items-center gap-3">
-                 <Download className="w-4 h-4" /> Snapshot Backup
+                 <Download className="w-4 h-4" /> {t('snapshotBackup')}
               </button>
               <label className="px-6 py-3 bg-[#00d2b4] rounded-xl text-[#050c14] text-[10px] font-black uppercase tracking-widest hover:brightness-110 cursor-pointer transition-all flex items-center gap-3">
-                 <Upload className="w-4 h-4" /> Restore Data
+                 <Upload className="w-4 h-4" /> {t('restoreData')}
                  <input type="file" onChange={handleRestore} className="hidden" accept=".json" />
               </label>
            </div>
@@ -89,20 +91,20 @@ const AdminDashboard = () => {
 
         {/* ── STATS GRID ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" change="↑ 0.0%" value={data.recentSessions.length} label="Active Sessions" delay="delay-0" />
-          <StatCard icon={MapPin} color="bg-[#0094ff]/10 text-[#0094ff]" change="↑ 0.0%" value={data.activeStations} label="Station Clusters" delay="delay-75" />
-          <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" change="↑ 0.0%" value={data.totalBookings} label="Slot Bookings" delay="delay-150" />
-          <StatCard icon={PieChart} color="bg-purple-500/10 text-purple-500" change="↑ 0.0%" value={`Rs. 0`} label="Earnings Earned" delay="delay-200" />
+          <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" change="↑ 0.0%" value={data.recentSessions.length} label={t('activeSessions')} delay="delay-0" />
+          <StatCard icon={MapPin} color="bg-[#0094ff]/10 text-[#0094ff]" change="↑ 0.0%" value={data.activeStations} label={t('stationClusters')} delay="delay-75" />
+          <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" change="↑ 0.0%" value={data.totalBookings} label={t('slotBookings')} delay="delay-150" />
+          <StatCard icon={PieChart} color="bg-purple-500/10 text-purple-500" change="↑ 0.0%" value={`Rs. 0`} label={t('earningsEarned')} delay="delay-200" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           <div className="lg:col-span-2 bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] overflow-hidden p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl relative opacity-40 font-manrope">
-            <SectionHeader title="Revenue Analysis" subtitle="Daily revenue trends across all sectors." />
-            <div className="h-[220px] flex items-center justify-center text-[12px] font-bold uppercase tracking-[4px] text-[#4E7A96] opacity-40">Syncing telemetry data...</div>
+            <SectionHeader title={t('revenueAnalysis')} subtitle={t('revenueSubtitle')} />
+            <div className="h-[220px] flex items-center justify-center text-[12px] font-bold uppercase tracking-[4px] text-[#4E7A96] opacity-40">{t('syncingData')}</div>
           </div>
 
           <div className="bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl font-inter">
-            <SectionHeader title="Commission Split" subtitle="Platform fee vs provider earnings." />
+            <SectionHeader title={t('commissionSplit')} subtitle={t('commissionSplitDesc')} />
             <div className="flex justify-center p-8 mb-10">
               <div className="relative w-40 h-40 flex items-center justify-center group font-manrope">
                 <svg className="w-full h-full -rotate-90 group-hover:scale-105 transition-transform duration-700" viewBox="0 0 100 100">
@@ -111,28 +113,28 @@ const AdminDashboard = () => {
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <div className="font-extrabold text-[36px] text-white leading-none tracking-tighter">{data.commissionRate}%</div>
-                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mt-2 opacity-60">Split</div>
+                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mt-2 opacity-60">{t('split')}</div>
                 </div>
               </div>
             </div>
             <div className="space-y-5 border-t border-white/5 pt-10 px-2 font-inter">
-              <div className="flex justify-between items-center text-[15px]"><span className="text-[#8AAFC8] font-medium">Total Revenue</span><span className="text-white font-extrabold font-manrope">Rs. 0.00</span></div>
-              <div className="flex justify-between items-center text-[15px]"><span className="text-[#8AAFC8] font-medium">Platform Commission</span><span className="text-[#00d2b4] font-extrabold font-manrope">Rs. 0.00</span></div>
+              <div className="flex justify-between items-center text-[15px]"><span className="text-[#8AAFC8] font-medium">{t('networkRevenue')}</span><span className="text-white font-extrabold font-manrope">Rs. 0.00</span></div>
+              <div className="flex justify-between items-center text-[15px]"><span className="text-[#8AAFC8] font-medium">{t('commissionLabel')}</span><span className="text-[#00d2b4] font-extrabold font-manrope">Rs. 0.00</span></div>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl relative font-manrope">
-            <SectionHeader title="Quick Links" subtitle="Navigate to admin modules." />
+            <SectionHeader title={t('quickLinks')} subtitle={t('quickLinksSubtitle')} />
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10 font-manrope">
               {[ 
-                { i: Users, l: 'Users', path: '/admin/users' }, 
-                { i: Zap, l: 'Providers', path: '/admin/providers' }, 
-                { i: Receipt, l: 'Ledger', path: '/admin/transactions' }, 
-                { i: PieChart, l: 'Revenue', path: '/admin/commission' } 
+                { i: Users, l: t('users'), path: '/admin/users' }, 
+                { i: Zap, l: t('providers'), path: '/admin/providers' }, 
+                { i: Receipt, l: t('ledger'), path: '/admin/transactions' }, 
+                { i: PieChart, l: t('revenue'), path: '/admin/commission' } 
               ].map(q => (
-                <a href={q.path} key={q.l} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm cursor-pointer">
+                <a href={q.path} key={q.path} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm cursor-pointer">
                   <q.i className="w-5.5 h-5.5 text-[#4E7A96] group-hover:text-[#00d2b4] transition-colors" strokeWidth={2.5} />
                   <span className="text-[10px] font-bold text-[#4E7A96] group-hover:text-white uppercase tracking-widest transition-colors">{q.l}</span>
                 </a>
@@ -141,10 +143,10 @@ const AdminDashboard = () => {
           </div>
 
           <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl font-inter">
-            <SectionHeader title="Recent Bookings" subtitle="Latest user interactions and sessions." action="Audit All" />
+            <SectionHeader title={t('recentBookings')} subtitle={t('bookingsSubtitle')} action={t('auditAll')} />
             <div className="space-y-6 max-h-[460px] overflow-y-auto custom-scrollbar pr-4">
               {data.loading ? (
-                 <div className="text-center py-24 text-[#4E7A96] font-bold uppercase tracking-widest text-[11px] animate-pulse">Syncing data...</div>
+                 <div className="text-center py-24 text-[#4E7A96] font-bold uppercase tracking-widest text-[11px] animate-pulse">{t('syncingData')}</div>
               ) : data.recentSessions.map((session, i) => (
                 <div key={i} className="flex gap-6 group cursor-pointer border-b border-white/5 pb-6 last:border-none hover:bg-white/[0.01] rounded-xl transition-all p-3">
                   <div className="w-3 h-3 rounded-full mt-2 shrink-0 bg-emerald-500 shadow-[0_0_12px_#10b981] animate-pulse"></div>
@@ -158,7 +160,7 @@ const AdminDashboard = () => {
                 </div>
               ))}
               {!data.loading && data.recentSessions.length === 0 && (
-                 <div className="py-24 text-center text-[#4E7A96] font-bold italic tracking-[4px] text-[12px] uppercase opacity-30">No active sessions found.</div>
+                 <div className="py-24 text-center text-[#4E7A96] font-bold italic tracking-[4px] text-[12px] uppercase opacity-30">{t('noActiveSessions')}</div>
               )}
             </div>
           </div>
@@ -166,17 +168,17 @@ const AdminDashboard = () => {
 
         <div className="bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[48px] overflow-hidden hover:border-[#00d2b4]/40 transition-all shadow-2xl font-inter">
           <div className="p-10 border-b border-white/5 flex flex-wrap justify-between items-center bg-white/[0.02] font-manrope gap-6">
-            <SectionHeader title="Recent Transactions" subtitle="Detailed log of recent node transactions." />
-            <button className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-[#0A8F6A] text-[#050c14] text-[12px] font-extrabold hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest shadow-xl shadow-emerald-500/10">+ Add Transaction</button>
+            <SectionHeader title={t('recentTransactions')} subtitle={t('transSubtitle')} />
+            <button className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-[#0A8F6A] text-[#050c14] text-[12px] font-extrabold hover:scale-[1.02] active:scale-[0.98] transition-all uppercase tracking-widest shadow-xl shadow-emerald-500/10">{t('addTransaction')}</button>
           </div>
           <div className="overflow-x-auto">
               <table className="w-full text-left font-inter">
                  <thead>
                     <tr className="bg-white/5 border-b border-white/5">
-                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">User</th>
-                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">Amount</th>
-                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">Date & Time</th>
-                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">Status</th>
+                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('userLabel')}</th>
+                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('amountLabel')}</th>
+                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('dateLabel')}</th>
+                       <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('statusLabel')}</th>
                     </tr>
                  </thead>
                  <tbody className="divide-y divide-white/5 font-manrope">
@@ -188,14 +190,14 @@ const AdminDashboard = () => {
                             {row.timestamp?.toDate().toLocaleString() || 'N/A'}
                          </td>
                          <td className="px-12 py-8">
-                            <span className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 text-emerald-400 bg-emerald-500/10 shadow-sm font-inter">Completed</span>
+                            <span className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 text-emerald-400 bg-emerald-500/10 shadow-sm font-inter">{t('completed')}</span>
                          </td>
                       </tr>
                     ))}
                  </tbody>
               </table>
               {data.recentSessions.length === 0 && !data.loading && (
-                 <div className="p-24 text-center opacity-30 text-[#4E7A96] font-bold uppercase tracking-[5px] text-[12px] italic">No transaction data found.</div>
+                 <div className="p-24 text-center opacity-30 text-[#4E7A96] font-bold uppercase tracking-[5px] text-[12px] italic">{t('noTransactions')}</div>
               )}
           </div>
         </div>

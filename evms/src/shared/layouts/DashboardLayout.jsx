@@ -1,8 +1,12 @@
 import React from 'react';
 import UnifiedSidebar from '../components/UnifiedSidebar';
 import Topbar from '../components/Topbar';
+import DocumentationModal from '../components/DocumentationModal';
+import { useState } from 'react';
 
 const DashboardLayout = ({ children, title }) => {
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#050c14] text-[#e2eaf8] font-inter selection:bg-[#00d2b4]/30 overflow-x-hidden flex">
       {/* Dynamic Background Elements */}
@@ -16,7 +20,7 @@ const DashboardLayout = ({ children, title }) => {
 
       {/* Main Content Area */}
       <main className="ml-[280px] flex-1 min-h-screen relative z-10 flex flex-col overflow-hidden">
-        <Topbar title={title} />
+        <Topbar title={title} onOpenHelp={() => setIsDocModalOpen(true)} />
         
         {/* Viewport for Page Content */}
         <div className="p-8 lg:p-12 animate-fade-up flex-1 overflow-y-auto custom-scrollbar">
@@ -25,6 +29,11 @@ const DashboardLayout = ({ children, title }) => {
           </div>
         </div>
       </main>
+
+      <DocumentationModal 
+        isOpen={isDocModalOpen} 
+        onClose={() => setIsDocModalOpen(false)} 
+      />
     </div>
   );
 };

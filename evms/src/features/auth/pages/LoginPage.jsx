@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin, BookOpen, LogOut } from 'lucide-react';
 import DocumentationModal from '../../../shared/components/DocumentationModal';
 import { useAuth } from '../../../features/auth/context/AuthContext';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 import { logoutUser } from '../../../firebase/auth';
 
 const Login = () => {
   const navigate = useNavigate();
   const { user, profile, role } = useAuth();
+  const { t } = useLanguage();
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   const handleRegisterClick = (role) => {
@@ -55,14 +57,14 @@ const Login = () => {
           <div className="hidden md:flex items-center gap-10 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96]">
             <a href="/explore" className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group">
               <Globe className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform opacity-60 group-hover:opacity-100" />
-              Global Network
+              {t('globalNetwork')}
             </a>
             <button 
                onClick={() => setIsDocModalOpen(true)}
                className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group cursor-pointer border-none bg-transparent h-auto p-0"
             >
               <ShieldCheck className="w-3.5 h-3.5 group-hover:scale-110 transition-transform opacity-60 group-hover:opacity-100" />
-              Documentation
+              {t('documentation')}
             </button>
           </div>
 
@@ -92,7 +94,7 @@ const Login = () => {
               className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope whitespace-nowrap"
             >
               <Lock className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-[#00D4AA] transition-all" strokeWidth={2.5} />
-              Login
+              {t('login')}
             </button>
           )}
         </nav>
@@ -109,18 +111,18 @@ const Login = () => {
                 <span className="w-2 h-2 rounded-full bg-[#00D4AA] animate-pulse shadow-[0_0_8px_#00D4AA]"></span>
                 <p className="text-[10px] font-bold text-[#00D4AA] uppercase tracking-widest flex items-center gap-2 font-inter">
                   <Activity className="w-3.5 h-3.5" />
-                  Live in Sri Lanka
+                  {t('liveInSL')}
                 </p>
               </div>
 
               <h1 className="font-manrope text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight text-white mb-6 uppercase">
-                Powering <br />
-                <span className="text-[#00D4AA]">Sri Lanka's</span> <br />
-                Future.
+                {t('powering')} <br />
+                <span className="text-[#00D4AA]">{t('sriLanka')}</span> <br />
+                {t('future')}
               </h1>
 
               <p className="text-xl md:text-2xl text-[#8AAFC8] max-w-[500px] leading-relaxed mx-auto lg:mx-0 font-medium opacity-80 border-l-4 border-white/10 pl-8 font-inter">
-                The leading platform for electric vehicle management. Simple and reliable charging for everyone.
+                {t('description')}
               </p>
             </div>
 
@@ -135,8 +137,8 @@ const Login = () => {
                     <Car className="w-7 h-7 text-[#00D4AA]" strokeWidth={2.5} />
                   </div>
                   <div className="text-left">
-                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-[#00D4AA] transition-colors font-inter">Join the Network</div>
-                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">Join as Owner</div>
+                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-[#00D4AA] transition-colors font-inter">{t('joinNetwork')}</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">{t('joinAsOwner')}</div>
                   </div>
                 </div>
                 <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-[#00D4AA] bg-white/5 backdrop-blur-sm">
@@ -155,8 +157,8 @@ const Login = () => {
                     <Fuel className="w-7 h-7 text-blue-400" strokeWidth={2.5} />
                   </div>
                   <div className="text-left">
-                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-blue-400 transition-colors font-inter">Host a Station</div>
-                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">Become Provider</div>
+                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-blue-400 transition-colors font-inter">{t('hostStation')}</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">{t('becomeProvider')}</div>
                   </div>
                 </div>
                 <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-blue-400 bg-white/5 backdrop-blur-sm">
@@ -172,7 +174,7 @@ const Login = () => {
                  onClick={() => navigate('/explore')}
                  className="w-full py-6 bg-white/[0.02] border border-white/5 rounded-3xl text-[11px] font-black uppercase tracking-[5px] text-[#4E7A96] hover:text-[#00D4AA] hover:border-[#00D4AA]/20 hover:bg-[#00D4AA]/5 transition-all shadow-xl flex items-center justify-center gap-6 group"
                >
-                  <MapPin className="w-4 h-4 group-hover:scale-125 transition-transform" /> EXPLORE LIVE MAP <ChevronRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  <MapPin className="w-4 h-4 group-hover:scale-125 transition-transform" /> {t('exploreMap')} <ChevronRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                </button>
             </div>
 
@@ -185,8 +187,8 @@ const Login = () => {
                 ))}
               </div>
               <div className="font-manrope">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] font-inter opacity-60">Happy Users</p>
-                <p className="text-xl font-extrabold text-white uppercase tracking-tight">2,400+ Verified Users</p>
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] font-inter opacity-60">{t('happyUsers')}</p>
+                <p className="text-xl font-extrabold text-white uppercase tracking-tight">{t('verifiedUsersCount')}</p>
               </div>
             </div>
           </div>
@@ -215,8 +217,8 @@ const Login = () => {
                   <BarChart3 className="w-6 h-6" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-[#00D4AA] transition-colors">System Uptime</div>
-                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">99.9%</div>
+                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-[#00D4AA] transition-colors">{t('systemUptime')}</div>
+                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{t('uptimeValue')}</div>
                 </div>
               </div>
 
@@ -225,8 +227,8 @@ const Login = () => {
                   <Zap className="w-6 h-6" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-blue-400 transition-colors">Stations</div>
-                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">450+</div>
+                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-blue-400 transition-colors">{t('stationsCount')}</div>
+                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{t('stationsValue')}</div>
                 </div>
               </div>
             </div>
@@ -239,16 +241,16 @@ const Login = () => {
         <div className="flex gap-12 text-[10px] font-bold uppercase tracking-widest text-[#4E7A96]">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-            Secure Platform
+            {t('securePlatform')}
           </div>
           <div className="flex items-center gap-3">
             <ShieldCheck className="w-4 h-4 text-blue-400" />
-            Data Protected
+            {t('dataProtected')}
           </div>
         </div>
         <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] text-center md:text-right flex items-center gap-4 opacity-70">
           <Globe className="w-4 h-4" />
-          VoltWay EV-CMS · Colombo · Sri Lanka
+          {t('locationText')}
         </div>
       </footer>
 

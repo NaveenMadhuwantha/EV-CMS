@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { logoutUser } from '../../firebase/auth';
 import {
   Zap, LayoutDashboard, BarChart3, Map as MapIcon,
@@ -14,27 +15,27 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/admin/dashboard',
     sections: [
       {
-        title: 'Operations',
+        title: 'operations',
         items: [
-          { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-          { label: 'Analytics', path: '/admin/analytics', icon: BarChart3 }
+          { label: 'dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+          { label: 'analytics', path: '/admin/analytics', icon: BarChart3 }
         ]
       },
       {
-        title: 'Network',
+        title: 'network',
         items: [
-          { label: 'Station Map', path: '/admin/map', icon: MapIcon },
-          { label: 'Stations', path: '/admin/stations', icon: Fuel },
-          { label: 'Bookings', path: '/admin/booking', icon: Calendar, badge: 'Live' }
+          { label: 'stationMap', path: '/admin/map', icon: MapIcon },
+          { label: 'stations', path: '/admin/stations', icon: Fuel },
+          { label: 'bookings', path: '/admin/booking', icon: Calendar, badge: 'Live' }
         ]
       },
       {
-        title: 'Management',
+        title: 'management',
         items: [
-          { label: 'User Registry', path: '/admin/users', icon: Users },
-          { label: 'Providers', path: '/admin/providers', icon: Users },
-          { label: 'Ledger', path: '/admin/transactions', icon: Receipt },
-          { label: 'Global Revenue', path: '/admin/commission', icon: PieChart, badge: 'Tax' }
+          { label: 'users', path: '/admin/users', icon: Users },
+          { label: 'providers', path: '/admin/providers', icon: Users },
+          { label: 'ledger', path: '/admin/transactions', icon: Receipt },
+          { label: 'globalRevenue', path: '/admin/commission', icon: PieChart, badge: 'Tax' }
         ]
       }
     ]
@@ -44,24 +45,24 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/provider/dashboard',
     sections: [
       {
-        title: 'Operations',
+        title: 'operations',
         items: [
-          { label: 'Dashboard', path: '/provider/dashboard', icon: LayoutDashboard },
-          { label: 'Analytics', path: '/provider/analytics', icon: BarChart3 }
+          { label: 'dashboard', path: '/provider/dashboard', icon: LayoutDashboard },
+          { label: 'analytics', path: '/provider/analytics', icon: BarChart3 }
         ]
       },
       {
-        title: 'Network',
+        title: 'network',
         items: [
-          { label: 'Your Stations', path: '/provider/stations', icon: Fuel },
-          { label: 'Bookings', path: '/provider/booking', icon: Calendar, badge: 'Live' }
+          { label: 'yourStations', path: '/provider/stations', icon: Fuel },
+          { label: 'bookings', path: '/provider/booking', icon: Calendar, badge: 'Live' }
         ]
       },
       {
-        title: 'Finance',
+        title: 'finance',
         items: [
-          { label: 'Transactions', path: '/provider/transactions', icon: Receipt },
-          { label: 'Earnings', path: '/provider/earnings', icon: PieChart, badge: 'Yield' }
+          { label: 'ledger', path: '/provider/transactions', icon: Receipt },
+          { label: 'earnings', path: '/provider/earnings', icon: PieChart, badge: 'Yield' }
         ]
       }
     ]
@@ -71,11 +72,11 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/owner/dashboard',
     sections: [
       {
-        title: 'Operations',
+        title: 'operations',
         items: [
-          { label: 'Dashboard', path: '/owner/dashboard', icon: LayoutDashboard },
-          { label: 'Station Map', path: '/owner/map', icon: MapIcon },
-          { label: 'My Bookings', path: '/owner/booking', icon: Calendar, badge: 'Active' }
+          { label: 'dashboard', path: '/owner/dashboard', icon: LayoutDashboard },
+          { label: 'stationMap', path: '/owner/map', icon: MapIcon },
+          { label: 'myBookings', path: '/owner/booking', icon: Calendar, badge: 'Active' }
         ]
       }
     ]
@@ -97,6 +98,7 @@ const UnifiedSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { role, profile } = useAuth();
+  const { t } = useLanguage();
   
   const currentRole = role?.toLowerCase() || 'owner';
   let config = { ... (SIDEBAR_CONFIG[currentRole] || SIDEBAR_CONFIG.owner) };
@@ -134,13 +136,13 @@ const UnifiedSidebar = () => {
       <nav className="flex-1 p-4 overflow-y-auto space-y-8 custom-scrollbar">
         {config.sections.map((section, idx) => (
           <div key={idx}>
-            <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{section.title}</div>
+            <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t(section.title)}</div>
             {section.items.map((item, i) => (
               <NavItem 
                 key={i}
                 to={item.path}
                 icon={item.icon}
-                label={item.label}
+                label={t(item.label)}
                 badge={item.badge}
                 active={location.pathname === item.path}
               />
@@ -149,11 +151,11 @@ const UnifiedSidebar = () => {
         ))}
 
         <div>
-          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">System</div>
+          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t('system')}</div>
           <NavItem 
             to="/profile" 
             icon={User} 
-            label="Profile" 
+            label={t('profile')} 
             active={location.pathname === '/profile'}
           />
           <button 
@@ -161,13 +163,16 @@ const UnifiedSidebar = () => {
             className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-400 hover:bg-red-500/10 transition-all font-inter group mt-4"
           >
             <LogOut className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
-            <span className="text-[12px] uppercase tracking-widest font-bold">Log out</span>
+            <span className="text-[12px] uppercase tracking-widest font-bold">{t('logout')}</span>
           </button>
         </div>
       </nav>
 
       <div className="p-4 border-t border-white/5 mt-auto">
-        <div className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm relative overflow-hidden">
+        <div 
+          onClick={() => navigate('/profile')}
+          className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm relative overflow-hidden"
+        >
           <div className="w-10 h-10 bg-gradient-to-br from-[#0094ff] to-[#00d2b4] rounded-xl flex items-center justify-center font-manrope font-extrabold text-[#050c14] shadow-lg shadow-[#000]/30 transform group-hover:rotate-12 transition-transform uppercase shrink-0">
             {profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'U'}
           </div>
@@ -176,7 +181,7 @@ const UnifiedSidebar = () => {
               {profile?.fullName || profile?.businessName || 'User'}
             </div>
             <div className="text-[9px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1 opacity-60">
-              {currentRole}
+              {role || t('verifiedUser')}
             </div>
           </div>
           <ChevronRight className="w-4 h-4 text-[#4E7A96] group-hover:text-white transition-all transform group-hover:translate-x-1" />

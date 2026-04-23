@@ -6,12 +6,24 @@ import {
   Lock, Camera, Settings, ShieldAlert, 
   ArrowUpRight, Fingerprint, Globe 
 } from 'lucide-react';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 
 const Profile = () => {
   const { user, profile } = useAuth();
+  const { t } = useLanguage();
+
+  const handleAction = (action) => {
+    alert(`${action} functionality will be implemented in the next phase.`);
+  };
+
+  const handleDeleteAccount = () => {
+    if (window.confirm(t('deleteAccountConfirm'))) {
+      alert(t('deleteAccountSuccess'));
+    }
+  };
 
   return (
-    <DashboardLayout title="My Profile">
+    <DashboardLayout title={t('myProfile')}>
       <div className="max-w-5xl mx-auto space-y-10 animate-fade-up font-inter">
         
         {/* Core Identity Sector */}
@@ -25,7 +37,10 @@ const Profile = () => {
                    {profile?.fullName ? profile.fullName.split(' ').map(n=>n[0]).join('') : 'U'}
                  </div>
               </div>
-              <button className="absolute -bottom-4 -right-4 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center text-[#00d2b4] hover:bg-[#00d2b4] hover:text-[#050c14] transition-all shadow-xl active:scale-95">
+              <button 
+                onClick={() => handleAction('Camera / Avatar Upload')}
+                className="absolute -bottom-4 -right-4 w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center text-[#00d2b4] hover:bg-[#00d2b4] hover:text-[#050c14] transition-all shadow-xl active:scale-95"
+              >
                 <Camera className="w-5 h-5" />
               </button>
             </div>
@@ -37,20 +52,20 @@ const Profile = () => {
                  </h1>
                  <span className="px-4 py-1.5 rounded-full bg-[#00d2b4]/10 border border-[#00d2b4]/20 text-[10px] font-bold uppercase tracking-widest text-[#00d2b4] flex items-center gap-2 font-inter">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    Verified User
+                    {t('verifiedUser')}
                  </span>
               </div>
               <p className="text-[#8AAFC8] font-medium text-lg opacity-80 mb-10 max-w-xl font-inter leading-relaxed">
-                 Member since {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : 'March 2026'}. 
-                 Manage your personal information and security settings here.
+                 {t('memberSince')} {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : 'March 2026'}. 
+                 {t('managePersonalInfo')}
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 font-inter">
                  {[
-                   { i: Mail, l: 'Email Address', v: user?.email },
-                   { i: Phone, l: 'Phone Number', v: profile?.phone || 'Not Provided' },
-                   { i: MapPin, l: 'Location', v: profile?.address || 'Sri Lanka' },
-                   { i: Globe, l: 'Account Type', v: localStorage.getItem('user_role')?.toUpperCase() || 'USER' }
+                   { i: Mail, l: t('emailAddress'), v: user?.email },
+                   { i: Phone, l: t('phoneNumber'), v: profile?.phone || t('notProvided') },
+                   { i: MapPin, l: t('location'), v: profile?.address || 'Sri Lanka' },
+                   { i: Globe, l: t('accountType'), v: localStorage.getItem('user_role')?.toUpperCase() || 'USER' }
                  ].map((d, i) => (
                    <div key={i} className="flex items-center gap-5 p-5 bg-white/[0.02] rounded-3xl border border-white/5 hover:border-[#00d2b4]/20 transition-all group/item shadow-sm">
                       <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#4E7A96] group-hover/item:text-[#00d2b4] transition-colors">
@@ -74,16 +89,16 @@ const Profile = () => {
               <div className="flex justify-between items-center mb-10">
                  <h3 className="text-[11px] font-bold uppercase tracking-[5px] text-white flex items-center gap-4 font-inter">
                     <Fingerprint className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
-                    Security Settings
+                    {t('securitySettings')}
                  </h3>
                  <Settings className="w-5 h-5 text-[#4E7A96] group-hover:rotate-90 transition-transform cursor-pointer" />
               </div>
               
               <div className="space-y-5">
                  {[
-                   { t: 'Two-Step Verification', d: 'Enhanced account security active', s: 'ACTIVE', c: 'text-[#00d2b4]' },
-                   { t: 'Password Management', d: 'Securely manage your login credentials', s: 'SECURE', c: 'text-blue-400' },
-                   { t: 'Linked Bank Account', d: 'Managing payment settlement details', s: 'CONFIGURED', c: 'text-emerald-400' }
+                   { t: t('twoStepVerification'), d: t('twoStepDesc'), s: t('active'), c: 'text-[#00d2b4]' },
+                   { t: t('passwordManagement'), d: t('passwordDesc'), s: t('secure'), c: 'text-blue-400' },
+                   { t: t('linkedBank'), d: t('linkedBankDesc'), s: t('configured'), c: 'text-emerald-400' }
                  ].map(s => (
                    <div key={s.t} className="flex justify-between items-center p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all shadow-sm">
                       <div>
@@ -100,19 +115,25 @@ const Profile = () => {
               <div className="flex justify-between items-center mb-10 px-1">
                  <h3 className="text-[11px] font-bold uppercase tracking-[5px] text-red-500 flex items-center gap-4 font-inter">
                     <ShieldAlert className="w-5 h-5 group-hover:animate-pulse" />
-                    Danger Zone
+                    {t('dangerZone')}
                  </h3>
               </div>
               <p className="text-[#8AAFC8] text-[14px] leading-relaxed mb-10 font-medium opacity-80 font-inter border-l-2 border-red-500/20 pl-6">
-                 Warning: Actions here are permanent and cannot be undone. Please be careful when modifying account-level settings.
+                 {t('dangerZoneWarning')}
               </p>
               <div className="space-y-4">
-                 <button className="w-full py-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-extrabold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-xl shadow-red-500/10 font-manrope">
-                    Delete Account
-                 </button>
-                 <button className="w-full py-5 rounded-2xl bg-white/5 text-[#4E7A96] text-[11px] font-extrabold uppercase tracking-widest hover:text-white transition-all font-manrope">
-                    Download Data
-                 </button>
+                  <button 
+                    onClick={handleDeleteAccount}
+                    className="w-full py-5 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-extrabold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-xl shadow-red-500/10 font-manrope"
+                  >
+                    {t('deleteAccount')}
+                  </button>
+                  <button 
+                    onClick={() => handleAction('Data Download')}
+                    className="w-full py-5 rounded-2xl bg-white/5 text-[#4E7A96] text-[11px] font-extrabold uppercase tracking-widest hover:text-white transition-all font-manrope"
+                  >
+                    {t('downloadData')}
+                  </button>
               </div>
            </div>
 
