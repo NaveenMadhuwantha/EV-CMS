@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { 
   Zap, MapPin, Calendar, TrendingUp, 
@@ -35,10 +36,11 @@ import { requestProviderStatus } from '../../../firestore/providerDb';
 
 const OwnerDashboard = () => {
   const { user, profile } = useAuth();
-  const userName = profile?.fullName || user?.email?.split('@')[0] || 'User';
+  const { t } = useLanguage();
+  const userName = profile?.fullName || user?.email?.split('@')[0] || t('user');
 
   const handleRequestStatus = async () => {
-    if (window.confirm("Do you want to request Provider status to monetize your charger? Admin will review your application.")) {
+    if (window.confirm(t('requestProviderConfirm'))) {
        try {
           await requestProviderStatus(user.uid, {
              name: profile?.fullName || user.email,
@@ -46,43 +48,43 @@ const OwnerDashboard = () => {
              location: profile?.address || 'Private Home',
              uid: user.uid
           });
-          alert("Request sent successfully! Your application is now pending review.");
+          alert(t('requestProviderSuccess'));
        } catch (err) {
           console.error(err);
-          alert("Failed to send request.");
+          alert(t('requestProviderFail'));
        }
     }
   };
 
   return (
-    <DashboardLayout title="Station Control">
+    <DashboardLayout title={t('stationControl')}>
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
-               Active <span className="text-[#00d2b4]">Overview.</span>
+               {t('activeOverview').split('.')[0]} <span className="text-[#00d2b4]">{t('activeOverview').split('.')[1]}</span>
             </h1>
             <p className="text-[#7a9bbf] mt-2 font-medium font-inter opacity-70">
-               Authenticated as <span className="text-white font-bold">{userName}</span> 
+               {t('authenticatedAs')} <span className="text-white font-bold">{userName}</span> 
                <span className="mx-2 opacity-30">|</span> 
                <span className="text-[#00d2b4] font-bold lowercase tracking-tighter">@owner</span>
             </p>
          </div>
          <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 shadow-inner">
             <ShieldCheck className="w-5 h-5 text-[#00d2b4]" />
-            <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Verified Identity</span>
+            <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">{t('verifiedIdentity')}</span>
          </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <StatCard icon={Car} color="bg-[#00d2b4]/10 text-[#00d2b4]" value="1" label="Active Vehicle" delay="delay-0" />
-        <StatCard icon={History} color="bg-blue-500/10 text-blue-400" value="0" label="Total Sessions" delay="delay-75" />
-        <StatCard icon={CreditCard} color="bg-amber-500/10 text-amber-500" value="Rs. 0" label="Total Spent" delay="delay-150" />
-        <StatCard icon={TrendingUp} color="bg-purple-500/10 text-purple-500" value="84%" label="Eco Score" delay="delay-200" />
+        <StatCard icon={Car} color="bg-[#00d2b4]/10 text-[#00d2b4]" value="1" label={t('activeVehicle')} delay="delay-0" />
+        <StatCard icon={History} color="bg-blue-500/10 text-blue-400" value="0" label={t('totalSessions')} delay="delay-75" />
+        <StatCard icon={CreditCard} color="bg-amber-500/10 text-amber-500" value="Rs. 0" label={t('totalSpent')} delay="delay-150" />
+        <StatCard icon={TrendingUp} color="bg-purple-500/10 text-purple-500" value="84%" label={t('ecoScore')} delay="delay-200" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
         <div className="lg:col-span-2 bg-[#0a1628] border border-[#00d2b4]/10 rounded-3xl overflow-hidden p-8 hover:border-[#00d2b4]/30 transition-all shadow-xl relative font-inter">
-          <SectionHeader title="Usage Analytics" subtitle="Your charging patterns across the VoltWay network" action="Full Report →" />
+          <SectionHeader title={t('usageAnalytics')} subtitle={t('usageSubtitle')} action={t('fullReport')} />
           <div className="h-[200px] flex items-end gap-3 mt-12 px-2 group opacity-30">
             {[20, 35, 48, 28, 45, 32, 50].map((v, i) => (
               <div key={i} className="flex-1 flex items-end gap-1.5 h-full">
@@ -94,7 +96,7 @@ const OwnerDashboard = () => {
         </div>
 
         <div className="bg-[#0a1628] border border-[#00d2b4]/10 rounded-3xl p-8 hover:border-[#00d2b4]/30 transition-all shadow-xl font-inter">
-          <SectionHeader title="Current Plan" subtitle="Managed subscriptions and loyalty status" />
+          <SectionHeader title={t('currentPlan')} subtitle={t('planSubtitle')} />
           <div className="flex justify-center p-6 my-4">
              <div className="relative w-36 h-36 flex items-center justify-center group">
                 <svg className="w-full h-full -rotate-90 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 100 100">
@@ -102,14 +104,14 @@ const OwnerDashboard = () => {
                    <circle cx="50" cy="50" r="42" fill="none" stroke="#00d2b4" strokeWidth="10" strokeLinecap="round" strokeDasharray="264" strokeDashoffset="64" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center font-manrope">
-                   <div className="font-extrabold text-[28px] text-white tracking-tight leading-none">GOLD</div>
-                   <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-widest mt-1">Tier</div>
+                   <div className="font-extrabold text-[28px] text-white tracking-tight leading-none">{t('gold')}</div>
+                   <div className="text-[10px] font-bold text-[#3a5a7a] uppercase tracking-widest mt-1">{t('tier')}</div>
                 </div>
              </div>
           </div>
           <div className="space-y-4 border-t border-white/5 pt-8 mt-6">
-             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Credits Left</span><span className="text-[#00d2b4] font-bold">500 kWh</span></div>
-             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">Total Saved</span><span className="text-white font-extrabold font-manrope">Rs. 4,500</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('creditsLeft')}</span><span className="text-[#00d2b4] font-bold">500 kWh</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('totalSaved')}</span><span className="text-white font-extrabold font-manrope">Rs. 4,500</span></div>
           </div>
         </div>
       </div>
@@ -120,15 +122,15 @@ const OwnerDashboard = () => {
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#00d2b4]/5 blur-[120px] pointer-events-none group-hover:bg-[#00d2b4]/10 transition-all duration-1000"></div>
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 text-center lg:text-left">
                <div className="max-w-2xl">
-                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#00d2b4]/10 border border-[#00d2b4]/20 text-[#00d2b4] text-[10px] font-black uppercase tracking-[4px] mb-8 shadow-sm">Exclusive Opportunity</div>
-                  <h2 className="text-4xl lg:text-5xl font-extrabold text-white font-manrope uppercase tracking-tighter leading-none mb-6">Own a home charger? <span className="text-[#00d2b4]">Start Earning.</span></h2>
-                  <p className="text-[#8AAFC8] text-lg font-medium leading-relaxed opacity-80 max-w-xl font-inter">Join the VoltWay Grid as a Private Provider. Share your infrastructure with our network and earn passive income while supporting the EV ecosystem in Sri Lanka.</p>
+                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#00d2b4]/10 border border-[#00d2b4]/20 text-[#00d2b4] text-[10px] font-black uppercase tracking-[4px] mb-8 shadow-sm">{t('exclusiveOpportunity')}</div>
+                  <h2 className="text-4xl lg:text-5xl font-extrabold text-white font-manrope uppercase tracking-tighter leading-none mb-6">{t('ownHomeCharger')} <span className="text-[#00d2b4]">{t('startEarning')}</span></h2>
+                  <p className="text-[#8AAFC8] text-lg font-medium leading-relaxed opacity-80 max-w-xl font-inter">{t('joinVoltWayGrid')}</p>
                </div>
                <button 
                  onClick={handleRequestStatus}
                  className="px-12 py-6 rounded-[32px] bg-[#00d2b4] text-[#050c14] text-[13px] font-black uppercase tracking-[4px] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#00d2b4]/30 whitespace-nowrap"
                >
-                 Request Provider Status
+                 {t('requestProviderStatus')}
                </button>
             </div>
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none"></div>
@@ -140,11 +142,11 @@ const OwnerDashboard = () => {
             <div className="flex items-center gap-6">
                <div className="w-14 h-14 rounded-2xl bg-[#00d2b4]/10 flex items-center justify-center text-[#00d2b4] shadow-inner"><Fuel className="w-7 h-7" /></div>
                <div>
-                  <h4 className="text-white font-black text-xl uppercase tracking-tighter">Your Hosting Node is Active</h4>
-                  <p className="text-[#4E7A96] font-bold text-sm opacity-70">You can now manage your station using the sidebar Host options.</p>
+                  <h4 className="text-white font-black text-xl uppercase tracking-tighter">{t('hostingNodeActive')}</h4>
+                  <p className="text-[#4E7A96] font-bold text-sm opacity-70">{t('manageStationDesc')}</p>
                </div>
             </div>
-            <Link to="/provider/stations" className="px-8 py-3 rounded-xl bg-[#00d2b4] text-[#050c14] font-black text-[11px] uppercase tracking-widest shadow-xl">MANAGE STATION</Link>
+            <Link to="/provider/stations" className="px-8 py-3 rounded-xl bg-[#00d2b4] text-[#050c14] font-black text-[11px] uppercase tracking-widest shadow-xl">{t('manageStationBtn')}</Link>
          </div>
       )}
     </DashboardLayout>

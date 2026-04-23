@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { logoutUser } from '../../firebase/auth';
-import { Zap, LayoutDashboard, BarChart3, Map as MapIcon, Fuel, Calendar, Receipt, PieChart, Search, Bell, Settings, Menu, LogOut, User } from 'lucide-react';
+import { Zap, LayoutDashboard, BarChart3, Map as MapIcon, Fuel, Calendar, Receipt, PieChart, Menu, LogOut, User } from 'lucide-react';
+import Topbar from '../components/Topbar';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -67,7 +68,10 @@ const Sidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-white/5 mt-auto">
-        <div className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm">
+        <div 
+          onClick={() => navigate('/profile')}
+          className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm"
+        >
           <div className="w-10 h-10 bg-gradient-to-br from-[#0094ff] to-[#00d2b4] rounded-xl flex items-center justify-center font-manrope font-extrabold text-[#050c14] shadow-lg shadow-[#000]/30 transform group-hover:rotate-12 transition-transform uppercase">
             {profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'P'}
           </div>
@@ -86,24 +90,7 @@ const Sidebar = () => {
   );
 };
 
-const Topbar = ({ title }) => (
-  <header className="sticky top-0 z-50 h-[80px] bg-[#050c14]/80 backdrop-blur-2xl border-b border-white/5 flex items-center px-12 gap-8 font-inter shadow-sm">
-    <div className="font-manrope font-extrabold text-[24px] flex-1 text-white tracking-tighter uppercase leading-none">{title}</div>
-    <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-3 w-[320px] focus-within:border-[#00d2b4]/40 transition-all group shadow-inner">
-      <Search className="w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00d2b4]" />
-      <input type="text" placeholder="Search Activity..." className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder:text-[#4E7A96] placeholder:uppercase placeholder:tracking-widest placeholder:text-[9px] font-bold" />
-    </div>
-    <div className="flex items-center gap-4">
-      <button className="w-12 h-12 flex items-center justify-center bg-white/[0.03] border border-white/5 rounded-2xl text-[#4E7A96] hover:text-white hover:border-[#00d2b4]/30 relative transition-all shadow-sm">
-        <Bell className="w-4.5 h-4.5" />
-        <div className="absolute top-4 right-4 w-2 h-2 bg-emerald-500 rounded-full border-2 border-[#050c14] shadow-[0_0_8px_#10b981]" />
-      </button>
-      <button className="w-12 h-12 flex items-center justify-center bg-white/[0.03] border border-white/5 rounded-2xl text-[#4E7A96] hover:text-white hover:border-[#00d2b4]/30 transition-all shadow-sm">
-        <Settings className="w-4.5 h-4.5" />
-      </button>
-    </div>
-  </header>
-);
+
 
 const ProviderLayout = ({ children, title }) => {
   return (

@@ -4,16 +4,17 @@ import { loginWithEmail, loginWithGoogle } from '../../../firebase/auth';
 import { getUserProfile } from '../../../firestore/authDb';
 import { Car, Zap, Shield, Mail, Lock, Eye, EyeOff, ArrowRight, KeyRound, AlertCircle, Info, Activity, Fingerprint, Book } from 'lucide-react';
 import DocumentationModal from '../../../shared/components/DocumentationModal';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 
-const ROLES = {
-  owner: { label: 'EV Owner', icon: Car, ac: '#00D4AA', hint: 'owner@ev.lk' },
-  provider: { label: 'Provider', icon: Zap, ac: '#3B82F6', hint: 'provider@ev.lk' },
-  admin: { label: 'Admin', icon: Shield, ac: '#A78BFA', hint: 'admin@ev.lk' },
-};
+const ROLES = (t) => ({
+  owner: { label: t('evOwner'), icon: Car, ac: '#00D4AA', hint: 'owner@ev.lk' },
+  provider: { label: t('provider'), icon: Zap, ac: '#3B82F6', hint: 'provider@ev.lk' },
+  admin: { label: t('admin'), icon: Shield, ac: '#A78BFA', hint: 'admin@ev.lk' },
+});
 
-const STATS = [
-  { icon: Activity, val: '14.2k', lbl: 'Active Users', col: '#00D4AA' },
-  { icon: Zap, val: '450+', lbl: 'Stations', col: '#3B82F6' },
+const STATS = (t) => [
+  { icon: Activity, val: '14.2k', lbl: t('activeUsers'), col: '#00D4AA' },
+  { icon: Zap, val: '450+', lbl: t('stationsCount'), col: '#3B82F6' },
 ];
 
 const ForgotModal = ({ prefill, onClose, onSend }) => {
@@ -25,22 +26,22 @@ const ForgotModal = ({ prefill, onClose, onSend }) => {
           <div className="w-16 h-16 rounded-2xl bg-[#00D4AA]/10 flex items-center justify-center text-3xl mx-auto mb-6 text-[#00D4AA] shadow-inner">
             <KeyRound className="w-8 h-8" />
           </div>
-          <h2 className="font-manrope text-2xl font-extrabold text-white tracking-tight">Forgot Password?</h2>
-          <p className="text-sm text-[#8AAFC8] font-medium mt-2 opacity-60 font-inter">Enter your registered email address.</p>
+          <h2 className="font-manrope text-2xl font-extrabold text-white tracking-tight">{onSend.t('forgotPassword')}</h2>
+          <p className="text-sm text-[#8AAFC8] font-medium mt-2 opacity-60 font-inter">{onSend.t('enterRegisteredEmail')}</p>
         </div>
 
         <div className="space-y-4 mb-10 font-inter">
-          <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Email Address</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">{onSend.t('emailAddress')}</label>
           <div className="relative group">
             <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00D4AA] transition-colors" />
-            <input type="email" value={em} onChange={e => setEm(e.target.value)} placeholder="Enter your email"
+            <input type="email" value={em} onChange={e => setEm(e.target.value)} placeholder={onSend.t('enterEmail')}
               className="w-full py-4.5 px-6 pl-14 bg-white/5 border border-white/10 rounded-2xl text-white font-medium outline-none focus:border-[#00D4AA] transition-all" />
           </div>
         </div>
 
         <div className="flex flex-col gap-4 font-manrope">
-          <button onClick={() => onSend(em)} className="w-full py-4.5 rounded-2xl font-bold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-lg hover:brightness-110 active:scale-95 transition-all outline-none text-[13px]">Send Reset Link</button>
-          <button onClick={onClose} className="w-full py-3 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-white transition-colors">Cancel</button>
+          <button onClick={() => onSend(em)} className="w-full py-4.5 rounded-2xl font-bold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-lg hover:brightness-110 active:scale-95 transition-all outline-none text-[13px]">{onSend.t('sendResetLink')}</button>
+          <button onClick={onClose} className="w-full py-3 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-white transition-colors">{onSend.t('cancel')}</button>
         </div>
       </div>
     </div>
@@ -57,11 +58,14 @@ export default function SignIn() {
   const [alert, setAlert] = useState('');
   const [forgot, setForgot] = useState(false);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+  const { t } = useLanguage();
 
-  const cfg = ROLES[role];
+  const rolesList = ROLES(t);
+  const statsList = STATS(t);
+  const cfg = rolesList[role];
 
   const handleLogin = async () => {
-    if (!email || !pass) { setAlert('Please provide all credentials.'); return; }
+    if (!email || !pass) { setAlert(t('provideCredentials')); return; }
     setLoad(true); setAlert('');
     try {
       const user = await loginWithEmail(email, pass);
@@ -72,18 +76,18 @@ export default function SignIn() {
       navigate(`/${role}/dashboard`);
     } catch (error) {
       setLoad(false);
-      setAlert(error.code?.includes('password') ? 'Incorrect password.' : 'Login failed. Please try again.');
+      setAlert(error.code?.includes('password') ? t('incorrectPassword') : t('loginFailed'));
     }
   };
 
   const handleSocialLogin = async (type) => {
     setAlert('');
     try {
-      const user = type === 'google' ? await loginWithGoogle() : await loginWithMicrosoft();
+      const user = type === 'google' ? await loginWithGoogle() : null;
       localStorage.setItem('user_role', role);
       navigate(`/${role}/dashboard`);
     } catch (error) {
-      setAlert(`${type} login failed.`);
+      setAlert(t('loginFailed'));
     }
   };
 
@@ -92,20 +96,20 @@ export default function SignIn() {
       try {
         await resetPassword(em);
         setForgot(false);
-        setAlert('Password reset email sent.');
-      } catch (err) { setAlert('Failed to send reset email.'); }
+        setAlert(t('passwordResetSent'));
+      } catch (err) { setAlert(t('failedToResetPassword')); }
     }
   };
 
+  handlePasswordReset.t = t;
+
   return (
     <>
-      {/* Documentation Modal */}
       <DocumentationModal isOpen={isDocModalOpen} onClose={() => setIsDocModalOpen(false)} />
 
       <div className="flex min-h-screen bg-[#050F1C] font-inter text-[#EFF6FF] overflow-x-hidden relative selection:bg-[#00D4AA]/30">
       <div className="fixed bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#00D4AA]/5 blur-[150px] pointer-events-none"></div>
 
-      {/* LEFT PANEL */}
       <div className="hidden lg:flex lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[460px] flex-col overflow-hidden bg-[#0a1628] shrink-0 border-r border-white/10 z-20">
         <div className="absolute inset-0 bg-gradient-to-br from-[#050F1C] via-[#050F1C]/80 to-transparent"></div>
         <div className="relative flex flex-col h-full p-16 justify-between animate-fade-in">
@@ -122,11 +126,11 @@ export default function SignIn() {
 
           <div className="space-y-10">
             <h1 className="font-manrope text-5xl xl:text-6xl font-extrabold text-white leading-tight tracking-tight uppercase animate-fade-up">
-              Welcome <br /> <span className="text-[#00D4AA]">Back</span> <br /> Portal.
+              {t('welcomeBackPortal').split(' ').slice(0, 2).join(' ')} <br /> <span className="text-[#00D4AA]">{t('welcomeBackPortal').split(' ').slice(2, 3).join(' ')}</span> <br /> {t('welcomeBackPortal').split(' ').slice(3).join(' ')}
             </h1>
 
             <p className="text-lg text-[#8AAFC8] font-medium leading-relaxed opacity-80 animate-fade-up delay-100 border-l-2 border-white/10 pl-6">
-              Please log in to your account to manage your charging experience and monitor charging stations.
+              {t('manageExperienceDesc')}
             </p>
 
             <button 
@@ -137,13 +141,13 @@ export default function SignIn() {
                 <Book className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-1">Architecture</div>
-                <div className="text-lg font-extrabold text-white uppercase tracking-tight">System Manual</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-1">{t('architecture')}</div>
+                <div className="text-lg font-extrabold text-white uppercase tracking-tight">{t('systemManual')}</div>
               </div>
             </button>
 
             <div className="grid grid-cols-1 gap-4 animate-fade-up delay-200">
-              {STATS.map(s => (
+              {statsList.map(s => (
                 <div key={s.lbl} className="bg-white/[0.03] p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all flex items-center gap-5">
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/5" style={{ color: s.col }}>
                     <s.icon className="w-6 h-6" strokeWidth={2.5} />
@@ -160,7 +164,7 @@ export default function SignIn() {
           <div className="flex flex-col gap-5 animate-fade-up delay-300 font-inter">
             <div className="flex items-center gap-3 text-[10px] font-bold text-[#00D4AA] uppercase tracking-widest bg-[#00D4AA]/5 px-4 py-2 rounded-full w-fit border border-[#00D4AA]/10">
               <Fingerprint className="w-4 h-4" />
-              Secure Login Active
+              {t('secureLoginActive')}
             </div>
             <div className="flex justify-between items-center text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest px-2 opacity-40">
               <span>© 2026 VoltWay</span>
@@ -170,7 +174,6 @@ export default function SignIn() {
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
       <div className="flex-1 flex flex-col items-center pt-16 pb-24 px-6 lg:pl-[500px] lg:pr-12 lg:pt-28 min-h-screen relative z-10 w-full overflow-y-auto">
         <div className="w-full max-w-[440px] animate-fade-up">
 
@@ -187,18 +190,17 @@ export default function SignIn() {
           <div className="mb-12 text-center lg:text-left">
             <div className="text-[11px] font-bold uppercase tracking-widest mb-4 text-[#4E7A96] opacity-80 flex items-center gap-3 justify-center lg:justify-start">
               <Shield className="w-4.5 h-4.5 text-[#00D4AA]" />
-              Authentication
+              {t('authentication')}
             </div>
-            <h2 className="font-manrope text-5xl lg:text-6xl font-extrabold text-white leading-tight uppercase tracking-tight">Sign In</h2>
+            <h2 className="font-manrope text-5xl lg:text-6xl font-extrabold text-white leading-tight uppercase tracking-tight">{t('signIn')}</h2>
           </div>
 
-          {/* Role Network */}
           <div className="mb-10 space-y-4">
             <div className="text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96] opacity-60 flex items-center gap-2">
-              <Info className="w-4 h-4" /> Select Your Role
+              <Info className="w-4 h-4" /> {t('selectYourRole')}
             </div>
             <div className="grid grid-cols-3 gap-3">
-              {Object.entries(ROLES).map(([key, r]) => (
+              {Object.entries(rolesList).map(([key, r]) => (
                 <button
                   key={key}
                   disabled={loading}
@@ -215,7 +217,6 @@ export default function SignIn() {
             </div>
           </div>
 
-          {/* Auth Interface */}
           <div className="space-y-6">
             {alert && (
               <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-[12px] font-bold uppercase tracking-wider flex items-center gap-4 animate-shake shadow-lg">
@@ -225,7 +226,7 @@ export default function SignIn() {
             )}
 
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Email Address</label>
+              <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">{t('emailAddress')}</label>
               <div className="relative group">
                 <Mail className="absolute left-7 top-1/2 -translate-y-1/2 w-4.5 h-4.5 opacity-30 group-focus-within:opacity-100 transition-opacity" />
                 <input
@@ -239,8 +240,8 @@ export default function SignIn() {
 
             <div className="space-y-3">
               <div className="flex justify-between px-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96]">Password</label>
-                <button onClick={() => setForgot(true)} className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-[#00D4AA] transition-colors outline-none cursor-pointer">Forgot?</button>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96]">{t('password')}</label>
+                <button onClick={() => setForgot(true)} className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-[#00D4AA] transition-colors outline-none cursor-pointer">{t('forgot')}</button>
               </div>
               <div className="relative group">
                 <Lock className="absolute left-7 top-1/2 -translate-y-1/2 w-4.5 h-4.5 opacity-30 group-focus-within:opacity-100 transition-opacity" />
@@ -263,16 +264,15 @@ export default function SignIn() {
             >
               {loading ? <div className="w-6 h-6 border-4 border-white/10 border-t-white rounded-full animate-spin"></div> : (
                 <>
-                  Sign In
+                  {t('signIn')}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" style={{ color: cfg.ac }} />
                 </>
               )}
             </button>
 
-            {/* Social Bridges */}
             <div className="relative py-8 flex items-center justify-center">
               <div className="absolute inset-x-0 h-px bg-white/5"></div>
-              <span className="relative z-10 px-8 bg-[#050F1C] text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] opacity-40">Or continue with</span>
+              <span className="relative z-10 px-8 bg-[#050F1C] text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] opacity-40">{t('orContinueWith')}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -288,14 +288,14 @@ export default function SignIn() {
           </div>
 
           <div className="mt-20 pt-10 border-t border-white/5 text-center">
-            <p className="text-[11px] font-bold text-[#3a5a7a] uppercase tracking-widest mb-8 opacity-60">Don't have an account?</p>
+            <p className="text-[11px] font-bold text-[#3a5a7a] uppercase tracking-widest mb-8 opacity-60">{t('dontHaveAccount')}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button onClick={() => navigate('/register')} className="w-full py-4.5 rounded-2xl bg-white/5 border border-white/10 text-[#00D4AA] text-[11px] font-bold uppercase tracking-wider hover:border-[#00D4AA]/30 transition-all shadow-lg font-manrope">Join Owner</button>
-              <button onClick={() => navigate('/provider/register')} className="w-full py-4.5 rounded-2xl bg-white/5 border border-white/10 text-blue-400 text-[11px] font-bold uppercase tracking-wider hover:border-blue-400/30 transition-all shadow-lg font-manrope">Join Provider</button>
+              <button onClick={() => navigate('/register')} className="w-full py-4.5 rounded-2xl bg-white/5 border border-white/10 text-[#00D4AA] text-[11px] font-bold uppercase tracking-wider hover:border-[#00D4AA]/30 transition-all shadow-lg font-manrope">{t('joinOwner')}</button>
+              <button onClick={() => navigate('/provider/register')} className="w-full py-4.5 rounded-2xl bg-white/5 border border-white/10 text-blue-400 text-[11px] font-bold uppercase tracking-wider hover:border-blue-400/30 transition-all shadow-lg font-manrope">{t('joinProvider')}</button>
             </div>
           </div>
         </div>
-        </div>
+      </div>
       </div>
       {forgot && <ForgotModal prefill={email} onClose={() => setForgot(false)} onSend={handlePasswordReset} />}
     </>

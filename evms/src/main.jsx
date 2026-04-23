@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 
 import { AuthProvider } from './features/auth/context/AuthContext.jsx'
+import { LanguageProvider } from './shared/context/LanguageContext.jsx'
 
 import React from 'react';
 
@@ -36,7 +37,9 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
       <AuthProvider>
-        <App />
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
       </AuthProvider>
     </ErrorBoundary>
   </StrictMode>,
