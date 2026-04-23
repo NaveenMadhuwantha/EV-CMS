@@ -37,11 +37,8 @@ const RegSidebar = ({
             <Zap className="w-6 h-6 text-white fill-white/20" />
           </div>
           <div className="text-left font-manrope">
-            <div className="text-2xl font-extrabold text-white tracking-tight leading-none">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1.5 flex items-center gap-2 opacity-70">
-               <Globe className="w-3 h-3 text-blue-400" />
-               Ecosystem Registry
-            </div>
+            <div className="text-2xl font-extrabold text-white tracking-tight leading-none uppercase">VoltWay</div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
           </div>
         </div>
 

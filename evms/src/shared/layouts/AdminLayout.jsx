@@ -56,9 +56,7 @@ const Sidebar = () => {
           </div>
           <div>
             <div className="font-manrope font-extrabold text-[20px] tracking-tighter text-white leading-none uppercase">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] uppercase tracking-[3px] mt-2 font-bold whitespace-nowrap opacity-60">
-              {isAdmin ? 'System Lead' : isProvider ? 'Station Station' : 'User Portal'}
-            </div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
           </div>
         </Link>
       </div>
