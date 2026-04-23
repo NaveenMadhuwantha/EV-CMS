@@ -125,33 +125,45 @@ const Login = () => {
             </div>
 
             {/* CTA Modules */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg lg:max-w-xl font-manrope">
+            <div className="flex flex-col gap-5 w-full max-w-lg lg:max-w-xl font-manrope">
               <button
                 onClick={() => handleRegisterClick('EV Owner')}
-                className="group relative flex flex-col items-start justify-end p-10 h-64 bg-white/[0.03] border border-white/10 rounded-3xl hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 overflow-hidden active:scale-95 shadow-xl"
+                className="group relative flex items-center justify-between p-6 bg-white/[0.03] border border-white/10 rounded-full hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 overflow-hidden active:scale-[0.98] shadow-2xl backdrop-blur-sm"
               >
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#00D4AA]/20 transition-all shadow-inner">
-                  <Car className="w-8 h-8 text-[#00D4AA]" strokeWidth={2.5} />
+                <div className="flex items-center gap-6 relative z-10">
+                  <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D4AA]/20 transition-all shadow-inner ring-1 ring-white/10">
+                    <Car className="w-7 h-7 text-[#00D4AA]" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-[#00D4AA] transition-colors font-inter">Join the Network</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">Join as Owner</div>
+                  </div>
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2 group-hover:text-white transition-all font-inter">For Owners</div>
-                <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Join as Owner</div>
-                <div className="absolute top-8 right-8 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm">
+                <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-[#00D4AA] bg-white/5 backdrop-blur-sm">
                   <ChevronRight className="w-6 h-6" />
                 </div>
+                {/* Subtle gradient glow on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/0 via-[#00D4AA]/5 to-[#00D4AA]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </button>
 
               <button
                 onClick={() => handleRegisterClick('Provider')}
-                className="group relative flex flex-col items-start justify-end p-10 h-64 bg-white/[0.03] border border-white/10 rounded-3xl hover:border-blue-500/40 transition-all hover:bg-blue-500/5 overflow-hidden active:scale-95 shadow-xl"
+                className="group relative flex items-center justify-between p-6 bg-white/[0.03] border border-white/10 rounded-full hover:border-blue-500/40 transition-all hover:bg-blue-500/5 overflow-hidden active:scale-[0.98] shadow-2xl backdrop-blur-sm"
               >
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-all shadow-inner">
-                  <Fuel className="w-8 h-8 text-blue-400" strokeWidth={2.5} />
+                <div className="flex items-center gap-6 relative z-10">
+                  <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-all shadow-inner ring-1 ring-white/10">
+                    <Fuel className="w-7 h-7 text-blue-400" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-blue-400 transition-colors font-inter">Host a Station</div>
+                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">Become Provider</div>
+                  </div>
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2 group-hover:text-white transition-all font-inter">For Providers</div>
-                <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Become Provider</div>
-                <div className="absolute top-8 right-8 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm">
+                <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-blue-400 bg-white/5 backdrop-blur-sm">
                   <ChevronRight className="w-6 h-6" />
                 </div>
+                {/* Subtle gradient glow on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </button>
             </div>
 
