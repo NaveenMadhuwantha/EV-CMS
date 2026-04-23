@@ -35,7 +35,7 @@ const Navbar = () => {
           </div>
           <div className="hidden sm:block font-manrope">
             <div className="text-xl font-extrabold text-white tracking-tight leading-none uppercase">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1.5 opacity-60">Charging System</div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
           </div>
         </Link>
 

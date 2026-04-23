@@ -41,10 +41,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
           </div>
           <div className="text-left font-manrope">
             <div className="text-2xl font-extrabold text-white tracking-tight uppercase leading-none">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1.5 opacity-70 flex items-center gap-2">
-               <Globe className="w-3 h-3 text-blue-400 group-hover:rotate-45 transition-transform" />
-               Enterprise Nexus
-            </div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
           </div>
         </div>
 

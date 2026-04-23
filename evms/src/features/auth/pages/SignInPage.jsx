@@ -115,8 +115,8 @@ export default function SignIn() {
               <Zap className="w-6 h-6 text-white fill-white/20" />
             </div>
             <div>
-              <div className="font-manrope text-2xl font-extrabold text-white tracking-tight">VoltWay</div>
-              <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-0.5 opacity-70">EV-CMS Administration</div>
+              <div className="font-manrope text-2xl font-extrabold text-white tracking-tight uppercase">VoltWay</div>
+              <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-1">EV Management System</div>
             </div>
           </div>
 
@@ -174,11 +174,14 @@ export default function SignIn() {
       <div className="flex-1 flex flex-col items-center pt-16 pb-24 px-6 lg:pl-[500px] lg:pr-12 lg:pt-28 min-h-screen relative z-10 w-full overflow-y-auto">
         <div className="w-full max-w-[440px] animate-fade-up">
 
-          <div className="flex lg:hidden items-center gap-4 mb-20 justify-center group">
+          <div className="flex lg:hidden items-center gap-4 mb-20 justify-center group" onClick={() => navigate('/')}>
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00D4AA] to-blue-600 flex items-center justify-center text-2xl shadow-2xl group-hover:scale-105 transition-transform">
               <Zap className="w-8 h-8 text-white" />
             </div>
-            <div className="font-manrope text-3xl font-extrabold text-white uppercase tracking-tight">VoltWay</div>
+            <div>
+              <div className="font-manrope text-3xl font-extrabold text-white uppercase tracking-tight leading-none">VoltWay</div>
+              <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
+            </div>
           </div>
 
           <div className="mb-12 text-center lg:text-left">

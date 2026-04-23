@@ -21,7 +21,7 @@ const GuestLayout = ({ children, title }) => {
           </div>
           <div className="hidden sm:block">
             <div className="font-manrope font-extrabold text-[22px] tracking-tighter text-white leading-none uppercase">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] uppercase tracking-[4px] mt-2 font-bold opacity-60">Public Network Explorer</div>
+            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
           </div>
         </Link>
 
