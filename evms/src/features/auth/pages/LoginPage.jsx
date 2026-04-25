@@ -70,7 +70,7 @@ const Login = () => {
             <div className="flex items-center gap-8 pl-8 border-l border-white/10">
               <div className="flex flex-col items-end group cursor-pointer" onClick={() => navigate(`/${role}/dashboard`)}>
                 <div className="text-[13px] font-black text-white uppercase tracking-tighter group-hover:text-[#00D4AA] transition-colors">
-                  {profile?.fullName || profile?.businessName || user.email.split('@')[0]}
+                  {profile?.fullName || profile?.businessName || user?.email?.split('@')[0]}
                 </div>
                 <div className="text-[9px] text-[#4E7A96] font-extrabold uppercase tracking-[3px] opacity-60 flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-[#00D4AA] shadow-[0_0_8px_#00D4AA]"></div>

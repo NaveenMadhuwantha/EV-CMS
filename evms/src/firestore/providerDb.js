@@ -42,3 +42,6 @@ export const approveProviderRequest = async (uid, requestData) => {
 
   return { success: true };
 };
+
+export const addProvider = (data) => coreDb.add('providers', { ...data, status: 'ACTIVE' });
+export const deleteProvider = (id) => coreDb.remove('providers', id);

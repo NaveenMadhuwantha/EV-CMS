@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../features/auth/context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import { logoutUser } from '../../firebase/auth';
 import {
   Zap, LayoutDashboard, BarChart3, Map as MapIcon,
   Fuel, Calendar, Users, Receipt, PieChart,
-  LogOut, User, Menu, ChevronRight
+  LogOut, User, Menu, ChevronRight, Bell, Settings, Globe
 } from 'lucide-react';
 
 const SIDEBAR_CONFIG = {
@@ -14,27 +15,26 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/admin/dashboard',
     sections: [
       {
-        title: 'Operations',
+        titleKey: 'ops',
         items: [
-          { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-          { label: 'Analytics', path: '/admin/analytics', icon: BarChart3 }
+          { labelKey: 'dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+          { labelKey: 'analytics', path: '/admin/analytics', icon: BarChart3 }
         ]
       },
       {
-        title: 'Network',
+        titleKey: 'net',
         items: [
-          { label: 'Station Map', path: '/admin/map', icon: MapIcon },
-          { label: 'Stations', path: '/admin/stations', icon: Fuel },
-          { label: 'Bookings', path: '/admin/booking', icon: Calendar, badge: 'Live' }
+          { labelKey: 'stations', path: '/admin/stations', icon: Fuel },
+          { labelKey: 'bookings', path: '/admin/booking', icon: Calendar, badge: 'Live' }
         ]
       },
       {
-        title: 'Management',
+        titleKey: 'mgmt',
         items: [
-          { label: 'User Registry', path: '/admin/users', icon: Users },
-          { label: 'Providers', path: '/admin/providers', icon: Users },
-          { label: 'Ledger', path: '/admin/transactions', icon: Receipt },
-          { label: 'Global Revenue', path: '/admin/commission', icon: PieChart, badge: 'Tax' }
+          { labelKey: 'users', path: '/admin/users', icon: Users },
+          { labelKey: 'providers', path: '/admin/providers', icon: Zap },
+          { labelKey: 'transactions', path: '/admin/transactions', icon: Receipt },
+          { labelKey: 'revenue', path: '/admin/commission', icon: PieChart, badge: 'Tax' }
         ]
       }
     ]
@@ -44,24 +44,24 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/provider/dashboard',
     sections: [
       {
-        title: 'Operations',
+        titleKey: 'ops',
         items: [
-          { label: 'Dashboard', path: '/provider/dashboard', icon: LayoutDashboard },
-          { label: 'Analytics', path: '/provider/analytics', icon: BarChart3 }
+          { labelKey: 'dashboard', path: '/provider/dashboard', icon: LayoutDashboard },
+          { labelKey: 'analytics', path: '/provider/analytics', icon: BarChart3 }
         ]
       },
       {
-        title: 'Network',
+        titleKey: 'net',
         items: [
-          { label: 'Your Stations', path: '/provider/stations', icon: Fuel },
-          { label: 'Bookings', path: '/provider/booking', icon: Calendar, badge: 'Live' }
+          { labelKey: 'stations', path: '/provider/stations', icon: Fuel },
+          { labelKey: 'bookings', path: '/provider/booking', icon: Calendar, badge: 'Live' }
         ]
       },
       {
-        title: 'Finance',
+        titleKey: 'Finance',
         items: [
-          { label: 'Transactions', path: '/provider/transactions', icon: Receipt },
-          { label: 'Earnings', path: '/provider/earnings', icon: PieChart, badge: 'Yield' }
+          { labelKey: 'transactions', path: '/provider/transactions', icon: Receipt },
+          { labelKey: 'earnings', path: '/provider/earnings', icon: PieChart, badge: 'Yield' }
         ]
       }
     ]
@@ -71,11 +71,11 @@ const SIDEBAR_CONFIG = {
     dashboardPath: '/owner/dashboard',
     sections: [
       {
-        title: 'Operations',
+        titleKey: 'ops',
         items: [
-          { label: 'Dashboard', path: '/owner/dashboard', icon: LayoutDashboard },
-          { label: 'Station Map', path: '/owner/map', icon: MapIcon },
-          { label: 'My Bookings', path: '/owner/booking', icon: Calendar, badge: 'Active' }
+          { labelKey: 'dashboard', path: '/owner/dashboard', icon: LayoutDashboard },
+          { labelKey: 'stations', path: '/owner/map', icon: MapIcon },
+          { labelKey: 'bookings', path: '/owner/booking', icon: Calendar, badge: 'Active' }
         ]
       }
     ]
@@ -97,16 +97,10 @@ const UnifiedSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { role, profile } = useAuth();
+  const { t } = useSettings();
   
   const currentRole = role?.toLowerCase() || 'owner';
   let config = { ... (SIDEBAR_CONFIG[currentRole] || SIDEBAR_CONFIG.owner) };
-
-  // HYBRID MODE: If user is owner but HAS provider capabilities enabled by admin
-  if (currentRole === 'owner' && profile?.isProviderEnabled) {
-     config.brandLabel = 'Hybrid Portal';
-     const providerSections = SIDEBAR_CONFIG.provider.sections.filter(s => s.title !== 'Operations');
-     config.sections = [...config.sections, ...providerSections.map(s => ({ ...s, title: `Host ${s.title}` }))];
-  }
 
   const handleLogout = async () => {
     try {
@@ -136,13 +130,13 @@ const UnifiedSidebar = () => {
       <nav className="flex-1 p-4 overflow-y-auto space-y-8 custom-scrollbar">
         {config.sections.map((section, idx) => (
           <div key={idx}>
-            <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{section.title}</div>
+            <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t(section.titleKey || section.title)}</div>
             {section.items.map((item, i) => (
               <NavItem 
                 key={i}
                 to={item.path}
                 icon={item.icon}
-                label={item.label}
+                label={t(item.labelKey || item.label)}
                 badge={item.badge}
                 active={location.pathname === item.path}
               />
@@ -151,19 +145,35 @@ const UnifiedSidebar = () => {
         ))}
 
         <div>
-          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">System</div>
+          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t('sys')}</div>
           <NavItem 
             to="/profile" 
             icon={User} 
-            label="Profile" 
-            active={location.pathname === '/profile'}
+            label={t('profile')} 
+            active={location.pathname === '/profile' && !location.hash}
           />
+          <NavItem 
+            to="/notifications" 
+            icon={Bell} 
+            label={t('notifications')} 
+            badge="New"
+            active={location.pathname === '/notifications'}
+          />
+          <a 
+            href="https://github.com/NaveenMadhuwantha/EV-CMS/issues/new" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl text-[#4E7A96] hover:bg-white/5 hover:text-white transition-all font-inter group mb-1"
+          >
+            <Globe className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
+            <span className="text-[12px] uppercase tracking-widest opacity-70 group-hover:opacity-100">{t('reportBug')}</span>
+          </a>
           <button 
             onClick={handleLogout} 
             className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-400 hover:bg-red-500/10 transition-all font-inter group mt-4"
           >
             <LogOut className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
-            <span className="text-[12px] uppercase tracking-widest font-bold">Log out</span>
+            <span className="text-[12px] uppercase tracking-widest font-bold">{t('logout')}</span>
           </button>
         </div>
       </nav>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { getDashboardOverview } from '../../../firestore/dashboardDb';
 import { performBackup, performRecovery } from '../../../firestore/backupDb';
@@ -131,12 +132,15 @@ const AdminDashboard = () => {
                 { i: Zap, l: 'Providers', path: '/admin/providers' }, 
                 { i: Receipt, l: 'Ledger', path: '/admin/transactions' }, 
                 { i: PieChart, l: 'Revenue', path: '/admin/commission' } 
-              ].map(q => (
-                <a href={q.path} key={q.l} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm cursor-pointer">
-                  <q.i className="w-5.5 h-5.5 text-[#4E7A96] group-hover:text-[#00d2b4] transition-colors" strokeWidth={2.5} />
-                  <span className="text-[10px] font-bold text-[#4E7A96] group-hover:text-white uppercase tracking-widest transition-colors">{q.l}</span>
-                </a>
-              ))}
+              ].map(q => {
+                const Icon = q.i;
+                return (
+                  <Link to={q.path} key={q.l} className="flex flex-col items-center gap-4 p-5 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-[#00d2b4]/10 hover:border-[#00d2b4]/40 transition-all group shadow-sm cursor-pointer">
+                    <Icon className="w-5.5 h-5.5 text-[#4E7A96] group-hover:text-[#00d2b4] transition-colors" strokeWidth={2.5} />
+                    <span className="text-[10px] font-bold text-[#4E7A96] group-hover:text-white uppercase tracking-widest transition-colors">{q.l}</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
@@ -149,7 +153,7 @@ const AdminDashboard = () => {
                 <div key={i} className="flex gap-6 group cursor-pointer border-b border-white/5 pb-6 last:border-none hover:bg-white/[0.01] rounded-xl transition-all p-3">
                   <div className="w-3 h-3 rounded-full mt-2 shrink-0 bg-emerald-500 shadow-[0_0_12px_#10b981] animate-pulse"></div>
                   <div className="flex-1 min-w-0 font-manrope">
-                    <p className="text-[17px] text-white font-extrabold tracking-tight leading-none truncate uppercase group-hover:text-[#00d2b4] transition-colors">{session.userName || 'Unknown User'}</p>
+                    <p className="text-[17px] text-white font-extrabold tracking-tight leading-none truncate uppercase group-hover:text-[#00d2b4] transition-colors">{session?.userName || 'Unknown User'}</p>
                     <p className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-2.5 flex items-center gap-2">
                        <Activity className="w-3.5 h-3.5" />
                        LOC: {session.location || 'N/A'}
@@ -182,10 +186,10 @@ const AdminDashboard = () => {
                  <tbody className="divide-y divide-white/5 font-manrope">
                     {data.recentSessions.map((row, i) => (
                       <tr key={i} className="hover:bg-white/[0.01] transition-all group">
-                         <td className="px-12 py-8 text-[16px] font-extrabold text-white uppercase tracking-tight group-hover:text-emerald-400 transition-colors">{row.userName}</td>
-                         <td className="px-12 py-8 text-[16px] font-extrabold text-emerald-400 tracking-tight">Rs. {row.amount || '0.00'}</td>
+                         <td className="px-12 py-8 text-[16px] font-extrabold text-white uppercase tracking-tight group-hover:text-emerald-400 transition-colors">{row?.userName}</td>
+                         <td className="px-12 py-8 text-[16px] font-extrabold text-emerald-400 tracking-tight">Rs. {row?.amount || '0.00'}</td>
                          <td className="px-12 py-8 text-[13px] text-[#8AAFC8] font-bold uppercase opacity-60 tracking-wider font-inter">
-                            {row.timestamp?.toDate().toLocaleString() || 'N/A'}
+                            {row.timestamp?.toDate ? row.timestamp.toDate().toLocaleString() : row.timestamp || 'N/A'}
                          </td>
                          <td className="px-12 py-8">
                             <span className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20 text-emerald-400 bg-emerald-500/10 shadow-sm font-inter">Completed</span>

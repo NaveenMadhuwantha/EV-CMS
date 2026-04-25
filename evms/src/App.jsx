@@ -12,6 +12,8 @@ import ProviderRegisterStep3 from './features/registration/provider/pages/Provid
 import ProviderRegisterStep4 from './features/registration/provider/pages/ProviderRegisterStep4.jsx';
 import ProviderRegisterStep5 from './features/registration/provider/pages/ProviderRegisterStep5.jsx';
 import Profile from './features/profile/pages/ProfilePage.jsx';
+import NotificationsPage from './features/profile/pages/NotificationsPage.jsx';
+import SettingsPage from './features/profile/pages/SettingsPage.jsx';
 import AdminDashboard from './features/admin/pages/AdminDashboardPage.jsx';
 import OwnerDashboard from './features/owner/pages/OwnerDashboardPage.jsx';
 import ProviderDashboard from './features/provider/pages/ProviderDashboardPage.jsx';
@@ -101,6 +103,8 @@ function App() {
           <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
 
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
           {/* Provider Specific Routes Aliases */}
           <Route path="/provider/analytics" element={<ProtectedRoute allowedRoles={['provider']}><Analytics /></ProtectedRoute>} />
@@ -119,7 +123,8 @@ function App() {
           <Route path="/admin/transactions" element={<ProtectedRoute allowedRoles={['admin', 'provider']}><Transactions /></ProtectedRoute>} />
           <Route path="/admin/commission" element={<ProtectedRoute allowedRoles={['admin', 'provider']}><Commission /></ProtectedRoute>} />
 
-          <Route path="/" element={<Navigate to="/" replace />} />
+          {/* Catch-all Redirect */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </Router>

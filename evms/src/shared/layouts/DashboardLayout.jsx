@@ -11,15 +11,10 @@ const DashboardLayout = ({ children, title }) => {
         <div className="absolute bottom-0 left-[300px] w-[500px] h-[500px] bg-[#0094ff]/3 blur-[140px]" />
       </div>
 
-      {/* Persistent Sidebar */}
       <UnifiedSidebar />
-
-      {/* Main Content Area */}
-      <main className="ml-[280px] flex-1 min-h-screen relative z-10 flex flex-col overflow-hidden">
+      <main className="ml-[280px] flex-1 min-h-screen relative z-10 flex flex-col">
         <Topbar title={title} />
-        
-        {/* Viewport for Page Content */}
-        <div className="p-8 lg:p-12 animate-fade-up flex-1 overflow-y-auto custom-scrollbar">
+        <div className="p-8 lg:p-12 animate-fade-up flex-1">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
