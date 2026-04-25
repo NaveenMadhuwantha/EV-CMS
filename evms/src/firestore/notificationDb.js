@@ -2,7 +2,8 @@ import { db } from '../config/firebase';
 import { 
   collection, query, where, orderBy, 
   onSnapshot, limit, doc, updateDoc, 
-  writeBatch, serverTimestamp, addDoc 
+  writeBatch, serverTimestamp, addDoc, or, and,
+  getCountFromServer
 } from 'firebase/firestore';
 
 /**
@@ -37,31 +38,30 @@ export const notificationDb = {
   stream: (userId, role, callback) => {
     const notificationsRef = collection(db, 'notifications');
     
-    // Query for notifications where recipientId is the user ID OR recipientId is 'all'
-    // OR recipientRole matches the user's role
-    // Since Firestore doesn't support OR across different fields easily in a single listener WITHOUT multiple indexes,
-    // we'll listen to a broader set and filter or use multiple listeners.
-    // For simplicity in this system, we'll fetch where recipientId == userId OR recipientRole == role OR recipientId == 'all'.
-    
     const q = query(
       notificationsRef,
+      or(
+        where('recipientId', '==', userId),
+        where('recipientId', '==', 'all'),
+        where('recipientRole', '==', role)
+      ),
       orderBy('createdAt', 'desc'),
       limit(20)
     );
 
-    return onSnapshot(q, (snapshot) => {
-      const allNotifications = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      
-      // Filter client-side to ensure security/relevance 
-      // (True security should be handled via Firestore Rules)
-      const filtered = allNotifications.filter(n => 
-        n.recipientId === userId || 
-        n.recipientId === 'all' || 
-        n.recipientRole === role
-      );
-      
-      callback(filtered);
-    });
+    const fetchNotifications = async () => {
+      try {
+        const snapshot = await getDocs(q);
+        const notifications = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        callback(notifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
+    const intervalId = setInterval(fetchNotifications, 30000); // Poll every 30 seconds
+    return () => clearInterval(intervalId);
   },
 
   /**
@@ -79,18 +79,31 @@ export const notificationDb = {
     const notificationsRef = collection(db, 'notifications');
     const q = query(
       notificationsRef,
-      where('isRead', '==', false)
+      and(
+        where('isRead', '==', false),
+        or(
+          where('recipientId', '==', userId),
+          where('recipientId', '==', 'all'),
+          where('recipientRole', '==', role)
+        )
+      )
     );
 
-    return onSnapshot(q, (snapshot) => {
-      const allUnread = snapshot.docs.map(d => d.data());
-      const filteredCount = allUnread.filter(n => 
-        n.recipientId === userId || 
-        n.recipientId === 'all' || 
-        n.recipientRole === role
-      ).length;
-      callback(filteredCount);
-    });
+    // Using polling as a workaround for persistent Firestore assertion failures (ID: ca9)
+    // with real-time listeners on this specific collection.
+    const fetchCount = async () => {
+      try {
+        const snapshot = await getCountFromServer(q);
+        callback(snapshot.data().count);
+      } catch (error) {
+        console.error("Error fetching unread count:", error);
+      }
+    };
+
+    fetchCount(); // Initial fetch
+    const intervalId = setInterval(fetchCount, 30000); // Poll every 30 seconds
+
+    return () => clearInterval(intervalId);
   },
 
   /**
