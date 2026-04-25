@@ -90,12 +90,25 @@ export const AuthProvider = ({ children }) => {
     devRole = sessionStorage.getItem('devRole');
   }
   
-  const ctxUser = devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user;
-  const ctxProfile = devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole } : profile;
+  const ctxUser = React.useMemo(() => 
+    devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user
+  , [devRole, user]);
+
+  const ctxProfile = React.useMemo(() => 
+    devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole } : profile
+  , [devRole, profile]);
+
   const ctxRole = (devRole || profile?.role || 'owner').toLowerCase();
 
+  const value = React.useMemo(() => ({ 
+    user: ctxUser, 
+    profile: ctxProfile, 
+    role: ctxRole, 
+    loading: devRole ? false : loading 
+  }), [ctxUser, ctxProfile, ctxRole, loading, devRole]);
+
   return (
-    <AuthContext.Provider value={{ user: ctxUser, profile: ctxProfile, role: ctxRole, loading: devRole ? false : loading }}>
+    <AuthContext.Provider value={value}>
       {(!loading || devRole) && children}
     </AuthContext.Provider>
   );

@@ -128,12 +128,16 @@ export const SettingsProvider = ({ children }) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const resetSettings = () => {
+    setSettings(DEFAULT_SETTINGS);
+  };
+
   const t = (key) => {
     return translations[settings.language][key] || translations['en'][key] || key;
   };
 
   return (
-    <SettingsContext.Provider value={{ ...settings, updateSetting, t, setSettings }}>
+    <SettingsContext.Provider value={{ ...settings, updateSetting, t, setSettings, resetSettings }}>
       {children}
     </SettingsContext.Provider>
   );

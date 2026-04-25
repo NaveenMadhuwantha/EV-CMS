@@ -8,7 +8,7 @@ import { useSettings } from '../../../shared/context/SettingsContext';
 
 const SettingsPage = () => {
   const settings = useSettings();
-  const { updateSetting, t, setSettings } = settings;
+  const { updateSetting, t, setSettings, resetSettings } = settings;
 
   const SettingToggle = ({ icon: Icon, label, desc, value, onChange }) => (
     <div className="flex items-center justify-between p-8 bg-[#0a1628]/40 border-2 border-dashed border-white/5 rounded-[40px] hover:border-[#00d2b4]/20 transition-all group shadow-sm font-inter">
@@ -120,7 +120,7 @@ const SettingsPage = () => {
         {/* Reset Sector */}
         <div className="pt-10 border-t border-white/5 flex justify-center">
            <button 
-             onClick={() => setSettings({ language: 'en', notificationsEnabled: true, emailAlerts: false, darkMode: true, publicProfile: false, soundEffects: true })}
+             onClick={resetSettings}
              className="flex items-center gap-4 px-10 py-5 rounded-2xl bg-white/5 text-[#4E7A96] hover:text-white transition-all text-[11px] font-black uppercase tracking-[4px] border border-white/5 hover:border-white/10 shadow-sm"
            >
              <RotateCcw className="w-4 h-4" /> {t('resetDefault')}

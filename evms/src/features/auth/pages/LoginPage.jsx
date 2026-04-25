@@ -125,31 +125,35 @@ const Login = () => {
             </div>
 
             {/* CTA Modules */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg lg:max-w-xl font-manrope">
+            <div className="flex flex-col gap-6 w-full max-w-lg lg:max-w-xl font-manrope">
               <button
                 onClick={() => handleRegisterClick('EV Owner')}
-                className="group relative flex flex-col items-start justify-end p-10 h-64 bg-white/[0.03] border border-white/10 rounded-3xl hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 overflow-hidden active:scale-95 shadow-xl"
+                className="group relative flex items-center gap-6 p-4 pr-10 bg-white/[0.03] border border-white/10 rounded-full hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 active:scale-95 shadow-xl w-full"
               >
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-[#00D4AA]/20 transition-all shadow-inner">
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D4AA]/20 transition-all shadow-inner shrink-0">
                   <Car className="w-8 h-8 text-[#00D4AA]" strokeWidth={2.5} />
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2 group-hover:text-white transition-all font-inter">For Owners</div>
-                <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Join as Owner</div>
-                <div className="absolute top-8 right-8 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm">
+                <div className="flex flex-col items-start">
+                  <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] group-hover:text-white transition-all font-inter">For Owners</div>
+                  <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Join as Owner</div>
+                </div>
+                <div className="ml-auto w-12 h-12 rounded-full border border-white/10 flex items-center justify-center opacity-40 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm group-hover:translate-x-1">
                   <ChevronRight className="w-6 h-6" />
                 </div>
               </button>
 
               <button
                 onClick={() => handleRegisterClick('Provider')}
-                className="group relative flex flex-col items-start justify-end p-10 h-64 bg-white/[0.03] border border-white/10 rounded-3xl hover:border-blue-500/40 transition-all hover:bg-blue-500/5 overflow-hidden active:scale-95 shadow-xl"
+                className="group relative flex items-center gap-6 p-4 pr-10 bg-white/[0.03] border border-white/10 rounded-full hover:border-blue-500/40 transition-all hover:bg-blue-500/5 active:scale-95 shadow-xl w-full"
               >
-                <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-all shadow-inner">
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-all shadow-inner shrink-0">
                   <Fuel className="w-8 h-8 text-blue-400" strokeWidth={2.5} />
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2 group-hover:text-white transition-all font-inter">For Providers</div>
-                <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Become Provider</div>
-                <div className="absolute top-8 right-8 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm">
+                <div className="flex flex-col items-start">
+                  <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] group-hover:text-white transition-all font-inter">For Providers</div>
+                  <div className="text-2xl font-extrabold text-white uppercase tracking-tight">Join as Provider</div>
+                </div>
+                <div className="ml-auto w-12 h-12 rounded-full border border-white/10 flex items-center justify-center opacity-40 group-hover:opacity-100 transition-all text-white bg-white/5 backdrop-blur-sm group-hover:translate-x-1">
                   <ChevronRight className="w-6 h-6" />
                 </div>
               </button>
