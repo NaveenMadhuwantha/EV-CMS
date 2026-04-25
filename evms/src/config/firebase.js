@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // Firebase project configuration using environment variables
@@ -19,7 +19,17 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Services
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Use initializeFirestore with aggressive stability settings:
+// 1. experimentalForceLongPolling: true - bypasses WebChannel race conditions.
+// 2. experimentalAutoDetectLongPolling: false - prevents the SDK from trying to switch back to WebSockets.
+// 3. localCache: memoryLocalCache() - disables IndexedDB persistence to avoid corrupted local state.
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+  experimentalAutoDetectLongPolling: false,
+  localCache: memoryLocalCache(),
+});
 export const storage = getStorage(app);
 
 export default app;
+
+

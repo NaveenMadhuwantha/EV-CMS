@@ -42,12 +42,19 @@ export const AuthProvider = ({ children }) => {
              }
            } catch (e) { console.error("Sync upsert error:", e); }
 
-           return onSnapshot(ref, (snap) => {
-              if (snap.exists()) {
-                 setProfile({ ...snap.data(), id: snap.id, role });
-                 localStorage.setItem('user_role', role);
-              }
-           });
+           const fetchProfile = async () => {
+              try {
+                const snap = await getDoc(ref);
+                if (snap.exists()) {
+                   setProfile({ ...snap.data(), id: snap.id, role });
+                   localStorage.setItem('user_role', role);
+                }
+              } catch (err) { console.error("Profile fetch error:", err); }
+           };
+
+           fetchProfile();
+           const intervalId = setInterval(fetchProfile, 60000); // Profile updates are rare, check every minute
+           return () => clearInterval(intervalId);
         };
 
         try {
