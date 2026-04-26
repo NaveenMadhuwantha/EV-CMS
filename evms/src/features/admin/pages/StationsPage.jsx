@@ -198,103 +198,111 @@ export const Stations = () => {
             <p className="text-[#7a9bbf] text-sm max-w-lg mx-auto mt-2">Complete your provider profile to activate station management and deployment tools.</p>
          </div>
       )}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 font-inter">
-        {loading ? (
-          <div className="col-span-full py-24 text-center opacity-30">
-            <Loader2 className="w-12 h-12 animate-spin mx-auto mb-6 text-[#00d2b4]" />
-            <p className="text-[12px] font-bold uppercase tracking-[4px]">Accessing Infrastructure Core...</p>
-          </div>
-        ) : filteredStations.length > 0 ? filteredStations.map((s) => (
-          <div key={s.id} className={`bg-[#0a2038]/40 border-2 border-dashed rounded-[40px] p-10 hover:border-[#00d2b4]/30 transition-all shadow-xl group relative overflow-hidden ${!s.isVerified ? 'border-amber-500/20' : 'border-[#00d2b4]/10'}`}>
-             <div className="absolute top-0 right-0 w-32 h-32 bg-[#00d2b4]/5 blur-[60px] pointer-events-none"></div>
-             
-             <div className="flex justify-between items-start mb-10 relative z-10">
-                <div className="w-14 h-14 rounded-2xl bg-[#00d2b4]/10 flex items-center justify-center text-[#00d2b4] shadow-inner group-hover:scale-110 transition-transform">
-                   <Fuel className="w-6 h-6" />
-                </div>
-                <div className="flex items-center gap-2">
-                   {!s.isVerified && (
-                     <div className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/10 text-[9px] font-black text-amber-500 uppercase tracking-widest">PENDING</div>
-                   )}
-                   <button 
-                     onClick={() => handleStatusToggle(s.id, s.status || 'LIVE')}
-                     className={`px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest shadow-sm transition-all ${
-                       s.status === 'LIVE' ? 'bg-[#00d2b4]/10 border-[#00d2b4]/20 text-[#00d2b4]' : 
-                       s.status === 'MAINTENANCE' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' : 
-                       'bg-red-500/10 border-red-500/20 text-red-500'
-                     }`}
-                   >
-                     {s.status || 'LIVE'}
-                   </button>
-                   <button 
-                     onClick={() => setDeleteConfirm({ id: s.id, name: s.name })}
-                     className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-lg"
-                   >
-                     <Trash2 className="w-4 h-4" />
-                   </button>
-                </div>
-             </div>
-
-             <div className="relative z-10">
-                <h3 className="text-white font-extrabold text-[20px] uppercase tracking-tighter mb-2 group-hover:text-emerald-400 transition-colors truncate">{s.name}</h3>
-                <div className="flex items-center gap-2 text-[11px] font-bold text-[#4E7A96] uppercase tracking-widest opacity-70 mb-4">
-                   <MapPin className="w-3.5 h-3.5" /> {s.location}
-                </div>
-                
-                {role === 'admin' && (
-                  <div className="flex flex-col gap-3 mb-8">
-                    <div className="text-[9px] font-bold text-[#00d2b4] uppercase tracking-[2px] bg-[#00d2b4]/5 py-1 px-3 rounded-full w-fit border border-[#00d2b4]/10">
-                      Owner: {s.ownerEmail || 'System Node'}
+           <div className="bg-[#0a1628] border border-white/5 rounded-[32px] overflow-hidden shadow-2xl font-inter">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-white/5 bg-white/[0.02]">
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96]">Station Node</th>
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96]">Category</th>
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96]">Energy Rate</th>
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96]">Operation Status</th>
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96]">Performance</th>
+                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-[#4E7A96] text-right">Management</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="p-20 text-center opacity-30">
+                    <Loader2 className="w-10 h-10 animate-spin mx-auto mb-4 text-[#00d2b4]" />
+                    <div className="text-[10px] font-black uppercase tracking-[4px]">Accessing Infrastructure...</div>
+                  </td>
+                </tr>
+              ) : filteredStations.length > 0 ? filteredStations.map((s) => (
+                <tr key={s.id} className="hover:bg-white/[0.01] transition-all group">
+                  <td className="p-6">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${!s.isVerified ? 'bg-amber-500/10 text-amber-500' : 'bg-[#00d2b4]/10 text-[#00d2b4]'}`}>
+                        <Fuel className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                           <span className="text-white font-extrabold text-[15px] uppercase tracking-tight group-hover:text-[#00d2b4] transition-colors">{s.name}</span>
+                           {!s.isVerified && <span className="px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-[8px] font-black text-amber-500 uppercase tracking-widest">PENDING</span>}
+                        </div>
+                        <div className="text-[#4E7A96] text-[11px] font-bold flex items-center gap-1.5 mt-1 opacity-70">
+                          <MapPin className="w-3.5 h-3.5" /> {s.location}
+                        </div>
+                      </div>
                     </div>
-                    {!s.isVerified && (
+                  </td>
+                  <td className="p-6">
+                    <span className="px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-black text-[#7a9bbf] uppercase tracking-widest shadow-inner">
+                      {s.type?.split(' ')[0] || 'AC'} NODE
+                    </span>
+                  </td>
+                  <td className="p-6">
+                    <div className="text-white font-manrope font-extrabold text-[16px]">Rs. {s.price}</div>
+                    <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest mt-0.5 opacity-60">per hour usage</div>
+                  </td>
+                  <td className="p-6">
+                    <button 
+                      onClick={() => handleStatusToggle(s.id, s.status || 'LIVE')}
+                      className={`px-5 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all shadow-sm hover:scale-105 active:scale-95 ${
+                        s.status === 'LIVE' ? 'bg-[#00d2b4]/10 border-[#00d2b4]/20 text-[#00d2b4]' : 
+                        s.status === 'MAINTENANCE' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500' : 
+                        'bg-red-500/10 border-red-500/20 text-red-500'
+                      }`}
+                    >
+                      {s.status || 'LIVE'}
+                    </button>
+                  </td>
+                  <td className="p-6">
+                    <div className="flex flex-col gap-1.5">
+                       <div className="text-[13px] font-extrabold text-white flex items-center gap-2">84% <span className="text-[#00d2b4] text-[10px]">↑</span></div>
+                       <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest opacity-50 italic">142 sessions log</div>
+                    </div>
+                  </td>
+                  <td className="p-6">
+                    <div className="flex items-center justify-end gap-3">
+                      {role === 'admin' && !s.isVerified && (
+                        <button 
+                          onClick={() => handleVerify(s.id, s.name)}
+                          className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center shadow-lg border border-amber-500/20"
+                          title="Verify Station"
+                        >
+                          <CheckCircle2 className="w-5 h-5" />
+                        </button>
+                      )}
                       <button 
-                        onClick={() => handleVerify(s.id, s.name)}
-                        className="w-full py-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center gap-2"
+                        className="w-10 h-10 rounded-xl bg-white/5 text-[#4E7A96] hover:bg-[#00d2b4] hover:text-[#050c14] transition-all flex items-center justify-center shadow-lg border border-white/5"
+                        title="Configure Settings"
                       >
-                        <CheckCircle2 className="w-4 h-4" /> VERIFY NODE
+                        <Settings2 className="w-5 h-5" />
                       </button>
-                    )}
-                  </div>
-                )}
-
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 group/stat">
-                      <div className="flex items-center gap-2 text-[9px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 opacity-60">
-                        <BarChart3 className="w-3 h-3" /> Usage
-                      </div>
-                      <div className="text-[14px] font-black text-white font-manrope">84% <span className="text-[10px] text-emerald-400 ml-1">↑</span></div>
-                   </div>
-                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-                      <div className="flex items-center gap-2 text-[9px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 opacity-60">
-                        <Clock className="w-3 h-3" /> Sessions
-                      </div>
-                      <div className="text-[14px] font-black text-white font-manrope">142</div>
-                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-                      <div className="text-[9px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 opacity-60">Base Rate</div>
-                      <div className="text-[14px] font-black text-white font-manrope">Rs. {s.price}</div>
-                   </div>
-                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-                      <div className="text-[9px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 opacity-60">Type</div>
-                      <div className="text-[14px] font-black text-white font-manrope">{s.type?.split(' ')[0] || 'AC'}</div>
-                   </div>
-                </div>
-                
-                <button className="w-full mt-8 py-5 rounded-2xl bg-white/[0.03] border border-white/5 text-[#4E7A96] text-[10px] font-black uppercase tracking-[3px] hover:bg-[#00d2b4] hover:text-[#050c14] transition-all flex items-center justify-center gap-3 group/btn">
-                   MANAGE NODE <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-             </div>
-          </div>
-        )) : (
-          <div className="col-span-full py-32 text-center opacity-20">
-             <Zap className="w-12 h-12 mx-auto mb-6" />
-             <p className="text-[10px] font-extrabold uppercase tracking-[6px]">No Infrastructure Deployed</p>
-          </div>
-        )}
+                      <button 
+                        onClick={() => setDeleteConfirm({ id: s.id, name: s.name })}
+                        className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-lg border border-red-500/20"
+                        title="Decommission Node"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )) : (
+                <tr>
+                  <td colSpan="6" className="p-32 text-center opacity-20">
+                    <Zap className="w-12 h-12 mx-auto mb-6" />
+                    <p className="text-[12px] font-black uppercase tracking-[8px]">No Infrastructure Deployed</p>
+                    <p className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mt-4">Initialize a new node to begin operations</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Delete Confirmation Modal */}
