@@ -3,8 +3,9 @@ import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllStations } from '../../../firestore/stationDb';
 import { createBooking, getAllBookings, updateBookingStatus } from '../../../firestore/bookingDb';
-import { Loader2, Clock, MapPin, Zap, ShieldCheck } from 'lucide-react';
+import { Loader2, Clock, MapPin, Zap, ShieldCheck, BarChart3, CheckCircle2, Activity, DollarSign, Search, Filter } from 'lucide-react';
 import { useAuth } from '../../auth/context/AuthContext';
+import { useLanguage } from '../../../shared/context/LanguageContext';
 
 const ChargingTimer = ({ startTime, durationHours, size = 'small' }) => {
   const [timeLeft, setTimeLeft] = useState(durationHours * 3600);
@@ -75,7 +76,7 @@ const ChargingTimer = ({ startTime, durationHours, size = 'small' }) => {
 };
 
 export const BookSlot = () => {
-  const { profile } = useAuth();
+  const { role, profile } = useAuth();
   const [stations, setStations] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -166,9 +167,15 @@ export const BookSlot = () => {
     }
   };
 
+  const isAdmin = role === 'admin';
+  const { t } = useLanguage();
+
   return (
-    <DashboardLayout title="Bookings">
-      <PageHeader title="Bookings" subtitle="Handle customer appointments and grid slot reservations." />
+    <DashboardLayout title={isAdmin ? t('bookingInsights') : t('bookings')}>
+      <PageHeader 
+        title={isAdmin ? t('bookingInsights') : t('bookings')} 
+        subtitle={isAdmin ? t('bookingInsightsSubtitle') : "Handle customer appointments and grid slot reservations."} 
+      />
       
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 opacity-30">
@@ -193,6 +200,121 @@ export const BookSlot = () => {
                  Complete Registration Now
               </a>
            </div>
+        </div>
+      ) : isAdmin ? (
+        /* Admin Summary View */
+        <div className="space-y-12 font-inter">
+          {/* Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-[#0a1628]/40 border-2 border-dashed border-[#00d2b4]/10 p-8 rounded-[32px] hover:border-[#00d2b4]/30 transition-all group">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 bg-[#00d2b4]/10 rounded-2xl flex items-center justify-center text-[#00d2b4]"><BarChart3 className="w-6 h-6" /></div>
+                <div className="text-[10px] font-black text-[#00d2b4] uppercase tracking-widest bg-[#00d2b4]/5 px-3 py-1.5 rounded-lg">{t('total')}</div>
+              </div>
+              <div className="text-4xl font-black text-white mb-2 font-manrope">{bookings.length}</div>
+              <div className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('totalReservations')}</div>
+            </div>
+
+            <div className="bg-[#0a1628]/40 border-2 border-dashed border-amber-500/10 p-8 rounded-[32px] hover:border-amber-500/30 transition-all group">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500"><Activity className="w-6 h-6" /></div>
+                <div className="text-[10px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/5 px-3 py-1.5 rounded-lg">{t('live')}</div>
+              </div>
+              <div className="text-4xl font-black text-white mb-2 font-manrope">{bookings.filter(b => b.status === 'CHARGING').length}</div>
+              <div className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('activeSessions')}</div>
+            </div>
+
+            <div className="bg-[#0a1628]/40 border-2 border-dashed border-blue-500/10 p-8 rounded-[32px] hover:border-blue-500/30 transition-all group">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500"><CheckCircle2 className="w-6 h-6" /></div>
+                <div className="text-[10px] font-black text-blue-400 uppercase tracking-widest bg-blue-500/5 px-3 py-1.5 rounded-lg">{t('completed')}</div>
+              </div>
+              <div className="text-4xl font-black text-white mb-2 font-manrope">{bookings.filter(b => b.status === 'COMPLETED').length}</div>
+              <div className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('completed')}</div>
+            </div>
+
+            <div className="bg-[#0a1628]/40 border-2 border-dashed border-emerald-500/10 p-8 rounded-[32px] hover:border-emerald-500/30 transition-all group">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500"><DollarSign className="w-6 h-6" /></div>
+                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/5 px-3 py-1.5 rounded-lg">{t('net')}</div>
+              </div>
+              <div className="text-4xl font-black text-white mb-2 font-manrope">Rs. {bookings.reduce((sum, b) => sum + (b.platformCommission || 0), 0).toLocaleString()}</div>
+              <div className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">{t('netRevenue')}</div>
+            </div>
+          </div>
+
+          {/* Detailed Table */}
+          <div className="bg-[#0a2038]/40 border-2 border-dashed border-[#00d2b4]/10 rounded-[40px] overflow-hidden shadow-2xl">
+             <div className="px-12 py-10 border-b border-white/5 bg-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                   <h3 className="text-xl font-black text-white uppercase tracking-tight font-manrope">{t('reservationLedger')}</h3>
+                   <p className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[4px] mt-2 opacity-60">{t('globalSessionInventory')}</p>
+                </div>
+                <div className="flex gap-4 w-full md:w-auto">
+                   <div className="relative flex-1 md:w-64">
+                      <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4E7A96]" />
+                      <input type="text" placeholder={t('searchSessions')} className="w-full bg-[#050c14]/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-[12px] text-white focus:outline-none focus:border-[#00d2b4] transition-all font-bold placeholder:opacity-20 uppercase tracking-widest" />
+                   </div>
+                </div>
+             </div>
+             
+             <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                   <thead>
+                      <tr className="bg-white/[0.02] border-b border-white/5">
+                         <th className="px-12 py-6 text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px]">{t('customerVehicle')}</th>
+                         <th className="px-12 py-6 text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px]">{t('stationHub')}</th>
+                         <th className="px-12 py-6 text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px]">{t('schedule')}</th>
+                         <th className="px-12 py-6 text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px]">{t('financials')}</th>
+                         <th className="px-12 py-6 text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px]">{t('statusLabel')}</th>
+                      </tr>
+                   </thead>
+                   <tbody className="divide-y divide-white/5 font-inter">
+                      {bookings.length > 0 ? bookings.map((b) => (
+                        <tr key={b.id} className="hover:bg-[#00d2b4]/5 transition-all group">
+                           <td className="px-12 py-8">
+                              <div className="font-extrabold text-white text-[15px] uppercase tracking-tight group-hover:text-[#00d2b4] transition-colors">{b.userName}</div>
+                              <div className="text-[10px] text-[#4E7A96] font-black mt-2 font-manrope uppercase tracking-widest bg-white/5 inline-block px-2 py-1 rounded-md">{b.vehicleNo || 'NO-PLATE'}</div>
+                           </td>
+                           <td className="px-12 py-8">
+                              <div className="flex items-center gap-3">
+                                 <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center"><Fuel className="w-4 h-4 text-[#00d2b4]" /></div>
+                                 <div>
+                                    <div className="text-[13px] font-bold text-white uppercase tracking-tight">{b.stationName}</div>
+                                    <div className="text-[9px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1 opacity-60 flex items-center gap-1"><MapPin className="w-3 h-3" /> {b.location}</div>
+                                 </div>
+                              </div>
+                           </td>
+                           <td className="px-12 py-8">
+                              <div className="text-[13px] font-bold text-white">{b.date}</div>
+                              <div className="text-[10px] text-[#00d2b4] font-black mt-1.5 uppercase tracking-widest flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> {b.time}</div>
+                           </td>
+                           <td className="px-12 py-8">
+                              <div className="text-[14px] font-black text-white font-manrope">Rs. {b.totalCost?.toLocaleString()}</div>
+                              <div className="text-[9px] text-red-400 font-bold uppercase tracking-widest mt-1 opacity-70">Comm: Rs. {b.platformCommission?.toFixed(2)}</div>
+                           </td>
+                           <td className="px-12 py-8">
+                              <span className={`text-[9px] font-black px-3 py-1.5 rounded-xl uppercase tracking-[2px] border ${
+                                 b.status === 'CHARGING' ? 'text-[#00d2b4] border-[#00d2b4]/20 bg-[#00d2b4]/5 shadow-[0_0_12px_rgba(0,210,180,0.1)]' : 
+                                 b.status === 'COMPLETED' ? 'text-blue-400 border-blue-500/20 bg-blue-500/5' :
+                                 'text-amber-500 border-amber-500/20 bg-amber-500/5'
+                              }`}>
+                                {b.status || 'PENDING'}
+                              </span>
+                           </td>
+                        </tr>
+                      )) : (
+                        <tr>
+                           <td colSpan="5" className="px-12 py-32 text-center opacity-30">
+                              <Clock className="w-16 h-16 mx-auto mb-6 text-[#4E7A96]" />
+                              <p className="text-[12px] font-black uppercase tracking-[5px] text-[#4E7A96]">No Transactions Logged</p>
+                           </td>
+                        </tr>
+                      )}
+                   </tbody>
+                </table>
+             </div>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start font-inter">
