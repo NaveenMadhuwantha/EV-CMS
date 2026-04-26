@@ -35,7 +35,7 @@ const SIDEBAR_CONFIG = {
           { label: 'users', path: '/admin/users', icon: Users },
           { label: 'providers', path: '/admin/providers', icon: Users },
           { label: 'ledger', path: '/admin/transactions', icon: Receipt },
-          { label: 'globalRevenue', path: '/admin/commission', icon: PieChart, badge: 'Tax' }
+          { label: 'revenue', path: '/admin/commission', icon: PieChart }
         ]
       }
     ]
@@ -120,7 +120,10 @@ const UnifiedSidebar = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[280px] bg-[#0a2038]/50 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[100] font-inter">
+    <aside 
+      className="fixed left-0 bottom-0 w-[280px] bg-[#0a2038]/50 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[100] font-inter"
+      style={{ top: 'var(--dev-bar-offset, 0px)' }}
+    >
       <div className="p-8 border-b border-white/5">
         <Link to={config.dashboardPath} className="flex items-center gap-4 group">
           <div className="w-11 h-11 bg-gradient-to-br from-[#00d2b4] to-[#0094ff] rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500">

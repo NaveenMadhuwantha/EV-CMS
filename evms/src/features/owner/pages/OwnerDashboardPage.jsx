@@ -33,11 +33,19 @@ const SectionHeader = ({ title, subtitle, action }) => (
 );
 
 import { requestProviderStatus } from '../../../firestore/providerDb';
+import { getOwnerStats } from '../../../firestore/ownerDb';
 
 const OwnerDashboard = () => {
   const { user, profile } = useAuth();
   const { t } = useLanguage();
   const userName = profile?.fullName || user?.email?.split('@')[0] || t('user');
+  const [stats, setStats] = useState({ totalSessions: 0, totalSpent: 0, totalKwh: 0, ecoScore: 0, usageData: [], loading: true });
+
+  useEffect(() => {
+    if (user?.uid) {
+      getOwnerStats(user.uid).then(res => setStats({ ...res, loading: false }));
+    }
+  }, [user?.uid]);
 
   const handleRequestStatus = async () => {
     if (window.confirm(t('requestProviderConfirm'))) {
@@ -58,6 +66,27 @@ const OwnerDashboard = () => {
 
   return (
     <DashboardLayout title={t('stationControl')}>
+      {/* Complete Profile Prompt for Guest/New Users */}
+      {!profile?.isProfileComplete && (
+        <div className="mb-8 p-6 bg-gradient-to-r from-amber-500/20 to-amber-600/10 border border-amber-500/30 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 animate-pulse-subtle">
+           <div className="flex items-center gap-5">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500">
+                 <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                 <h4 className="text-white font-bold text-lg">{t('completeProfileTitle') || 'Finish Your Registration'}</h4>
+                 <p className="text-amber-200/60 text-sm">{t('completeProfileDesc') || 'Get full access to charging history and bookings by completing your profile.'}</p>
+              </div>
+           </div>
+           <Link 
+             to="/register" 
+             className="px-8 py-3 bg-amber-500 text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+           >
+              {t('completeNow') || 'Complete Now'}
+           </Link>
+        </div>
+      )}
+
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
@@ -77,9 +106,9 @@ const OwnerDashboard = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <StatCard icon={Car} color="bg-[#00d2b4]/10 text-[#00d2b4]" value="1" label={t('activeVehicle')} delay="delay-0" />
-        <StatCard icon={History} color="bg-blue-500/10 text-blue-400" value="0" label={t('totalSessions')} delay="delay-75" />
-        <StatCard icon={CreditCard} color="bg-amber-500/10 text-amber-500" value="Rs. 0" label={t('totalSpent')} delay="delay-150" />
-        <StatCard icon={TrendingUp} color="bg-purple-500/10 text-purple-500" value="84%" label={t('ecoScore')} delay="delay-200" />
+        <StatCard icon={History} color="bg-blue-500/10 text-blue-400" value={stats.loading ? '...' : stats.totalSessions} label={t('totalSessions')} delay="delay-75" />
+        <StatCard icon={CreditCard} color="bg-amber-500/10 text-amber-500" value={stats.loading ? '...' : `Rs. ${stats.totalSpent.toLocaleString()}`} label={t('totalSpent')} delay="delay-150" />
+        <StatCard icon={TrendingUp} color="bg-purple-500/10 text-purple-500" value={stats.loading ? '...' : `${stats.ecoScore}%`} label={t('ecoScore')} delay="delay-200" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
@@ -110,8 +139,8 @@ const OwnerDashboard = () => {
              </div>
           </div>
           <div className="space-y-4 border-t border-white/5 pt-8 mt-6">
-             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('creditsLeft')}</span><span className="text-[#00d2b4] font-bold">500 kWh</span></div>
-             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('totalSaved')}</span><span className="text-white font-extrabold font-manrope">Rs. 4,500</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('energyConsumed') || 'Energy Consumed'}</span><span className="text-[#00d2b4] font-bold">{stats.totalKwh.toFixed(1)} kWh</span></div>
+             <div className="flex justify-between text-[14px]"><span className="text-[#7a9bbf] font-medium">{t('totalSaved') || 'Estimated Savings'}</span><span className="text-white font-extrabold font-manrope">Rs. {(stats.totalSpent * 0.15).toLocaleString()}</span></div>
           </div>
         </div>
       </div>

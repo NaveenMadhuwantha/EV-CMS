@@ -1,259 +1,155 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, User, Activity, BarChart3, Globe, Fuel, Car, Lock, ShieldCheck, ChevronRight, Menu, MapPin, BookOpen, LogOut } from 'lucide-react';
 import DocumentationModal from '../../../shared/components/DocumentationModal';
 import { useAuth } from '../../../features/auth/context/AuthContext';
 import { useLanguage } from '../../../shared/context/LanguageContext';
 import { logoutUser } from '../../../firebase/auth';
+import { streamGlobalStats } from '../../../firestore/statsDb';
 
 const Login = () => {
   const navigate = useNavigate();
   const { user, profile, role } = useAuth();
   const { t } = useLanguage();
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+  const [stats, setStats] = useState({ totalUsers: 0, totalStations: 0, uptime: '100%' });
 
-  const handleRegisterClick = (role) => {
-    if (role === 'EV Owner') {
+  useEffect(() => {
+    const unsub = streamGlobalStats(setStats);
+    return () => unsub();
+  }, []);
+
+  const handleRegisterClick = (roleLabel) => {
+    if (roleLabel === 'EV Owner') {
       localStorage.setItem('user_role', 'owner');
       navigate('/register');
-    } else if (role === 'Provider') {
+    } else if (roleLabel === 'Provider') {
       localStorage.setItem('user_role', 'provider');
       navigate('/provider/register');
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      navigate('/');
-    } catch (error) {
-      console.error("Logout failed", error);
+  const handleDashboardRedirect = () => {
+    if (role) {
+      navigate(`/${role}/dashboard`);
+    } else {
+      navigate('/signin');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#050F1C] text-white flex flex-col font-inter overflow-x-hidden relative selection:bg-[#00D4AA]/30">
-      
-      {/* Documentation Modal Overlay */}
+    <div className="min-h-screen bg-[#050F1C] text-[#EFF6FF] font-inter overflow-x-hidden selection:bg-[#00D4AA]/30">
       <DocumentationModal isOpen={isDocModalOpen} onClose={() => setIsDocModalOpen(false)} />
 
-      {/* Dynamic Background Elements */}
-      <div className="fixed top-[-15%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#00D4AA]/5 blur-[140px] pointer-events-none"></div>
-      <div className="fixed bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none"></div>
-
-      {/* 1. Header */}
-      <header className="w-full px-6 py-8 lg:px-12 lg:py-10 flex items-center justify-between z-50 animate-fade-in text-white/90">
-        <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] shadow-xl group-hover:scale-105 transition-transform duration-500">
-            <Zap className="w-6 h-6 text-white fill-white/20" />
+      {/* Navigation */}
+      <nav 
+        className="fixed left-0 right-0 z-50 bg-[#050F1C]/80 backdrop-blur-2xl border-b border-white/5"
+        style={{ top: 'var(--dev-bar-offset, 0px)' }}
+      >
+        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <Zap className="w-5 h-5 text-white fill-white/20" />
+            </div>
+            <div>
+              <span className="font-manrope text-xl font-black tracking-tight text-white uppercase block leading-none">VoltWay</span>
+              <span className="text-[8px] text-[#4E7A96] font-bold uppercase tracking-[2px] mt-1 block opacity-70">EV Management System</span>
+            </div>
           </div>
-          <div className="hidden sm:block font-manrope">
-            <div className="text-2xl font-extrabold text-white leading-tight tracking-tight uppercase">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70">EV Management System</div>
+
+          <div className="hidden md:flex items-center gap-10 text-[11px] font-bold uppercase tracking-widest text-[#8AAFC8]">
+            <button onClick={() => navigate('/signin')} className="hover:text-white transition-colors">{t('login')}</button>
+            <button onClick={() => setIsDocModalOpen(true)} className="hover:text-white transition-colors">{t('documentation')}</button>
+            <button onClick={handleDashboardRedirect} className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-white font-black">
+              {user ? t('dashboard') : t('signIn')}
+            </button>
           </div>
         </div>
+      </nav>
 
-        <nav className="flex items-center gap-6 lg:gap-14 animate-fade-in delay-100 font-inter">
-          <div className="hidden md:flex items-center gap-10 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96]">
-            <a href="/explore" className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group">
-              <Globe className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform opacity-60 group-hover:opacity-100" />
-              {t('globalNetwork')}
-            </a>
-            <button 
-               onClick={() => setIsDocModalOpen(true)}
-               className="hover:text-[#00D4AA] transition-colors flex items-center gap-2 group cursor-pointer border-none bg-transparent h-auto p-0"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 group-hover:scale-110 transition-transform opacity-60 group-hover:opacity-100" />
-              {t('documentation')}
-            </button>
-          </div>
+      {/* Hero Section */}
+      <main className="pt-48 pb-32 px-6 relative">
+        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-[#00D4AA]/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none"></div>
 
-          {user ? (
-            <div className="flex items-center gap-8 pl-8 border-l border-white/10">
-              <div className="flex flex-col items-end group cursor-pointer" onClick={() => navigate(`/${role}/dashboard`)}>
-                <div className="text-[13px] font-black text-white uppercase tracking-tighter group-hover:text-[#00D4AA] transition-colors">
-                  {profile?.fullName || profile?.businessName || user.email.split('@')[0]}
-                </div>
-                <div className="text-[9px] text-[#4E7A96] font-extrabold uppercase tracking-[3px] opacity-60 flex items-center gap-2">
-                   <div className="w-1.5 h-1.5 rounded-full bg-[#00D4AA] shadow-[0_0_8px_#00D4AA]"></div>
-                   {(profile?.role || localStorage.getItem('user_role'))?.toUpperCase() || 'USER'}
-                </div>
-                <div className="text-[10px] text-[#4E7A96] font-bold tracking-tight opacity-40 mt-1">{user.email}</div>
-              </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="animate-fade-up">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 mb-10 group hover:border-[#00D4AA]/40 transition-all">
+              <div className="w-2 h-2 rounded-full bg-[#00D4AA] animate-pulse"></div>
+              <span className="text-[10px] font-bold uppercase tracking-[3px] text-[#8AAFC8] group-hover:text-white transition-colors">{t('liveInSL') || 'LIVE IN SRI LANKA'}</span>
+            </div>
+
+            <h1 className="font-manrope text-7xl xl:text-8xl font-black text-white leading-[0.95] tracking-tight uppercase mb-10">
+              {t('powering') || 'POWERING'} <br /> 
+              <span className="text-[#00D4AA]">{t('sriLanka') || "SRI LANKA'S"}</span> <br /> 
+              {t('future') || 'FUTURE.'}
+            </h1>
+
+            <p className="text-xl text-[#8AAFC8] font-medium leading-relaxed mb-12 max-w-lg opacity-80">
+              {t('description') || 'The leading platform for electric vehicle management. Simple and reliable charging for everyone.'}
+            </p>
+
+            <div className="flex flex-wrap gap-6 mb-16">
               <button 
-                onClick={handleLogout}
-                className="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center text-red-400 hover:bg-red-500/10 transition-all border border-white/5 active:scale-95 group shadow-xl"
-                title="Logout"
+                onClick={() => handleRegisterClick('EV Owner')} 
+                className="px-16 py-5 bg-gradient-to-r from-[#00D4AA] to-[#00B894] text-[#050F1C] rounded-full font-black uppercase tracking-[2px] hover:scale-105 hover:shadow-[0_0_40px_rgba(0,212,170,0.3)] active:scale-95 transition-all duration-300 text-[12px] flex items-center gap-4 group"
               >
-                <LogOut className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                <Car className="w-6 h-6" strokeWidth={2.5} />
+                {t('joinAsOwner') || 'Join as Owner'}
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform opacity-50" />
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => navigate('/signin')}
-              className="px-8 py-3.5 bg-white/5 backdrop-blur-md rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-[12px] font-extrabold uppercase tracking-widest text-white shadow-xl hover:border-white/20 active:scale-95 flex items-center gap-4 group font-manrope whitespace-nowrap"
-            >
-              <Lock className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:text-[#00D4AA] transition-all" strokeWidth={2.5} />
-              {t('login')}
-            </button>
-          )}
-        </nav>
-      </header>
-
-      {/* 2. Focused Hero Section */}
-      <main className="flex-grow flex items-center px-6 lg:px-20 py-12 lg:py-16 relative z-10">
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
-
-          {/* Left Side: Typography & Actions */}
-          <div className="flex flex-col items-center lg:items-start space-y-12 animate-fade-up">
-            <div className="space-y-8 text-center lg:text-left w-full">
-              <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-[#00D4AA]/5 border border-[#00D4AA]/20 shadow-xl shadow-[#00D4AA]/5">
-                <span className="w-2 h-2 rounded-full bg-[#00D4AA] animate-pulse shadow-[0_0_8px_#00D4AA]"></span>
-                <p className="text-[10px] font-bold text-[#00D4AA] uppercase tracking-widest flex items-center gap-2 font-inter">
-                  <Activity className="w-3.5 h-3.5" />
-                  {t('liveInSL')}
-                </p>
-              </div>
-
-              <h1 className="font-manrope text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight text-white mb-6 uppercase">
-                {t('powering')} <br />
-                <span className="text-[#00D4AA]">{t('sriLanka')}</span> <br />
-                {t('future')}
-              </h1>
-
-              <p className="text-xl md:text-2xl text-[#8AAFC8] max-w-[500px] leading-relaxed mx-auto lg:mx-0 font-medium opacity-80 border-l-4 border-white/10 pl-8 font-inter">
-                {t('description')}
-              </p>
-            </div>
-
-            {/* CTA Modules */}
-            <div className="flex flex-col gap-5 w-full max-w-lg lg:max-w-xl font-manrope">
-              <button
-                onClick={() => handleRegisterClick('EV Owner')}
-                className="group relative flex items-center justify-between p-6 bg-white/[0.03] border border-white/10 rounded-full hover:border-[#00D4AA]/40 transition-all hover:bg-[#00D4AA]/5 overflow-hidden active:scale-[0.98] shadow-2xl backdrop-blur-sm"
+              <button 
+                onClick={() => handleRegisterClick('Provider')} 
+                className="px-16 py-5 bg-white/5 border-2 border-white/10 text-white rounded-full font-black uppercase tracking-[2px] hover:bg-white/10 hover:border-white/20 active:scale-95 transition-all duration-300 text-[12px] flex items-center gap-4 group"
               >
-                <div className="flex items-center gap-6 relative z-10">
-                  <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#00D4AA]/20 transition-all shadow-inner ring-1 ring-white/10">
-                    <Car className="w-7 h-7 text-[#00D4AA]" strokeWidth={2.5} />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-[#00D4AA] transition-colors font-inter">{t('joinNetwork')}</div>
-                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">{t('joinAsOwner')}</div>
-                  </div>
-                </div>
-                <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-[#00D4AA] bg-white/5 backdrop-blur-sm">
-                  <ChevronRight className="w-6 h-6" />
-                </div>
-                {/* Subtle gradient glow on hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/0 via-[#00D4AA]/5 to-[#00D4AA]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <Fuel className="w-6 h-6 text-[#00D4AA]" strokeWidth={2.5} />
+                {t('becomeProvider') || 'Become Provider'}
               </button>
-
-              <button
-                onClick={() => handleRegisterClick('Provider')}
-                className="group relative flex items-center justify-between p-6 bg-white/[0.03] border border-white/10 rounded-full hover:border-blue-500/40 transition-all hover:bg-blue-500/5 overflow-hidden active:scale-[0.98] shadow-2xl backdrop-blur-sm"
-              >
-                <div className="flex items-center gap-6 relative z-10">
-                  <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-all shadow-inner ring-1 ring-white/10">
-                    <Fuel className="w-7 h-7 text-blue-400" strokeWidth={2.5} />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-[9px] font-bold uppercase tracking-[4px] text-[#4E7A96] mb-1 group-hover:text-blue-400 transition-colors font-inter">{t('hostStation')}</div>
-                    <div className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight">{t('becomeProvider')}</div>
-                  </div>
-                </div>
-                <div className="relative z-10 w-11 h-11 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-4 transition-all text-blue-400 bg-white/5 backdrop-blur-sm">
-                  <ChevronRight className="w-6 h-6" />
-                </div>
-                {/* Subtle gradient glow on hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </button>
-            </div>
-
-            <div className="w-full max-w-lg lg:max-w-xl">
-               <button 
-                 onClick={() => navigate('/explore')}
-                 className="w-full py-6 bg-white/[0.02] border border-white/5 rounded-3xl text-[11px] font-black uppercase tracking-[5px] text-[#4E7A96] hover:text-[#00D4AA] hover:border-[#00D4AA]/20 hover:bg-[#00D4AA]/5 transition-all shadow-xl flex items-center justify-center gap-6 group"
-               >
-                  <MapPin className="w-4 h-4 group-hover:scale-125 transition-transform" /> {t('exploreMap')} <ChevronRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-               </button>
             </div>
 
             <div className="flex items-center justify-center lg:justify-start w-full gap-10">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4, 5].map(i => (
-                  <div key={i} className="w-12 h-12 rounded-full border-[3px] border-[#050F1C] bg-slate-900 overflow-hidden shadow-xl">
-                    <img src={`https://i.pravatar.cc/150?u=${i}`} alt="User" />
-                  </div>
-                ))}
-              </div>
-              <div className="font-manrope">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] font-inter opacity-60">{t('happyUsers')}</p>
-                <p className="text-xl font-extrabold text-white uppercase tracking-tight">{t('verifiedUsersCount')}</p>
-              </div>
+               <div className="font-manrope">
+                  <p className="text-xl font-extrabold text-white uppercase tracking-tight">
+                    {(stats?.totalUsers || 0).toLocaleString()} {t('verifiedUsers') || 'VERIFIED USERS'}
+                  </p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] font-inter opacity-60">Active Network Nodes</p>
+               </div>
             </div>
           </div>
 
-          {/* Right Side: Visual System */}
-          <div className="hidden lg:flex flex-col items-center justify-center relative animate-fade-in delay-200">
-            <div className="relative w-full aspect-square max-w-[550px]">
-              {/* Central Glass Disc */}
-              <div className="absolute inset-0 rounded-full border border-white/10 bg-white/[0.01] shadow-[0_0_80px_rgba(0,0,0,0.5)] flex items-center justify-center backdrop-blur-[2px]">
-                <div className="w-[92%] h-[92%] rounded-full border border-dashed border-white/10 animate-[spin_30s_linear_infinite]"></div>
-              </div>
-
-              {/* Core Visual */}
-              <div className="absolute inset-[8%] rounded-[48px] overflow-hidden border border-white/20 shadow-2xl group ring-8 ring-white/[0.03]">
-                <img
-                  src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1200"
-                  className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-[60s] ease-linear"
-                  alt="EV Charging"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050F1C] via-[#050F1C]/20 to-transparent"></div>
-              </div>
-
-              {/* Floating Data Stations */}
-              <div className="absolute top-[12%] -left-[10%] bg-[#0a1628]/95 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center gap-4 group hover:border-[#00D4AA]/40 transition-all font-inter">
+          <div className="relative animate-fade-in delay-200">
+            <div className="aspect-square relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00D4AA]/20 to-blue-500/10 rounded-[60px] transform rotate-3 scale-95 blur-2xl"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1200" 
+                alt="EV Charging"
+                className="w-full h-full object-cover rounded-[60px] border border-white/10 shadow-2xl relative z-10 brightness-75 hover:brightness-100 transition-all duration-700"
+              />
+              
+              {/* Floating Cards */}
+              <div className="absolute top-[15%] -left-[10%] bg-[#0a1628]/95 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center gap-4 group hover:border-[#00D4AA]/40 transition-all font-inter z-20">
                 <div className="w-12 h-12 rounded-2xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-inner">
                   <BarChart3 className="w-6 h-6" strokeWidth={2.5} />
                 </div>
-                <div>
-                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-[#00D4AA] transition-colors">{t('systemUptime')}</div>
-                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{t('uptimeValue')}</div>
-                </div>
+                 <div>
+                   <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-[#00D4AA] transition-colors">{t('systemUptime')}</div>
+                   <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{stats?.uptime || '100%'}</div>
+                 </div>
               </div>
 
-              <div className="absolute bottom-[20%] -right-[8%] bg-[#0a1628]/95 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center gap-4 group hover:border-blue-500/40 transition-all font-inter">
+              <div className="absolute bottom-[20%] -right-[8%] bg-[#0a1628]/95 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center gap-4 group hover:border-blue-500/40 transition-all font-inter z-20">
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 shadow-inner">
                   <Zap className="w-6 h-6" strokeWidth={2.5} />
                 </div>
-                <div>
-                  <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-blue-400 transition-colors">{t('stationsCount')}</div>
-                  <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{t('stationsValue')}</div>
-                </div>
+                 <div>
+                   <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest mb-1 group-hover:text-blue-400 transition-colors">{t('stationsCount')}</div>
+                   <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{stats?.totalStations || 0}</div>
+                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
-
-      {/* 3. Footer Stats */}
-      <footer className="w-full py-12 px-6 lg:px-20 border-t border-white/10 relative z-10 flex flex-col md:flex-row items-center justify-between gap-10 animate-fade-in delay-300 font-inter">
-        <div className="flex gap-12 text-[10px] font-bold uppercase tracking-widest text-[#4E7A96]">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-            {t('securePlatform')}
-          </div>
-          <div className="flex items-center gap-3">
-            <ShieldCheck className="w-4 h-4 text-blue-400" />
-            {t('dataProtected')}
-          </div>
-        </div>
-        <div className="text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] text-center md:text-right flex items-center gap-4 opacity-70">
-          <Globe className="w-4 h-4" />
-          {t('locationText')}
-        </div>
-      </footer>
-
     </div>
   );
 };

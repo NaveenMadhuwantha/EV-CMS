@@ -56,7 +56,7 @@ const Profile = () => {
                  </span>
               </div>
               <p className="text-[#8AAFC8] font-medium text-lg opacity-80 mb-10 max-w-xl font-inter leading-relaxed">
-                 {t('memberSince')} {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : 'March 2026'}. 
+                 {t('memberSince')} {profile?.createdAt ? (typeof profile.createdAt === 'string' ? new Date(profile.createdAt).toLocaleDateString() : profile.createdAt.toDate?.().toLocaleDateString() || 'Recently') : 'Recently'}. 
                  {t('managePersonalInfo')}
               </p>
               

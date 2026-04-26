@@ -50,7 +50,7 @@ export const Commission = () => {
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `VoltWay_${role === 'provider' ? 'Earnings' : 'Commission'}_Report_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `VoltWay_${role === 'provider' ? 'Earnings' : 'Revenue'}_Report_${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -68,8 +68,8 @@ export const Commission = () => {
   const primaryMetric = role === 'provider' ? totalEarnings : totalCommission;
 
   return (
-    <DashboardLayout title={role === 'provider' ? "Earnings" : "Commission"}>
-      <PageHeader title={role === 'provider' ? "Earnings Station" : "Commission Station"} subtitle={role === 'provider' ? "Real-time earnings extracted from your node network." : "Real-time platform earnings extracted from provider yield."} />
+    <DashboardLayout title={role === 'provider' ? "Earnings" : "Revenue"}>
+      <PageHeader title={role === 'provider' ? "Earnings Station" : "Revenue Hub"} subtitle={role === 'provider' ? "Real-time earnings extracted from your node network." : "Real-time platform revenue extracted from provider yield."} />
       
       {/* Commission Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 font-inter">
@@ -97,7 +97,7 @@ export const Commission = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-[#00d2b4]/5 to-transparent pointer-events-none"></div>
             <div className="flex items-center gap-4 mb-8">
                <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white shadow-inner"><Zap className="w-6 h-6" /></div>
-               <div className="text-[11px] font-bold text-white uppercase tracking-[4px] opacity-90">{role === 'provider' ? 'Your Net Earnings' : 'Total Commission'}</div>
+               <div className="text-[11px] font-bold text-white uppercase tracking-[4px] opacity-90">{role === 'provider' ? 'Your Net Earnings' : 'Total Revenue'}</div>
             </div>
             <div className="text-4xl font-extrabold text-white font-manrope tracking-tighter uppercase tabular-nums shadow-sm">Rs. {primaryMetric.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
             <div className="mt-4 text-[10px] font-bold text-[#00d2b4] uppercase tracking-widest animate-pulse">{role === 'provider' ? 'Total Station Earnings' : 'Net Platform Earnings'}</div>
@@ -127,7 +127,7 @@ export const Commission = () => {
                      <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">Transaction Ref</th>
                      <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60">Customer</th>
                      <th className="px-12 py-8 text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] opacity-60 text-right">Session Value</th>
-                     <th className="px-12 py-8 text-[11px] font-bold text-[#00d2b4] uppercase tracking-[3px] opacity-80 text-right">{role === 'provider' ? 'Your Cut (75%)' : 'Tax (25%)'}</th>
+                     <th className="px-12 py-8 text-[11px] font-bold text-[#00d2b4] uppercase tracking-[3px] opacity-80 text-right">{role === 'provider' ? 'Your Cut (75%)' : 'Revenue (25%)'}</th>
                   </tr>
                </thead>
                <tbody className="divide-y divide-white/5 font-manrope">

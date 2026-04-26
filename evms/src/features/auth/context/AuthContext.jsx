@@ -19,7 +19,10 @@ export const AuthProvider = ({ children }) => {
       if (unsubscribeProfile) unsubscribeProfile();
 
       if (currentUser) {
-        let savedRole = localStorage.getItem('user_role');
+        // Clear dev mode when a real user logs in to prevent being stuck
+        sessionStorage.removeItem('devRole');
+        
+        const preferredRole = localStorage.getItem('user_role');
         
         // Helper to setup/sync and listen
         const syncAndListen = async (role, id) => {
@@ -45,34 +48,66 @@ export const AuthProvider = ({ children }) => {
            const fetchProfile = async () => {
               try {
                 const snap = await getDoc(ref);
-                if (snap.exists()) {
-                   setProfile({ ...snap.data(), id: snap.id, role });
-                   localStorage.setItem('user_role', role);
-                }
+                 if (snap.exists()) {
+                    const data = snap.data();
+                    // A profile is complete if it has basic verification fields like phone or address
+                    // which are NOT provided by Google login by default.
+                    const isComplete = !!(data.phone || data.address || data.businessName);
+                    
+                    setProfile({ ...data, id: snap.id, role, isProfileComplete: isComplete });
+                    localStorage.setItem('user_role', role);
+                 }
               } catch (err) { console.error("Profile fetch error:", err); }
            };
 
-           fetchProfile();
+           await fetchProfile();
            const intervalId = setInterval(fetchProfile, 60000); // Profile updates are rare, check every minute
            return () => clearInterval(intervalId);
         };
 
         try {
-          let role = null;
+          const preferredRole = localStorage.getItem('user_role') || 'owner';
+          let detectedRole = null;
           
-          // 1. Fetch the definitive user record from the 'users' collection
-          const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
-          
-          if (uSnap.exists()) {
-            role = (uSnap.data().role || 'owner').toLowerCase();
-          } else {
-            // 2. If not in main registry, check specialized provider collection
+          console.log("Auth System -> Debug: Preferred Role is", preferredRole);
+
+          // 1. Try to check providers collection
+          try {
             const pSnap = await getDoc(doc(db, 'providers', currentUser.uid));
-            role = pSnap.exists() ? 'provider' : 'owner';
-          }
+            if (pSnap.exists()) {
+              detectedRole = 'provider';
+              console.log("Auth System -> Debug: Found in PROVIDERS");
+            }
+          } catch (e) { console.error("Providers check error:", e); }
+
+          // 2. Try to check users collection (only if not found or to confirm)
+          try {
+            if (!detectedRole) {
+              const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+              if (uSnap.exists()) {
+                const dbRole = (uSnap.data().role || 'owner').toLowerCase();
+                detectedRole = dbRole === 'providers' ? 'provider' : dbRole;
+                console.log("Auth System -> Debug: Found in USERS. Role:", detectedRole);
+              }
+            }
+          } catch (e) { console.error("Users check error:", e); }
+
+          // 3. Final Decision - Give ABSOLUTE priority to what the user selected
+          // This allows users with the same email to switch between roles if they exist in both places
+          let finalRole = preferredRole; 
           
-          unsubscribeProfile = await syncAndListen(role, currentUser.uid);
-        } catch (err) { console.error("Sync Error:", err); }
+          // Special case: if they exist in DB as a provider but picked owner, 
+          // or if they are a confirmed provider, we should respect that.
+          if (detectedRole === 'provider' && preferredRole === 'provider') {
+            finalRole = 'provider';
+          } else if (detectedRole === 'admin') {
+            finalRole = 'admin'; // Admins are always admins
+          }
+
+          console.log("Auth System -> Absolute Decision:", finalRole);
+          
+          unsubscribeProfile = await syncAndListen(finalRole, currentUser.uid);
+        } catch (err) { console.error("Global Sync Error:", err); }
       } else {
         setProfile(null);
         localStorage.removeItem('user_role');
@@ -97,9 +132,13 @@ export const AuthProvider = ({ children }) => {
     devRole = sessionStorage.getItem('devRole');
   }
   
-  const ctxUser = devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user;
-  const ctxProfile = devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole } : profile;
-  const ctxRole = (devRole || profile?.role || 'owner').toLowerCase();
+   const ctxUser = devRole ? { uid: 'mock_uid_123', email: `dev_${devRole}@voltway.lk` } : user;
+   const ctxProfile = devRole ? { businessName: 'Dev Testing Inc.', fullName: 'Developer Mode', role: devRole, isProfileComplete: true } : profile;
+  
+  // Normalize final role to ensure it matches route expectations (singular)
+  // Use localStorage as a secondary fallback to prevent "owner flash" during transitions
+  let rawRole = (devRole || profile?.role || localStorage.getItem('user_role') || 'owner').toLowerCase();
+  const ctxRole = rawRole === 'providers' ? 'provider' : rawRole;
 
   return (
     <AuthContext.Provider value={{ user: ctxUser, profile: ctxProfile, role: ctxRole, loading: devRole ? false : loading }}>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { useAuth } from '../../auth/context/AuthContext';
 import { getStationsByProvider } from '../../../firestore/stationDb';
-import { getAllBookings } from '../../../firestore/bookingDb';
+import { getBookingsByProvider } from '../../../firestore/bookingDb';
 import { 
   Zap, MapPin, Calendar, PieChart, 
   Activity, ShieldCheck, Loader2
@@ -46,33 +47,31 @@ const ProviderDashboard = () => {
   });
 
   useEffect(() => {
-    const loadStats = async () => {
-       if (!user) return;
-       try {
-          const stations = await getStationsByProvider(user.uid);
-          const sIds = stations.map(s => s.id);
-          const allBk = await getAllBookings();
-          const providerBk = allBk.filter(b => sIds.includes(b.stationId));
-          
-          const today = new Date().toISOString().split('T')[0];
-          const todayBk = providerBk.filter(b => b.date === today);
-          
-          const dYld = todayBk.reduce((sum, b) => sum + (b.providerEarnings || 0), 0);
-          const tYld = providerBk.reduce((sum, b) => sum + (b.providerEarnings || 0), 0);
-          
-          setStats({
-             hubs: stations.length,
-             dailyEarnings: dYld,
-             totalEarnings: tYld,
-             reservations: providerBk.length,
-             loading: false
-          });
-       } catch (err) {
-          console.error(err);
-          setStats(s => ({ ...s, loading: false }));
-       }
-    };
-    loadStats();
+     const loadStats = async () => {
+        if (!user) return;
+        try {
+           const stations = await getStationsByProvider(user.uid);
+           const providerBk = await getBookingsByProvider(user.uid);
+           
+           const today = new Date().toISOString().split('T')[0];
+           const todayBk = providerBk.filter(b => b.date === today);
+           
+           const dYld = todayBk.reduce((sum, b) => sum + parseFloat(b.providerEarnings || 0), 0);
+           const tYld = providerBk.reduce((sum, b) => sum + parseFloat(b.providerEarnings || 0), 0);
+           
+           setStats({
+              hubs: stations.length,
+              dailyEarnings: dYld,
+              totalEarnings: tYld,
+              reservations: providerBk.length,
+              loading: false
+           });
+        } catch (err) {
+           console.error(err);
+           setStats(s => ({ ...s, loading: false }));
+        }
+     };
+     loadStats();
   }, [user]);
 
   if (stats.loading) return (
@@ -86,6 +85,27 @@ const ProviderDashboard = () => {
 
   return (
     <DashboardLayout title="Station Control">
+      {/* Complete Profile Prompt for Guest Providers */}
+      {!profile?.isProfileComplete && (
+        <div className="mb-8 p-6 bg-gradient-to-r from-[#00d2b4]/10 to-blue-600/10 border border-[#00d2b4]/20 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+           <div className="flex items-center gap-5">
+              <div className="w-12 h-12 rounded-2xl bg-[#00d2b4]/10 flex items-center justify-center text-[#00d2b4]">
+                 <Activity className="w-6 h-6" />
+              </div>
+              <div>
+                 <h4 className="text-white font-bold text-lg">Activate Provider Tools</h4>
+                 <p className="text-[#7a9bbf] text-sm">Complete your provider registration to start adding and managing charging stations.</p>
+              </div>
+           </div>
+           <Link 
+             to="/provider/register" 
+             className="px-8 py-3 bg-[#00d2b4] text-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+           >
+              Setup Now
+           </Link>
+        </div>
+      )}
+
       <div className="mb-10 pl-1 flex justify-between items-start">
          <div>
             <h1 className="font-manrope text-4xl font-extrabold text-white tracking-tight italic">
@@ -104,10 +124,10 @@ const ProviderDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" value={stats.hubs} label={t('activeStations')} delay="delay-0" />
-        <StatCard icon={PieChart} color="bg-[#0094ff]/10 text-[#0094ff]" value={`Rs. ${stats.dailyEarnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}`} label={t('dailyEarnings')} delay="delay-75" />
-        <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" value={stats.reservations} label={t('reservations')} delay="delay-150" />
-        <StatCard icon={Activity} color="bg-purple-500/10 text-purple-500" value="98%" label={t('uptimeHealth')} delay="delay-200" />
+         <StatCard icon={Zap} color="bg-[#00d2b4]/10 text-[#00d2b4]" value={stats.hubs} label={t('activeStations')} delay="delay-0" />
+         <StatCard icon={PieChart} color="bg-[#0094ff]/10 text-[#0094ff]" value={`Rs. ${stats.dailyEarnings.toLocaleString(undefined, { minimumFractionDigits: 2 })}`} label={t('dailyEarnings')} delay="delay-75" />
+         <StatCard icon={Calendar} color="bg-amber-500/10 text-amber-500" value={stats.reservations} label={t('reservations')} delay="delay-150" />
+         <StatCard icon={Activity} color="bg-purple-500/10 text-purple-500" value="99.9%" label={t('uptimeHealth')} delay="delay-200" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">

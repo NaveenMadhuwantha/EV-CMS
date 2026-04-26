@@ -1,5 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Zap, Activity, ShieldCheck, User, Globe, Lock, BarChart3, ChevronRight } from 'lucide-react';
+import { streamGlobalStats } from '../../../../firestore/statsDb';
+
+const RegistrationStats = ({ sBg }) => {
+  const [stats, setStats] = useState({ totalStations: 0, uptime: '100%' });
+  
+  useEffect(() => {
+    const unsub = streamGlobalStats(setStats);
+    return () => unsub();
+  }, []);
+
+  return (
+    <div className="grid grid-cols-2 gap-4 w-full">
+      <div className={`${sBg} p-6 rounded-[32px] border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-sm`}>
+        <ShieldCheck className="w-5 h-5 mb-4 group-hover:text-white transition-colors text-[#00D4AA]" strokeWidth={2.5} />
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2">Verified Nodes</div>
+        <div className="text-2xl font-manrope font-extrabold text-white">{stats?.totalStations || 0}</div>
+      </div>
+      <div className={`${sBg} p-6 rounded-[32px] border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-sm`}>
+        <BarChart3 className="w-5 h-5 mb-4 group-hover:text-white transition-colors text-blue-400" strokeWidth={2.5} />
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2">System Uptime</div>
+        <div className="text-2xl font-manrope font-extrabold text-white">{stats?.uptime || '100%'}</div>
+      </div>
+    </div>
+  );
+};
 
 const RegSidebar = ({
   image = "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1200",
@@ -64,6 +89,7 @@ const RegSidebar = ({
               {infoCards.length > 0 ? infoCards.map((card, i) => (
                 <div key={i} className="bg-white/[0.03] rounded-3xl p-6 border border-white/5 hover:border-white/20 transition-all group flex items-center gap-5 shadow-sm">
                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl bg-white/5 group-hover:bg-[#00D4AA]/10 transition-all shadow-inner">
+                      {/* Fixed icon rendering */}
                       {typeof card.icon === 'string' ? card.icon : <card.icon className="w-6 h-6" style={{ color: '#00D4AA' }} />}
                    </div>
                    <div className="text-left w-full">
@@ -72,18 +98,7 @@ const RegSidebar = ({
                    </div>
                 </div>
               )) : (
-                <div className="grid grid-cols-2 gap-4 w-full">
-                   {[
-                     { l: 'Verified Stations', v: '2,400+', c: '#00D4AA', i: ShieldCheck },
-                     { l: 'System Uptime', v: '99.9%', c: '#3B82F6', i: BarChart3 }
-                   ].map(s => (
-                     <div key={s.l} className="bg-white/[0.03] p-6 rounded-[32px] border border-white/5 hover:border-white/10 transition-all group relative overflow-hidden shadow-sm">
-                        <s.i className="w-5 h-5 mb-4 group-hover:text-white transition-colors" style={{ color: s.c }} strokeWidth={2.5} />
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-2">{s.l}</div>
-                        <div className="text-2xl font-manrope font-extrabold text-white">{s.v}</div>
-                     </div>
-                   ))}
-                </div>
+                <RegistrationStats sBg="bg-white/[0.03]" />
               )}
            </div>
         </div>

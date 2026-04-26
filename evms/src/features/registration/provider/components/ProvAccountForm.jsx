@@ -107,7 +107,7 @@ const ProvAccountForm = () => {
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
-              id="password" type={showPass ? 'text' : 'password'} placeholder="Secure Passphrase"
+              id="password" type={showPass ? 'text' : 'password'} placeholder="Secure Password"
               className={`w-full py-4.5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all duration-300
                 ${errors.password ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
@@ -133,7 +133,7 @@ const ProvAccountForm = () => {
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
-              id="confirm" type={showConfirm ? 'text' : 'password'} placeholder="Repeat Passphrase"
+              id="confirm" type={showConfirm ? 'text' : 'password'} placeholder="Repeat Password"
               className={`w-full py-4.5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all duration-300
                 ${errors.confirm ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
