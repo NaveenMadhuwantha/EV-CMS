@@ -20,3 +20,9 @@ export const getStationsByProvider = async (providerId) => {
   const stations = await coreDb.list('stations');
   return stations.filter(s => s.providerId === providerId);
 };
+
+export const deleteStation = (id) => coreDb.remove('stations', id);
+
+export const updateStationStatus = (id, status) => coreDb.update('stations', id, { status });
+
+export const verifyStation = (id, isVerified) => coreDb.update('stations', id, { isVerified });

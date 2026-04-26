@@ -3,7 +3,7 @@ import {
   collection, query, where, orderBy, 
   onSnapshot, limit, doc, updateDoc, 
   writeBatch, serverTimestamp, addDoc, or, and,
-  getCountFromServer
+  getCountFromServer, getDocs
 } from 'firebase/firestore';
 
 /**

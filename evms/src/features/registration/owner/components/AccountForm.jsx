@@ -151,7 +151,7 @@ const AccountForm = ({ onNext }) => {
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
               type={showConfirm ? 'text' : 'password'}
-              placeholder="Repeat Passphrase"
+              placeholder="Repeat Password"
               className={`w-full py-5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white text-[15px] font-bold outline-none transition-all duration-300
                 ${matchStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-white/5 focus:border-[#00D4AA] focus:bg-[#00D4AA]/5 shadow-sm'}
               `}
@@ -178,7 +178,7 @@ const AccountForm = ({ onNext }) => {
             {loading ? (
               <div className="w-6 h-6 border-4 border-[#050F1C]/20 border-t-[#050F1C] rounded-full animate-spin"></div>
             ) : (
-              <>Initiate Profile Setup <span className="text-xl group-hover:translate-x-2 transition-transform duration-300">→</span></>
+              <>Profile Setup <span className="text-xl group-hover:translate-x-2 transition-transform duration-300">→</span></>
             )}
           </button>
         </div>

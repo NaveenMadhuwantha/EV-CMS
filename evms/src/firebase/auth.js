@@ -5,7 +5,8 @@ import {
   GoogleAuthProvider, 
   signInWithPopup, 
   signOut,
-  sendEmailVerification
+  sendEmailVerification,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
@@ -31,6 +32,10 @@ export const verifyUserEmail = async () => {
     if (auth.currentUser) {
         return await sendEmailVerification(auth.currentUser);
     }
+};
+
+export const resetPassword = async (email) => {
+    return await sendPasswordResetEmail(auth, email);
 };
 
 export const registerUser = async (email, password, role, fullName, phone) => {

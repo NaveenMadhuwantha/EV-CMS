@@ -22,10 +22,10 @@ import { useAuth } from './features/auth/context/AuthContext.jsx';
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, role, loading } = useAuth();
 
-  // DEV SWITCHER LOGIC
+  // DEV SWITCHER LOGIC - Only override if no real user or devRole is specifically set and no user session
   const params = new URLSearchParams(window.location.search);
   const devRole = params.get('devRole');
-  const activeRole = devRole || role;
+  const activeRole = (user && !devRole) ? role : (devRole || role);
 
   if (loading) return null;
   // If devRole is set, completely bypass real user check so user can see UI
@@ -35,17 +35,28 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   return children;
 };
 
-const DevSwitcher = () => (
-  <div className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-r from-amber-500 to-orange-500 text-black px-6 py-2 flex justify-between items-center text-[11px] font-black uppercase tracking-widest font-inter shadow-xl">
-    <div>👷 DEV VISUAL MODE (NO LOGIN REQUIRED)</div>
-    <div className="flex gap-4">
-      <a href="/admin/dashboard?devRole=admin" className="hover:text-white transition-colors">👁 View as Admin</a>
-      <a href="/provider/dashboard?devRole=provider" className="hover:text-white transition-colors">👁 View as Provider</a>
-      <a href="/owner/dashboard?devRole=owner" className="hover:text-white transition-colors">👁 View as Owner</a>
-      <a href="/?devRole=clear" className="ml-4 pl-4 border-l border-black/20 hover:text-white transition-colors">✕ Exit Config</a>
+const DevSwitcher = ({ currentRole }) => {
+  const params = new URLSearchParams(window.location.search);
+  const devRole = params.get('devRole') || sessionStorage.getItem('devRole');
+  const isLocal = window.location.hostname === 'localhost';
+  
+  if (devRole === 'clear' || (!devRole && !isLocal)) return null;
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-[9999] bg-gradient-to-r from-amber-500 to-orange-500 text-black px-6 py-2 flex justify-between items-center text-[10px] font-black uppercase tracking-[2px] font-inter shadow-xl">
+      <div className="flex items-center gap-4">
+        <span>👷 DEV VISUAL MODE</span>
+        <span className="px-3 py-1 bg-black text-amber-500 rounded-full text-[9px]">Viewing as: {currentRole?.toUpperCase() || 'UNKNOWN'}</span>
+      </div>
+      <div className="flex gap-4">
+        <a href="/admin/dashboard?devRole=admin" className="hover:text-white transition-colors">Admin</a>
+        <a href="/provider/dashboard?devRole=provider" className="hover:text-white transition-colors">Provider</a>
+        <a href="/owner/dashboard?devRole=owner" className="hover:text-white transition-colors">Owner</a>
+        <a href="/?devRole=clear" className="ml-4 pl-4 border-l border-black/20 hover:text-white transition-colors">✕ Exit</a>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const DashboardStation = () => {
   const { role } = useAuth();
@@ -68,10 +79,21 @@ function App() {
   }, []);
 
 
+  const params = new URLSearchParams(window.location.search);
+  const devRole = params.get('devRole') || sessionStorage.getItem('devRole');
+  const isLocal = window.location.hostname === 'localhost';
+  const { role: realRole } = useAuth();
+  const activeRole = devRole && devRole !== 'clear' ? devRole : realRole;
+
+  const showDevBar = isLocal && devRole !== 'clear';
+
   return (
     <Router>
-      <div className="min-h-screen bg-[#050F1C]">
-        <DevSwitcher />
+      <div 
+        className={`min-h-screen bg-[#050F1C] ${showDevBar ? 'dev-mode-active pt-8' : ''}`}
+        style={{ '--dev-bar-offset': showDevBar ? '32px' : '0px' }}
+      >
+        <DevSwitcher currentRole={activeRole} />
         <Routes>
           {/* Dedicated Dev Links to prevent chat UI from stripping query parameters */}
           <Route path="/dev/all" element={<DevRedirect role="all" path="/admin/dashboard" />} />

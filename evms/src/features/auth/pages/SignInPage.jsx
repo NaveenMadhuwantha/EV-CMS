@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginWithEmail, loginWithGoogle } from '../../../firebase/auth';
+import { loginWithEmail, loginWithGoogle, resetPassword } from '../../../firebase/auth';
 import { getUserProfile } from '../../../firestore/authDb';
+import { streamGlobalStats } from '../../../firestore/statsDb';
 import { Car, Zap, Shield, Mail, Lock, Eye, EyeOff, ArrowRight, KeyRound, AlertCircle, Info, Activity, Fingerprint, Book } from 'lucide-react';
 import DocumentationModal from '../../../shared/components/DocumentationModal';
 import { useLanguage } from '../../../shared/context/LanguageContext';
@@ -12,12 +13,7 @@ const ROLES = (t) => ({
   admin: { label: t('admin'), icon: Shield, ac: '#A78BFA', hint: 'admin@ev.lk' },
 });
 
-const STATS = (t) => [
-  { icon: Activity, val: '14.2k', lbl: t('activeUsers'), col: '#00D4AA' },
-  { icon: Zap, val: '450+', lbl: t('stationsCount'), col: '#3B82F6' },
-];
-
-const ForgotModal = ({ prefill, onClose, onSend }) => {
+const ForgotModal = ({ prefill, onClose, onSend, t }) => {
   const [em, setEm] = useState(prefill || '');
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 backdrop-blur-md bg-black/60 animate-fade-in" onClick={e => e.target === e.currentTarget && onClose()}>
@@ -26,22 +22,22 @@ const ForgotModal = ({ prefill, onClose, onSend }) => {
           <div className="w-16 h-16 rounded-2xl bg-[#00D4AA]/10 flex items-center justify-center text-3xl mx-auto mb-6 text-[#00D4AA] shadow-inner">
             <KeyRound className="w-8 h-8" />
           </div>
-          <h2 className="font-manrope text-2xl font-extrabold text-white tracking-tight">{onSend.t('forgotPassword')}</h2>
-          <p className="text-sm text-[#8AAFC8] font-medium mt-2 opacity-60 font-inter">{onSend.t('enterRegisteredEmail')}</p>
+          <h2 className="font-manrope text-2xl font-extrabold text-white tracking-tight">{t('forgotPassword')}</h2>
+          <p className="text-sm text-[#8AAFC8] font-medium mt-2 opacity-60 font-inter">{t('enterRegisteredEmail')}</p>
         </div>
 
         <div className="space-y-4 mb-10 font-inter">
-          <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">{onSend.t('emailAddress')}</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">{t('emailAddress')}</label>
           <div className="relative group">
             <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00D4AA] transition-colors" />
-            <input type="email" value={em} onChange={e => setEm(e.target.value)} placeholder={onSend.t('enterEmail')}
+            <input type="email" value={em} onChange={e => setEm(e.target.value)} placeholder={t('enterEmail')}
               className="w-full py-4.5 px-6 pl-14 bg-white/5 border border-white/10 rounded-2xl text-white font-medium outline-none focus:border-[#00D4AA] transition-all" />
           </div>
         </div>
 
         <div className="flex flex-col gap-4 font-manrope">
-          <button onClick={() => onSend(em)} className="w-full py-4.5 rounded-2xl font-bold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-lg hover:brightness-110 active:scale-95 transition-all outline-none text-[13px]">{onSend.t('sendResetLink')}</button>
-          <button onClick={onClose} className="w-full py-3 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-white transition-colors">{onSend.t('cancel')}</button>
+          <button onClick={() => onSend(em)} className="w-full py-4.5 rounded-2xl font-bold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-lg hover:brightness-110 active:scale-95 transition-all outline-none text-[13px]">{t('sendResetLink')}</button>
+          <button onClick={onClose} className="w-full py-3 text-[11px] font-bold uppercase tracking-widest text-[#4E7A96] hover:text-white transition-colors">{t('cancel')}</button>
         </div>
       </div>
     </div>
@@ -58,11 +54,20 @@ export default function SignIn() {
   const [alert, setAlert] = useState('');
   const [forgot, setForgot] = useState(false);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+  const [stats, setStats] = useState({ totalUsers: 0, totalStations: 0, uptime: '100%' });
   const { t } = useLanguage();
 
+  useEffect(() => {
+    const unsub = streamGlobalStats(setStats);
+    return () => unsub();
+  }, []);
+
   const rolesList = ROLES(t);
-  const statsList = STATS(t);
-  const cfg = rolesList[role];
+  const statsList = [
+    { icon: Activity, val: stats?.totalUsers || 0, lbl: t('activeUsers'), col: '#00D4AA' },
+    { icon: Zap, val: stats?.totalStations || 0, lbl: t('stationsCount'), col: '#3B82F6' },
+  ];
+  const cfg = rolesList[role] || rolesList['owner'];
 
   const handleLogin = async () => {
     if (!email || !pass) { setAlert(t('provideCredentials')); return; }
@@ -83,8 +88,9 @@ export default function SignIn() {
   const handleSocialLogin = async (type) => {
     setAlert('');
     try {
-      const user = type === 'google' ? await loginWithGoogle() : null;
       localStorage.setItem('user_role', role);
+      const user = type === 'google' ? await loginWithGoogle() : null;
+      if (!user) return;
       navigate(`/${role}/dashboard`);
     } catch (error) {
       setAlert(t('loginFailed'));
@@ -101,7 +107,8 @@ export default function SignIn() {
     }
   };
 
-  handlePasswordReset.t = t;
+  const welcomeText = t('welcomeBackPortal') || "Welcome Back Portal.";
+  const welcomeParts = welcomeText.split(' ');
 
   return (
     <>
@@ -126,7 +133,7 @@ export default function SignIn() {
 
           <div className="space-y-10">
             <h1 className="font-manrope text-5xl xl:text-6xl font-extrabold text-white leading-tight tracking-tight uppercase animate-fade-up">
-              {t('welcomeBackPortal').split(' ').slice(0, 2).join(' ')} <br /> <span className="text-[#00D4AA]">{t('welcomeBackPortal').split(' ').slice(2, 3).join(' ')}</span> <br /> {t('welcomeBackPortal').split(' ').slice(3).join(' ')}
+              {welcomeParts.slice(0, 2).join(' ')} <br /> <span className="text-[#00D4AA]">{welcomeParts.slice(2, 3).join(' ')}</span> <br /> {welcomeParts.slice(3).join(' ')}
             </h1>
 
             <p className="text-lg text-[#8AAFC8] font-medium leading-relaxed opacity-80 animate-fade-up delay-100 border-l-2 border-white/10 pl-6">
@@ -147,14 +154,14 @@ export default function SignIn() {
             </button>
 
             <div className="grid grid-cols-1 gap-4 animate-fade-up delay-200">
-              {statsList.map(s => (
-                <div key={s.lbl} className="bg-white/[0.03] p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/5" style={{ color: s.col }}>
+              {statsList.map((s, idx) => (
+                <div key={idx} className="bg-white/[0.03] p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all flex items-center gap-5 group/stat">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/5 shadow-inner transition-transform group-hover/stat:scale-110" style={{ color: s.col }}>
                     <s.icon className="w-6 h-6" strokeWidth={2.5} />
                   </div>
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-widest text-[#4E7A96] mb-1">{s.lbl}</div>
-                    <div className="text-2xl font-manrope font-extrabold text-white">{s.val}</div>
+                    <div className="text-2xl font-manrope font-extrabold text-white tracking-tight">{s.val}</div>
                   </div>
                 </div>
               ))}
@@ -297,7 +304,7 @@ export default function SignIn() {
         </div>
       </div>
       </div>
-      {forgot && <ForgotModal prefill={email} onClose={() => setForgot(false)} onSend={handlePasswordReset} />}
+      {forgot && <ForgotModal prefill={email} onClose={() => setForgot(false)} onSend={handlePasswordReset} t={t} />}
     </>
   );
 }

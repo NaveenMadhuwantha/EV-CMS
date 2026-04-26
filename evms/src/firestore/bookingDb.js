@@ -1,3 +1,5 @@
+import { db } from '../config/firebase';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { coreDb } from './coreDb';
 import { notificationDb } from './notificationDb';
 
@@ -27,6 +29,17 @@ export const createBooking = async (data) => {
   }
 
   return result;
+};
+
+export const getBookingsByProvider = async (providerId) => {
+  try {
+    const q = query(collection(db, 'bookings'), where('providerId', '==', providerId), orderBy('timestamp', 'desc'));
+    const snap = await getDocs(q);
+    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Fetch bookings error:", error);
+    return [];
+  }
 };
 
 export const updateBookingStatus = async (id, data) => {
@@ -60,4 +73,5 @@ export const updateBookingStatus = async (id, data) => {
   }
   return result;
 };
+
 export const getAllBookings = () => coreDb.list('bookings');

@@ -3,7 +3,8 @@ import DashboardLayout from '../../../shared/layouts/DashboardLayout';
 import { PageHeader } from '../components/AdminComponents';
 import { getAllStations } from '../../../firestore/stationDb';
 import { createBooking, getAllBookings, updateBookingStatus } from '../../../firestore/bookingDb';
-import { Loader2, Clock, MapPin, Zap } from 'lucide-react';
+import { Loader2, Clock, MapPin, Zap, ShieldCheck } from 'lucide-react';
+import { useAuth } from '../../auth/context/AuthContext';
 
 const ChargingTimer = ({ startTime, durationHours, size = 'small' }) => {
   const [timeLeft, setTimeLeft] = useState(durationHours * 3600);
@@ -74,6 +75,7 @@ const ChargingTimer = ({ startTime, durationHours, size = 'small' }) => {
 };
 
 export const BookSlot = () => {
+  const { profile } = useAuth();
   const [stations, setStations] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -172,6 +174,25 @@ export const BookSlot = () => {
         <div className="flex flex-col items-center justify-center py-24 opacity-30">
            <Loader2 className="w-12 h-12 animate-spin mb-6 text-[#00d2b4]" />
            <p className="text-[12px] font-bold uppercase tracking-[4px] text-[#4E7A96]">Syncing Schedule...</p>
+        </div>
+      ) : !profile?.isProfileComplete ? (
+        /* Restricted View for Incomplete Profiles */
+        <div className="max-w-4xl mx-auto py-20 text-center font-inter">
+           <div className="w-24 h-24 bg-amber-500/10 rounded-[32px] flex items-center justify-center text-amber-500 mx-auto mb-10 border border-amber-500/20 shadow-2xl">
+              <ShieldCheck className="w-10 h-10" />
+           </div>
+           <h2 className="text-4xl font-extrabold text-white mb-6 font-manrope uppercase tracking-tight italic">Registration <span className="text-amber-500">Required</span></h2>
+           <p className="text-[#8AAFC8] text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-12 opacity-80">
+              To prevent unauthorized grid access, booking slots and managing sessions require a completed profile. Please finish your registration to activate these services.
+           </p>
+           <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <a 
+                href={profile?.role === 'provider' ? '/provider/register' : '/register'}
+                className="px-10 py-5 bg-amber-500 text-black font-black text-xs uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-amber-500/20"
+              >
+                 Complete Registration Now
+              </a>
+           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start font-inter">

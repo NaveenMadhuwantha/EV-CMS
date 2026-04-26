@@ -24,7 +24,10 @@ const Topbar = ({ title, onOpenHelp }) => {
   }, [user, role]);
 
   return (
-    <header className="sticky top-0 z-50 h-[80px] bg-[#050c14]/80 backdrop-blur-2xl border-b border-white/5 flex items-center px-12 gap-8 font-inter shadow-sm">
+    <header 
+      className="sticky z-50 h-[80px] bg-[#050c14]/80 backdrop-blur-2xl border-b border-white/5 flex items-center px-12 gap-8 font-inter shadow-sm"
+      style={{ top: 'var(--dev-bar-offset, 0px)' }}
+    >
       <div className="font-manrope font-extrabold text-[24px] flex-1 text-white tracking-tighter uppercase leading-none">{t(title?.toLowerCase()) || title}</div>
       <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-3 w-[320px] focus-within:border-[#00d2b4]/40 transition-all group shadow-inner">
         <Search className="w-4.5 h-4.5 text-[#4E7A96] group-focus-within:text-[#00d2b4]" />
