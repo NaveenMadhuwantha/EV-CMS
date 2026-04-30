@@ -132,7 +132,7 @@ const ProvReviewForm = () => {
               <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 shadow-inner group">🏢</div>
               <h3 className="text-[11px] font-bold uppercase tracking-[4px] text-[#0F172A] font-manrope">Business Details</h3>
            </div>
-           <div className="space-y-6">
+           <div className="space-y-5">
               {[
                 { l: 'Business Name', v: data.companyName },
                 { l: 'Merchant Type', v: data.bizType },
@@ -152,7 +152,7 @@ const ProvReviewForm = () => {
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-inner group">⚡</div>
               <h3 className="text-[11px] font-bold uppercase tracking-[4px] text-[#0F172A] font-manrope">Station Details</h3>
            </div>
-           <div className="space-y-6">
+           <div className="space-y-5">
               {[
                 { l: 'Station Name', v: data.stationName },
                 { l: 'Station Slots', v: data.slots },
@@ -217,3 +217,8 @@ const ProvReviewForm = () => {
 };
 
 export default ProvReviewForm;
+
+
+
+
+

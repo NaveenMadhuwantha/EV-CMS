@@ -15,8 +15,8 @@ const RegisterStep1 = () => {
       />
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
-        <div className="w-full max-w-[500px] animate-fade-in">
+      <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[400px] lg:pr-16 lg:pt-16 min-h-screen relative z-0">
+        <div className="w-full max-w-[860px] animate-fade-in">
           {/* Stepper Header */}
           <div className="mb-6">
             <RegStepper currentStep={1} />
@@ -34,3 +34,8 @@ const RegisterStep1 = () => {
 };
 
 export default RegisterStep1;
+
+
+
+
+

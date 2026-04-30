@@ -17,10 +17,20 @@ const ProvAccountForm = () => {
 
   const validate = (name, val) => {
     let err = '';
-    if (name === 'email') err = /\S+@\S+\.\S+/.test(val) ? '' : 'Invalid email format';
-    if (name === 'password') err = val.length >= 8 ? '' : 'Min 8 characters required';
-    if (name === 'confirm') err = val === formData.password ? '' : 'Passwords do not match';
-    setErrors(prev => ({ ...prev, [name]: err }));
+    if (name === 'email' && errors.email) err = /\S+@\S+\.\S+/.test(val) ? '' : 'Invalid email format';
+    if (name === 'password' && errors.password) err = val.length >= 8 ? '' : 'Min 8 characters required';
+    if (name === 'confirm' && errors.confirm) err = val === formData.password ? '' : 'Passwords do not match';
+    if (err !== '') setErrors(prev => ({ ...prev, [name]: err }));
+    else setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const handleBlur = (e) => {
+    const { id, value } = e.target;
+    let err = '';
+    if (id === 'email') err = /\S+@\S+\.\S+/.test(value) ? '' : 'Invalid email format';
+    if (id === 'password') err = value.length >= 8 ? '' : 'Min 8 characters required';
+    if (id === 'confirm') err = value === formData.password ? '' : 'Passwords do not match';
+    setErrors(prev => ({ ...prev, [id]: err }));
   };
 
   const handleChange = (e) => {
@@ -73,79 +83,81 @@ const ProvAccountForm = () => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-6 p-10 rounded-[40px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
+      <div className="mb-5 px-7 py-5 rounded-[28px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-700"></div>
         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 blur-2xl pointer-events-none"></div>
-        <div className="text-[14px] font-bold uppercase tracking-[4px] mb-4 text-blue-600/60 font-manrope">Phase 01 · Provider Authentication</div>
-        <h2 className="font-manrope text-5xl font-extrabold text-[#0F172A] mb-4 tracking-tighter leading-tight uppercase">ACCESS GATE</h2>
+        <div className="text-[15px] font-bold uppercase tracking-[4px] mb-4 text-blue-600 font-manrope">Phase 01 · Provider Authentication</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tighter leading-tight uppercase">ACCESS GATE</h2>
         <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mb-6"></div>
-        <p className="text-[18px] text-slate-500 font-medium leading-relaxed max-w-sm">Secure your portal to Sri Lanka's largest electric infrastructure network.</p>
+        <p className="text-[16px] text-slate-600 font-medium leading-relaxed max-w-sm">Secure your portal to Sri Lanka's largest electric infrastructure network.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 pb-10">
+      <form onSubmit={handleSubmit} className="space-y-6 pb-8">
         {fbError && (
           <div className="p-4 rounded-2xl bg-rose-500/10 border-2 border-rose-500/20 text-rose-400 text-[15px] font-bold animate-shake flex items-center gap-3 shadow-lg">
             <span className="text-lg">❌</span> {fbError}
           </div>
         )}
 
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Corporate Entity Email</label>
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Corporate Entity Email</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🏢</div>
             <input
               id="email" type="email" placeholder="company@voltway.lk"
-              className={`w-full py-4.5 px-6 pl-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+              className={`w-full py-3.5 px-6 pl-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${errors.email ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
-              value={formData.email} onChange={handleChange}
+              value={formData.email} onChange={handleChange} onBlur={handleBlur}
             />
           </div>
-          {errors.email && <p className="ml-2 text-[11px] font-bold text-red-400">{errors.email}</p>}
+          {errors.email && <p className="ml-2 text-[12px] font-bold text-rose-500">{errors.email}</p>}
         </div>
 
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Master Password</label>
+        {/* Master Password - full width */}
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Master Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
-              id="password" type={showPass ? 'text' : 'password'} placeholder="Secure Password"
-              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+              id="password" type={showPass ? 'text' : 'password'} placeholder="Minimum 8 characters"
+              className={`w-full py-3.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${errors.password ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
-              value={formData.password} onChange={handleChange}
+              value={formData.password} onChange={handleChange} onBlur={handleBlur}
             />
             <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-all p-2 text-xl">
               {showPass ? '🙈' : '👁'}
             </button>
           </div>
           {formData.password && !errors.password && (
-            <div className="px-2 mt-4">
-              <div className="flex gap-1.5 h-1.5 mb-2.5">
-                {[1, 2, 3, 4].map(i => <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? levels[strength].c : 'bg-[#F8FAFC]'}`}></div>)}
+            <div className="flex items-center gap-3 px-2 mt-2">
+              <div className="flex gap-1.5 h-1 flex-1">
+                {[1, 2, 3, 4].map(i => <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? levels[strength].c : 'bg-[#E2E8F0]'}`}></div>)}
               </div>
-              <p className={`text-[10px] font-bold uppercase tracking-widest ${levels[strength].t}`}>{levels[strength].l} Entropy Level</p>
+              <p className={`text-[10px] font-bold uppercase tracking-widest shrink-0 ${levels[strength].t}`}>{levels[strength].l} Entropy</p>
             </div>
           )}
-          {errors.password && <p className="ml-2 text-[11px] font-bold text-red-400">{errors.password}</p>}
+          {errors.password && <p className="ml-2 text-[12px] font-bold text-rose-500">{errors.password}</p>}
         </div>
 
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Verify Password</label>
+        {/* Verify Password - full width */}
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Verify Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
-              id="confirm" type={showConfirm ? 'text' : 'password'} placeholder="Repeat Password"
-              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+              id="confirm" type={showConfirm ? 'text' : 'password'} placeholder="Repeat your password"
+              className={`w-full py-3.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${errors.confirm ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
-              value={formData.confirm} onChange={handleChange}
+              value={formData.confirm} onChange={handleChange} onBlur={handleBlur}
             />
             <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-all p-2 text-xl">
               {showConfirm ? '🙈' : '👁'}
             </button>
           </div>
-          {errors.confirm && <p className="ml-2 text-[11px] font-bold text-red-400">{errors.confirm}</p>}
+          {errors.confirm && <p className="ml-2 text-[12px] font-bold text-rose-500">{errors.confirm}</p>}
         </div>
 
         <div className="p-6 rounded-3xl bg-blue-500/5 border border-blue-500/20 flex items-start gap-4 animate-fade-in shadow-sm">
@@ -156,7 +168,7 @@ const ProvAccountForm = () => {
         </div>
 
         <div className="pt-6 font-manrope">
-          <button type="submit" disabled={loading} className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 group flex items-center justify-center gap-4">
+          <button type="submit" disabled={loading} className="w-full py-5 rounded-2xl text-[16px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group flex items-center justify-center gap-4">
             {loading ? (
                <div className="w-6 h-6 border-4 border-[#E2E8F0] border-t-white rounded-full animate-spin"></div>
             ) : (
@@ -243,3 +255,8 @@ const ProvAccountForm = () => {
 };
 
 export default ProvAccountForm;
+
+
+
+
+

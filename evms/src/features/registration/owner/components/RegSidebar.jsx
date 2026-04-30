@@ -39,7 +39,7 @@ const RegSidebar = ({
   children
 }) => {
   return (
-    <aside className="relative lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[520px] w-full overflow-hidden bg-white shrink-0 z-10 lg:z-20 border-r border-[#E2E8F0] selection:bg-blue-600/10 font-inter text-[#0F172A]">
+    <aside className="relative lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[400px] w-full overflow-hidden bg-white shrink-0 z-10 lg:z-20 border-r border-[#E2E8F0] selection:bg-blue-600/10 font-inter text-[#0F172A]">
       {/* Visual Background */}
       <div className="absolute inset-0">
         <img
@@ -52,7 +52,7 @@ const RegSidebar = ({
       <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-blue-600/5 blur-[120px] pointer-events-none animate-pulse"></div>
 
       {/* Primary Content Area */}
-      <div className="relative flex flex-col h-full px-10 py-12 lg:px-16 lg:py-20 justify-between items-center lg:items-start text-center lg:text-left min-h-[400px] lg:min-h-screen">
+      <div className="relative flex flex-col h-full px-8 py-10 lg:px-10 lg:py-14 justify-between items-center lg:items-start text-center lg:text-left min-h-[400px] lg:min-h-screen">
         
         {/* Brand Identity */}
         <div className="flex items-center gap-4 group cursor-pointer mb-14 lg:mb-0 transform lg:scale-100 scale-90">
@@ -72,7 +72,7 @@ const RegSidebar = ({
               {stepTag}
            </div>
            
-           <h1 className="font-manrope text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0F172A] mb-8 uppercase border-l-4 border-[#3B82F6] pl-8">
+           <h1 className="font-manrope text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight text-[#0F172A] mb-6 uppercase border-l-4 border-[#3B82F6] pl-6">
              {title}
            </h1>
            
@@ -118,3 +118,8 @@ const RegSidebar = ({
 };
 
 export default RegSidebar;
+
+
+
+
+

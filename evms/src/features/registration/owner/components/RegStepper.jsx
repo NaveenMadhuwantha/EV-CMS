@@ -54,3 +54,8 @@ const RegStepper = ({ currentStep = 1, totalSteps = 4, stepTitles = ['Account', 
 };
 
 export default RegStepper;
+
+
+
+
+

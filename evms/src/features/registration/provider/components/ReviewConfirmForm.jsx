@@ -87,7 +87,7 @@ const ReviewConfirmForm = ({ onComplete }) => {
         <div className="bg-white rounded-3xl p-8 text-left mb-12 max-w-md mx-auto border border-[#E2E8F0] relative overflow-hidden shadow-sm">
            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-600/5 rounded-bl-[100px] pointer-events-none"></div>
            <div className="text-[10px] font-bold uppercase tracking-widest text-[#059669] mb-8 font-inter opacity-80">Digital Station Receipt</div>
-           <div className="space-y-6">
+           <div className="space-y-5">
               {[
                 ['Station Identifier', data.firstName + ' ' + data.lastName],
                 ['Network Access', data.email],
@@ -116,14 +116,14 @@ const ReviewConfirmForm = ({ onComplete }) => {
       <div className="flex items-center justify-between mb-6 px-1">
          <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-[#F8FAFC] group-hover:scale-110 transition-transform`} style={{ color }}>{icon}</div>
-            <div className="text-[11px] font-bold uppercase tracking-widest" style={{ color }}>{title}</div>
+            <div className="text-[13px] font-bold uppercase tracking-widest" style={{ color }}>{title}</div>
          </div>
       </div>
       <div className="space-y-5 px-1">
          {items.map(([l, v], i) => (
            <div key={i} className="flex flex-col gap-1">
-              <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest opacity-60">{l}</div>
-              <div className="text-sm font-bold text-[#0F172A] truncate font-manrope">{v}</div>
+              <div className="text-[12px] font-bold text-[#64748B] uppercase tracking-widest opacity-80">{l}</div>
+              <div className="text-[16px] font-bold text-[#0F172A] truncate font-manrope">{v}</div>
            </div>
          ))}
       </div>
@@ -132,11 +132,11 @@ const ReviewConfirmForm = ({ onComplete }) => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-6 p-8 rounded-3xl bg-white border border-[#E2E8F0] relative overflow-hidden shadow-sm">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-[#3B82F6] opacity-80">Phase 04 · Final Review</div>
-        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tight leading-none uppercase">REVIEW & DEPLOY</h2>
-        <p className="text-[15px] text-[#64748B] font-medium leading-relaxed opacity-80">Check your details before completing registration on the national grid.</p>
+      <div className="mb-5 px-7 py-5 rounded-[28px] bg-white border border-[#E2E8F0] relative overflow-hidden shadow-sm">
+        <div className="text-[15px] font-bold uppercase tracking-[4px] mb-4 text-[#3B82F6] font-manrope">Phase 05 · Final Review</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tighter leading-tight uppercase">REVIEW & DEPLOY</h2>
+        <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mb-6"></div>
+        <p className="text-[16px] text-slate-600 font-medium leading-relaxed max-w-sm">Check your details before completing registration on the national grid.</p>
       </div>
 
       {fbError && (
@@ -169,7 +169,7 @@ const ReviewConfirmForm = ({ onComplete }) => {
             <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${termsChecked ? 'bg-emerald-600 border-emerald-500 shadow-lg' : 'bg-[#F8FAFC] border-[#E2E8F0] group-hover:border-[#3B82F6]/30'}`}>
                {termsChecked && <span className="text-[#0F172A] text-xs font-extrabold font-manrope">✓</span>}
             </div>
-            <p className="text-[12px] font-bold text-[#64748B] transition-colors group-hover:text-[#0F172A] leading-snug">
+            <p className="text-[14px] font-bold text-slate-700 transition-colors group-hover:text-[#0F172A] leading-snug">
                I agree to the <span className="text-[#059669] hover:underline font-extrabold">Terms of Service</span> & <span className="text-[#059669] hover:underline font-extrabold">Privacy Policy</span> governing the national grid.
             </p>
          </div>
@@ -182,7 +182,7 @@ const ReviewConfirmForm = ({ onComplete }) => {
             <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${newsChecked ? 'bg-blue-500 border-blue-500 shadow-lg' : 'bg-[#F8FAFC] border-[#E2E8F0] group-hover:border-[#3B82F6]/30'}`}>
                {newsChecked && <span className="text-[#0F172A] text-xs font-extrabold">✓</span>}
             </div>
-            <p className="text-[12px] font-bold text-[#64748B] leading-snug font-inter">
+            <p className="text-[14px] font-bold text-slate-700 leading-snug font-inter">
                Receive network updates & exclusive offers (optional node telemetry)
             </p>
          </div>
@@ -193,14 +193,14 @@ const ReviewConfirmForm = ({ onComplete }) => {
           <button 
             type="button" 
             onClick={() => !loading && navigate('/register/step3')} 
-            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[12px]"
+            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[14px]"
           >
             ← MODIFY
           </button>
           <button 
             onClick={handleSubmit}
             disabled={loading}
-            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group flex items-center justify-center gap-3 text-[13px]"
+            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group flex items-center justify-center gap-3 text-[16px]"
           >
             {loading ? (
               <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
@@ -214,3 +214,8 @@ const ReviewConfirmForm = ({ onComplete }) => {
 };
 
 export default ReviewConfirmForm;
+
+
+
+
+

@@ -66,83 +66,83 @@ const PersonalInfoForm = ({ onNext, onBack }) => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-6 p-10 rounded-[40px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
+      <div className="mb-5 px-7 py-5 rounded-[28px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-700"></div>
         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 blur-2xl pointer-events-none"></div>
-        <div className="text-[14px] font-bold uppercase tracking-[4px] mb-4 text-blue-600/60 font-manrope">Phase 02 · Identity Registry</div>
-        <h2 className="font-manrope text-5xl font-extrabold text-[#0F172A] mb-4 tracking-tighter leading-tight uppercase">PERSONAL INFO</h2>
+        <div className="text-[15px] font-bold uppercase tracking-[4px] mb-4 text-blue-700 font-manrope">Phase 02 · Identity Registry</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tighter leading-tight uppercase">PERSONAL INFO</h2>
         <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mb-6"></div>
-        <p className="text-[18px] text-slate-500 font-medium leading-relaxed max-w-sm">Tell us about yourself to personalize your experience across the grid.</p>
+        <p className="text-[16px] text-slate-600 font-medium leading-relaxed max-w-sm">Tell us about yourself to personalize your experience across the grid.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 pb-10">
-        {/* Photo Upload */}
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Entity Portrait</label>
-          <div 
-            onClick={() => !uploading && document.getElementById('photo-inp').click()} 
-            className={`relative h-44 rounded-3xl bg-white/[0.02] border-2 border-dashed border-[#E2E8F0] flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:border-blue-400/40 hover:bg-blue-400/5 group shadow-sm ${uploading ? 'opacity-50 cursor-wait' : ''}`}
-          >
-            {uploading ? (
-              <div className="flex flex-col items-center animate-fade-in font-inter">
-                <div className="w-10 h-10 border-4 border-blue-400/20 border-t-blue-400 rounded-full animate-spin mb-4"></div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400">Processing Station...</div>
-              </div>
-            ) : photoPreview ? (
-              <div className="relative group/img h-full w-full p-4 overflow-hidden rounded-3xl shadow-inner">
-                <img src={photoPreview} className="w-full h-full object-cover rounded-2xl shadow-xl transition-transform duration-500 group-hover/img:scale-105" alt="Preview" />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
-                   <div className="px-5 py-2.5 bg-white/10 backdrop-blur-md rounded-xl text-[11px] font-bold text-[#0F172A] uppercase tracking-widest border border-[#E2E8F0]">Replace Identity Data</div>
+      <form onSubmit={handleSubmit} className="space-y-6 pb-8">
+        {/* Top Row: Photo + Names */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+          {/* Photo Upload */}
+          <div className="space-y-2">
+            <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Identity Portrait</label>
+            <div 
+              onClick={() => !uploading && document.getElementById('photo-inp').click()} 
+              className={`relative h-36 rounded-2xl bg-white border-2 border-dashed border-[#E2E8F0] flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:border-blue-400/40 hover:bg-blue-400/5 group shadow-sm ${uploading ? 'opacity-50 cursor-wait' : ''}`}
+            >
+              {uploading ? (
+                <div className="flex flex-col items-center animate-fade-in font-inter">
+                  <div className="w-8 h-8 border-4 border-blue-400/20 border-t-blue-400 rounded-full animate-spin mb-3"></div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-blue-400">Uploading...</div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center text-center animate-fade-in font-inter">
-                <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">👤</div>
-                <div className="text-[15px] font-bold text-[#0F172A] mb-1.5 uppercase tracking-wide">Upload Identity Portrait</div>
-                <div className="text-[10px] text-slate-600 font-bold uppercase opacity-60">PNG, JPG, WEBP (Max 5MB)</div>
-              </div>
-            )}
-            <input id="photo-inp" type="file" accept="image/*" className="hidden" onChange={handlePhoto} disabled={uploading} />
+              ) : photoPreview ? (
+                <div className="relative group/img h-full w-full p-3 overflow-hidden rounded-2xl">
+                  <img src={photoPreview} className="w-full h-full object-cover rounded-xl shadow-md transition-transform duration-500 group-hover/img:scale-105" alt="Preview" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity rounded-2xl">
+                     <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg text-[10px] font-bold text-white uppercase tracking-widest">Replace Photo</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center text-center animate-fade-in font-inter">
+                  <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">👤</div>
+                  <div className="text-[13px] font-bold text-[#0F172A] mb-1 uppercase tracking-wide">Upload Photo</div>
+                  <div className="text-[10px] text-slate-500 font-bold uppercase opacity-60">PNG, JPG (Max 5MB)</div>
+                </div>
+              )}
+              <input id="photo-inp" type="file" accept="image/*" className="hidden" onChange={handlePhoto} disabled={uploading} />
+            </div>
+          </div>
+
+          {/* Names */}
+          <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">First Name</label>
+              <input id="firstName" type="text" placeholder="e.g. John" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.firstName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.firstName} onChange={handleInputChange} />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Last Name</label>
+              <input id="lastName" type="text" placeholder="e.g. Doe" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.lastName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.lastName} onChange={handleInputChange} />
+            </div>
           </div>
         </div>
 
-        {/* Form Fields */}
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-3">
-               <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">First Name</label>
-               <input id="firstName" type="text" placeholder="e.g. John" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.firstName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.firstName} onChange={handleInputChange} />
-            </div>
-            <div className="space-y-3">
-               <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Last Name</label>
-               <input id="lastName" type="text" placeholder="e.g. Doe" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.lastName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.lastName} onChange={handleInputChange} />
-            </div>
+        {/* Bottom Row: Phone / DOB / NIC / District all in one row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="space-y-2">
+             <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Phone</label>
+             <input id="phone" type="tel" placeholder="07X XXX XXXX" className={`w-full py-3.5 px-4 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none transition-all ${errors.phone ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.phone} onChange={handleInputChange} />
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-3">
-               <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Phone Contact</label>
-               <input id="phone" type="tel" placeholder="07X XXX XXXX" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.phone ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.phone} onChange={handleInputChange} />
-            </div>
-            <div className="space-y-3">
-               <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Date of Birth</label>
-               <input id="dob" type="date" className="w-full py-4.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] font-bold outline-none focus:border-blue-400 [color-scheme:dark] transition-all" value={formData.dob} onChange={handleInputChange} />
-            </div>
+          <div className="space-y-2">
+             <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Date of Birth</label>
+             <input id="dob" type="date" className="w-full py-3.5 px-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none focus:border-blue-400 [color-scheme:light] transition-all" value={formData.dob} onChange={handleInputChange} />
           </div>
-
-          <div className="space-y-3">
-             <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">NIC / Security Identifier</label>
-             <input id="nic" type="text" placeholder="e.g. 200012345678" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.nic ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.nic} onChange={handleInputChange} />
+          <div className="space-y-2">
+             <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">NIC</label>
+             <input id="nic" type="text" placeholder="200012345678" className={`w-full py-3.5 px-4 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none transition-all ${errors.nic ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`} value={formData.nic} onChange={handleInputChange} />
           </div>
-
-          <div className="space-y-3">
-             <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Resident District</label>
+          <div className="space-y-2">
+             <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">District</label>
              <div className="relative group">
-                <select id="district" className="w-full py-4.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] font-bold outline-none appearance-none focus:border-blue-400 transition-all font-inter" value={formData.district} onChange={handleInputChange}>
-                   <option value="" className="bg-[#FCFCFC]">Choose your district</option>
+                <select id="district" className="w-full py-3.5 px-4 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none appearance-none focus:border-blue-400 transition-all font-inter" value={formData.district} onChange={handleInputChange}>
+                   <option value="" className="bg-[#FCFCFC]">Select</option>
                    {districts.map(d => <option key={d} value={d} className="bg-[#FCFCFC]">{d}</option>)}
                 </select>
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-focus-within:text-blue-400 text-xs">▼</div>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-focus-within:text-blue-400 text-xs">▼</div>
              </div>
           </div>
         </div>
@@ -152,13 +152,13 @@ const PersonalInfoForm = ({ onNext, onBack }) => {
           <button 
             type="button" 
             onClick={onBack} 
-            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[12px]"
+            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[14px]"
           >
             ← PREVIOUS
           </button>
           <button 
             type="submit" 
-            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 group text-[15px]"
+            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group text-[16px]"
           >
             CONFIRM & PROCEED <span className="group-hover:translate-x-2 transition-transform ml-2 duration-300">→</span>
           </button>
@@ -169,3 +169,8 @@ const PersonalInfoForm = ({ onNext, onBack }) => {
 };
 
 export default PersonalInfoForm;
+
+
+
+
+
