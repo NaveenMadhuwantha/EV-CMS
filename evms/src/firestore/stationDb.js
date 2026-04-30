@@ -2,14 +2,14 @@ import { coreDb } from './coreDb';
 import { notificationDb } from './notificationDb';
 
 export const registerStation = async (data) => {
-  const result = await coreDb.add('stations', { ...data, status: 'LIVE' });
+  const result = await coreDb.add('stations', { ...data, status: 'PENDING' });
   
   await notificationDb.send({
     recipientRole: 'admin',
-    title: 'New Charging Node Deployed',
-    message: `Station ${data.stationName || 'Unknown'} has been registered and is now LIVE on the network.`,
+    title: 'New Charging Node Request',
+    message: `Station ${data.stationName || 'Unknown'} has been registered and is awaiting approval.`,
     type: 'info',
-    actionUrl: '/admin/dashboard'
+    actionUrl: '/admin/stations'
   });
   
   return result;

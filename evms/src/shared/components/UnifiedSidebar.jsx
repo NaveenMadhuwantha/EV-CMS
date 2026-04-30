@@ -85,12 +85,12 @@ const SIDEBAR_CONFIG = {
 
 const NavItem = ({ to, icon: Icon, label, badge, active }) => (
   <Link to={to} className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group relative font-inter mb-1 ${
-    active ? 'bg-[#00d2b4]/10 text-[#00d2b4] font-extrabold shadow-sm shadow-[#00d2b4]/5' : 'text-[#4E7A96] hover:bg-[#00d2b4]/5 hover:text-white'
+    active ? 'bg-[#EFF6FF] text-[#2563EB] font-extrabold' : 'text-[#475569] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
   }`}>
-    <Icon className={`w-4.5 h-4.5 transition-colors ${active ? 'text-[#00d2b4]' : 'group-hover:text-white'}`} strokeWidth={2.5} />
-    <span className={`text-[12px] uppercase tracking-widest leading-none ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}>{label}</span>
-    {badge && <span className="ml-auto bg-[#00d2b4] text-[#050c14] text-[9px] font-black px-2 py-0.5 rounded-lg uppercase shadow-sm">{badge}</span>}
-    {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#00d2b4] rounded-r-full shadow-[0_0_12px_#00d2b4]" />}
+    <Icon className={`w-4.5 h-4.5 transition-colors ${active ? 'text-[#2563EB]' : 'group-hover:text-[#3B82F6]'}`} strokeWidth={2.5} />
+    <span className={`text-[12px] uppercase tracking-widest leading-none font-bold ${active ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}`}>{label}</span>
+    {badge && <span className={`ml-auto text-white text-[9px] font-black px-2 py-0.5 rounded-lg uppercase shadow-sm ${badge === 'Live' ? 'bg-[#10B981]' : badge === 'Active' ? 'bg-[#10B981]' : badge === 'Yield' ? 'bg-[#7C3AED]' : 'bg-[#3B82F6]'}`}>{badge}</span>}
+    {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#3B82F6] rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.5)]" />}
   </Link>
 );
 
@@ -121,17 +121,17 @@ const UnifiedSidebar = () => {
 
   return (
     <aside 
-      className="fixed left-0 bottom-0 w-[280px] bg-[#0a2038]/50 backdrop-blur-3xl border-r border-white/5 flex flex-col z-[100] font-inter"
+      className="fixed left-0 bottom-0 w-[280px] bg-[#FFFFFF] border-r border-[#E2E8F0] flex flex-col z-[100] font-inter shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
       style={{ top: 'var(--dev-bar-offset, 0px)' }}
     >
-      <div className="p-8 border-b border-white/5">
+      <div className="p-8 border-b border-[#E2E8F0]">
         <Link to={config.dashboardPath} className="flex items-center gap-4 group">
-          <div className="w-11 h-11 bg-gradient-to-br from-[#00d2b4] to-[#0094ff] rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500">
-            <Zap className="w-6 h-6 text-white fill-white/20" />
+          <div className="w-11 h-11 bg-[#3B82F6] rounded-2xl flex items-center justify-center shadow-md shadow-[#3B82F6]/20 group-hover:scale-105 transition-transform duration-500">
+            <Zap className="w-6 h-6 text-white" />
           </div>
           <div>
-            <div className="font-manrope font-extrabold text-[20px] tracking-tighter text-white leading-none uppercase">VoltWay</div>
-            <div className="text-[10px] text-[#4E7A96] font-bold uppercase tracking-widest leading-tight opacity-70 mt-2">EV Management System</div>
+            <div className="font-manrope font-extrabold text-[20px] tracking-tighter text-[#0F172A] leading-none uppercase">VoltWay</div>
+            <div className="text-[10px] text-[#94A3B8] font-bold uppercase tracking-widest leading-tight mt-2">EV Management System</div>
           </div>
         </Link>
       </div>
@@ -139,7 +139,7 @@ const UnifiedSidebar = () => {
       <nav className="flex-1 p-4 overflow-y-auto space-y-8 custom-scrollbar">
         {config.sections.map((section, idx) => (
           <div key={idx}>
-            <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t(section.title)}</div>
+            <div className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-[4px] px-4 mb-5">{t(section.title)}</div>
             {section.items.map((item, i) => (
               <NavItem 
                 key={i}
@@ -154,7 +154,7 @@ const UnifiedSidebar = () => {
         ))}
 
         <div>
-          <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-[4px] px-4 mb-5 opacity-40">{t('system')}</div>
+          <div className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-[4px] px-4 mb-5">{t('system')}</div>
           <NavItem 
             to="/profile" 
             icon={User} 
@@ -163,33 +163,35 @@ const UnifiedSidebar = () => {
           />
           <button 
             onClick={handleLogout} 
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-400 hover:bg-red-500/10 transition-all font-inter group mt-4"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-[#EF4444] hover:bg-[#FEF2F2] transition-all font-inter group mt-4 font-bold"
           >
             <LogOut className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
-            <span className="text-[12px] uppercase tracking-widest font-bold">{t('logout')}</span>
+            <span className="text-[12px] uppercase tracking-widest">{t('logout')}</span>
           </button>
         </div>
       </nav>
 
-      <div className="p-4 border-t border-white/5 mt-auto">
+      <div className="p-4 border-t border-[#E2E8F0] mt-auto">
         <div 
           onClick={() => navigate('/profile')}
-          className="flex items-center gap-4 p-4 bg-white/[0.03] rounded-3xl border border-white/5 group hover:border-[#00d2b4]/20 transition-all cursor-pointer shadow-sm relative overflow-hidden"
+          className="flex items-center gap-4 p-4 bg-[#F8FAFC] rounded-3xl border border-[#E2E8F0] group hover:border-[#3B82F6]/30 hover:shadow-md transition-all cursor-pointer relative overflow-hidden"
         >
-          <div className="w-10 h-10 bg-gradient-to-br from-[#0094ff] to-[#00d2b4] rounded-xl flex items-center justify-center font-manrope font-extrabold text-[#050c14] shadow-lg shadow-[#000]/30 transform group-hover:rotate-12 transition-transform uppercase shrink-0">
-            {profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'U'}
+          <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-xl flex items-center justify-center font-manrope font-extrabold text-white shadow-md shadow-[#3B82F6]/20 transform group-hover:scale-105 transition-transform uppercase shrink-0 overflow-hidden">
+            {profile?.photoURL ? (
+              <img src={profile.photoURL} alt="P" className="w-full h-full object-cover" />
+            ) : (
+              profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'U'
+            )}
           </div>
           <div className="flex-1 min-w-0 font-inter">
-            <div className="text-[13px] font-extrabold text-white truncate font-manrope">
+            <div className="text-[13px] font-extrabold text-[#0F172A] truncate font-manrope">
               {profile?.fullName || profile?.businessName || 'User'}
             </div>
-            <div className="text-[9px] text-[#4E7A96] font-bold uppercase tracking-widest mt-1 opacity-60">
+            <div className="text-[9px] text-[#64748B] font-bold uppercase tracking-widest mt-1">
               {role || t('verifiedUser')}
             </div>
           </div>
-          <ChevronRight className="w-4 h-4 text-[#4E7A96] group-hover:text-white transition-all transform group-hover:translate-x-1" />
-          
-          <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-[#00d2b4] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#3B82F6] transition-all transform group-hover:translate-x-1" />
         </div>
       </div>
     </aside>

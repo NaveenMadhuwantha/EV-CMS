@@ -5,7 +5,7 @@
   --font-manrope: "Manrope", sans-serif;
   --font-syne: "Syne", sans-serif;
   --color-brand: #00e5d4;
-  --color-dark-bg: #050f1c;
+  --color-dark-bg: #0F172A;
 }
 
 :root {
@@ -21,7 +21,7 @@ body {
   display: flex;
   flex-direction: column; 
   overflow-x: hidden;
-  background-color: #050f1c;
+  background-color: #0F172A;
 }
 
 /* Premium Glassmorphism */
@@ -52,7 +52,7 @@ h1, h2, h3, h4 {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #050f1c;
+  background: #0F172A;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
@@ -61,7 +61,7 @@ h1, h2, h3, h4 {
 
 @layer base {
   input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px #091825 inset !important;
+    -webkit-box-shadow: 0 0 0 30px #1E293B inset !important;
     -webkit-text-fill-color: white !important;
   }
 }

@@ -45,25 +45,20 @@ export const AuthProvider = ({ children }) => {
              }
            } catch (e) { console.error("Sync upsert error:", e); }
 
-           const fetchProfile = async () => {
-              try {
-                const snap = await getDoc(ref);
-                 if (snap.exists()) {
-                    const data = snap.data();
-                    // A profile is complete if it has basic verification fields like phone or address
-                    // which are NOT provided by Google login by default.
-                    const isComplete = !!(data.phone || data.address || data.businessName);
-                    
-                    setProfile({ ...data, id: snap.id, role, isProfileComplete: isComplete });
-                    localStorage.setItem('user_role', role);
-                 }
-              } catch (err) { console.error("Profile fetch error:", err); }
-           };
+            const unsubscribeProfileSnap = onSnapshot(ref, (snap) => {
+               if (snap.exists()) {
+                  const data = snap.data();
+                  const isComplete = !!(data.phone || data.address || data.businessName);
+                  
+                  setProfile({ ...data, id: snap.id, role, isProfileComplete: isComplete });
+                  localStorage.setItem('user_role', role);
+               }
+            }, (err) => {
+               console.error("Profile listen error:", err);
+            });
 
-           await fetchProfile();
-           const intervalId = setInterval(fetchProfile, 60000); // Profile updates are rare, check every minute
-           return () => clearInterval(intervalId);
-        };
+            return () => unsubscribeProfileSnap();
+         };
 
         try {
           const preferredRole = localStorage.getItem('user_role') || 'owner';

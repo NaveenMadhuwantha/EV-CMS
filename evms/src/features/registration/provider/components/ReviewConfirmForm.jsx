@@ -73,29 +73,29 @@ const ReviewConfirmForm = ({ onComplete }) => {
     return (
       <div className="w-full text-center py-10 animate-fade-up font-inter">
         <div className="relative inline-block mb-10">
-           <div className="w-32 h-32 rounded-[48px] bg-gradient-to-br from-[#00D4AA] to-[#4FFFB0] flex items-center justify-center text-5xl text-[#050F1C] shadow-2xl relative z-10 animate-bounce">
+           <div className="w-32 h-32 rounded-[48px] bg-gradient-to-br from-emerald-500 to-emerald-400 flex items-center justify-center text-5xl text-[#0F172A] shadow-2xl relative z-10 animate-bounce">
              ⚡
            </div>
-           <div className="absolute inset-0 bg-[#00D4AA]/20 blur-3xl animate-pulse -z-10"></div>
+           <div className="absolute inset-0 bg-emerald-600/20 blur-3xl animate-pulse -z-10"></div>
         </div>
         
-        <h2 className="font-manrope text-4xl font-extrabold text-white mb-4 tracking-tight uppercase">REGISTRATION LIVE!</h2>
-        <p className="text-[#8AAFC8] text-lg font-medium max-w-sm mx-auto mb-10 leading-relaxed font-inter">
-          Welcome to the grid, <span className="text-white font-extrabold">{data.firstName}</span>. Your EV journey starts now.
+        <h2 className="font-manrope text-4xl font-extrabold text-[#0F172A] mb-4 tracking-tight uppercase">REGISTRATION LIVE!</h2>
+        <p className="text-[#64748B] text-lg font-medium max-w-sm mx-auto mb-10 leading-relaxed font-inter">
+          Welcome to the grid, <span className="text-[#0F172A] font-extrabold">{data.firstName}</span>. Your EV journey starts now.
         </p>
 
-        <div className="bg-white/[0.03] rounded-3xl p-8 text-left mb-12 max-w-md mx-auto border border-white/10 relative overflow-hidden shadow-sm">
-           <div className="absolute top-0 right-0 w-24 h-24 bg-[#00D4AA]/5 rounded-bl-[100px] pointer-events-none"></div>
-           <div className="text-[10px] font-bold uppercase tracking-widest text-[#00D4AA] mb-8 font-inter opacity-80">Digital Station Receipt</div>
+        <div className="bg-white rounded-3xl p-8 text-left mb-12 max-w-md mx-auto border border-[#E2E8F0] relative overflow-hidden shadow-sm">
+           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-600/5 rounded-bl-[100px] pointer-events-none"></div>
+           <div className="text-[10px] font-bold uppercase tracking-widest text-[#059669] mb-8 font-inter opacity-80">Digital Station Receipt</div>
            <div className="space-y-6">
               {[
                 ['Station Identifier', data.firstName + ' ' + data.lastName],
                 ['Network Access', data.email],
                 ['System Status', '✓ OPERATIONAL'],
               ].map(([l, v], i) => (
-                <div key={i} className="flex flex-col gap-1.5 border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                   <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest">{l}</div>
-                   <div className={`text-sm font-bold font-manrope ${l === 'System Status' ? 'text-[#00D4AA]' : 'text-white'}`}>{v}</div>
+                <div key={i} className="flex flex-col gap-1.5 border-b border-[#E2E8F0] pb-4 last:border-0 last:pb-0">
+                   <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest">{l}</div>
+                   <div className={`text-sm font-bold font-manrope ${l === 'System Status' ? 'text-[#059669]' : 'text-[#0F172A]'}`}>{v}</div>
                 </div>
               ))}
            </div>
@@ -103,7 +103,7 @@ const ReviewConfirmForm = ({ onComplete }) => {
 
         <button 
            onClick={() => navigate('/')} 
-           className="w-full sm:w-auto px-12 py-5 rounded-2xl font-extrabold uppercase tracking-widest bg-[#00D4AA] text-[#050F1C] shadow-xl hover:brightness-110 active:scale-95 transition-all font-manrope text-[13px]"
+           className="w-full sm:w-auto px-12 py-5 rounded-2xl font-extrabold uppercase tracking-widest bg-blue-600 text-white shadow-xl hover:brightness-110 active:scale-95 transition-all font-manrope text-[13px]"
         >
           ENTER ECOSYSTEM →
         </button>
@@ -112,18 +112,18 @@ const ReviewConfirmForm = ({ onComplete }) => {
   }
 
   const SummarySection = ({ title, color, items, icon }) => (
-    <div className="bg-white/[0.02] rounded-3xl p-6 border border-white/5 hover:border-white/10 transition-all group overflow-hidden relative shadow-sm">
+    <div className="bg-white/[0.02] rounded-3xl p-6 border border-[#E2E8F0] hover:border-[#E2E8F0] transition-all group overflow-hidden relative shadow-sm">
       <div className="flex items-center justify-between mb-6 px-1">
          <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-white/5 group-hover:scale-110 transition-transform`} style={{ color }}>{icon}</div>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-[#F8FAFC] group-hover:scale-110 transition-transform`} style={{ color }}>{icon}</div>
             <div className="text-[11px] font-bold uppercase tracking-widest" style={{ color }}>{title}</div>
          </div>
       </div>
       <div className="space-y-5 px-1">
          {items.map(([l, v], i) => (
            <div key={i} className="flex flex-col gap-1">
-              <div className="text-[10px] font-bold text-[#4E7A96] uppercase tracking-widest opacity-60">{l}</div>
-              <div className="text-sm font-bold text-white truncate font-manrope">{v}</div>
+              <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest opacity-60">{l}</div>
+              <div className="text-sm font-bold text-[#0F172A] truncate font-manrope">{v}</div>
            </div>
          ))}
       </div>
@@ -132,11 +132,11 @@ const ReviewConfirmForm = ({ onComplete }) => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden shadow-sm">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#00D4AA]/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-[#00D4AA] opacity-80">Phase 04 · Final Review</div>
-        <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">REVIEW & DEPLOY</h2>
-        <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Check your details before completing registration on the national grid.</p>
+      <div className="mb-6 p-8 rounded-3xl bg-white border border-[#E2E8F0] relative overflow-hidden shadow-sm">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent pointer-events-none"></div>
+        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-[#3B82F6] opacity-80">Phase 04 · Final Review</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tight leading-none uppercase">REVIEW & DEPLOY</h2>
+        <p className="text-[15px] text-[#64748B] font-medium leading-relaxed opacity-80">Check your details before completing registration on the national grid.</p>
       </div>
 
       {fbError && (
@@ -166,11 +166,11 @@ const ReviewConfirmForm = ({ onComplete }) => {
             onClick={() => !loading && setTermsChecked(!termsChecked)}
             className="flex items-start gap-4 cursor-pointer group"
          >
-            <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${termsChecked ? 'bg-[#00D4AA] border-[#00D4AA] shadow-lg' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
-               {termsChecked && <span className="text-[#050F1C] text-xs font-extrabold font-manrope">✓</span>}
+            <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${termsChecked ? 'bg-emerald-600 border-emerald-500 shadow-lg' : 'bg-[#F8FAFC] border-[#E2E8F0] group-hover:border-[#3B82F6]/30'}`}>
+               {termsChecked && <span className="text-[#0F172A] text-xs font-extrabold font-manrope">✓</span>}
             </div>
-            <p className="text-[12px] font-bold text-[#8AAFC8] transition-colors group-hover:text-white leading-snug">
-               I agree to the <span className="text-[#00D4AA] hover:underline font-extrabold">Terms of Service</span> & <span className="text-[#00D4AA] hover:underline font-extrabold">Privacy Policy</span> governing the national grid.
+            <p className="text-[12px] font-bold text-[#64748B] transition-colors group-hover:text-[#0F172A] leading-snug">
+               I agree to the <span className="text-[#059669] hover:underline font-extrabold">Terms of Service</span> & <span className="text-[#059669] hover:underline font-extrabold">Privacy Policy</span> governing the national grid.
             </p>
          </div>
          {showTermsErr && <p className="ml-10 text-[10px] font-bold text-rose-400 uppercase tracking-widest animate-pulse font-inter">Agreement mandatory for deployment</p>}
@@ -179,10 +179,10 @@ const ReviewConfirmForm = ({ onComplete }) => {
             onClick={() => !loading && setNewsChecked(!newsChecked)}
             className="flex items-start gap-4 cursor-pointer group opacity-70"
          >
-            <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${newsChecked ? 'bg-blue-500 border-blue-500 shadow-lg' : 'bg-white/5 border-white/10 group-hover:border-white/20'}`}>
-               {newsChecked && <span className="text-white text-xs font-extrabold">✓</span>}
+            <div className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${newsChecked ? 'bg-blue-500 border-blue-500 shadow-lg' : 'bg-[#F8FAFC] border-[#E2E8F0] group-hover:border-[#3B82F6]/30'}`}>
+               {newsChecked && <span className="text-[#0F172A] text-xs font-extrabold">✓</span>}
             </div>
-            <p className="text-[12px] font-bold text-[#4E7A96] leading-snug font-inter">
+            <p className="text-[12px] font-bold text-[#64748B] leading-snug font-inter">
                Receive network updates & exclusive offers (optional node telemetry)
             </p>
          </div>
@@ -193,17 +193,17 @@ const ReviewConfirmForm = ({ onComplete }) => {
           <button 
             type="button" 
             onClick={() => !loading && navigate('/register/step3')} 
-            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white/[0.03] border border-white/10 text-[#7a9bbf] hover:text-white hover:bg-white/5 shadow-sm text-[12px]"
+            className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[12px]"
           >
             ← MODIFY
           </button>
           <button 
             onClick={handleSubmit}
             disabled={loading}
-            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-[#00D4AA] to-[#00A882] text-[#050F1C] hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-[#00D4AA]/30 group flex items-center justify-center gap-3 text-[13px]"
+            className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group flex items-center justify-center gap-3 text-[13px]"
           >
             {loading ? (
-              <div className="w-6 h-6 border-4 border-[#050F1C]/20 border-t-[#050F1C] rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
             ) : (
               <>⚡ DEPLOY PROFILE <span className="group-hover:translate-x-2 transition-transform duration-300">→</span></>
             )}

@@ -8,22 +8,22 @@ const RegisterStep2 = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row min-h-screen text-[#0F172A] font-inter bg-[#FDF8EE] overflow-x-hidden">
       <RegSidebar 
         image="https://images.unsplash.com/photo-1510172951991-856a654063f9?auto=format&fit=crop&q=80&w=1000"
-        title={<><span className="text-white">Profile</span><br /><span className="text-blue-400">Account</span><br /><span className="text-white">Setup</span></>}
+        title={<><span className="text-[#0F172A]">Profile</span><br /><span className="text-[#3B82F6]">Account</span><br /><span className="text-[#0F172A]">Setup</span></>}
         stepTag="Owner Identification"
-        tagColor="text-blue-400"
-        tagBg="bg-blue-400/10"
-        tagBorder="border-blue-400/20"
+        tagColor="text-[#3B82F6]"
+        tagBg="bg-blue-50"
+        tagBorder="border-blue-500/20"
         description="We use your personal details to ensure account security and provide accurate local charging recommendations."
       />
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
-        <div className="w-full max-w-[500px] animate-fade-in shadow-sm">
+        <div className="w-full max-w-[500px] animate-fade-in">
           {/* Stepper Header */}
-          <div className="mb-14">
+          <div className="mb-6">
             <RegStepper currentStep={2} />
           </div>
 

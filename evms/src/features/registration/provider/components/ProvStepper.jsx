@@ -21,7 +21,7 @@ const ProvStepper = ({ activeStep = 1 }) => {
 
   return (
     <div className="w-full flex-col font-inter relative z-10">
-      <div className="flex items-center justify-between mb-10 px-4 relative lg:px-0">
+      <div className="flex items-center justify-between mb-8 px-4 relative lg:px-0">
         {steps.map((s, i) => {
           const isActive = activeStep === s.num;
           const isCompleted = activeStep > s.num;
@@ -31,26 +31,26 @@ const ProvStepper = ({ activeStep = 1 }) => {
               <div className="flex flex-col items-center relative z-10 group">
                 {/* Visual Circle */}
                 <div 
-                   className={`w-10 h-10 lg:w-11 lg:h-11 rounded-xl flex items-center justify-center text-sm lg:text-[15px] font-extrabold border-2 transition-all duration-500 transform font-manrope ${
+                   className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center text-lg lg:text-xl font-extrabold border-2 transition-all duration-500 transform font-manrope ${
                       isActive
                         ? `shadow-lg scale-110` 
                         : isCompleted
-                        ? 'text-[#050F1C]'
-                        : 'bg-white/5 border-white/5 text-[#4E7A96]'
+                        ? 'text-[#0F172A]'
+                        : 'bg-[#F8FAFC] border-[#E2E8F0] text-[#64748B]'
                    }`}
                    style={{ 
-                      borderColor: (isActive || isCompleted) ? colors[s.num] : 'rgba(255,255,255,0.05)',
-                      backgroundColor: isActive ? `${colors[s.num]}15` : isCompleted ? colors[s.num] : 'rgba(255,255,255,0.03)',
-                      color: isActive ? colors[s.num] : isCompleted ? '#050F1C' : '#4E7A96'
+                      borderColor: (isActive || isCompleted) ? colors[s.num] : '#E2E8F0',
+                      backgroundColor: isActive ? `${colors[s.num]}15` : isCompleted ? colors[s.num] : '#F8FAFC',
+                      color: isActive ? colors[s.num] : isCompleted ? '#FFFFFF' : '#64748B'
                    }}
                 >
                   {isCompleted ? '✓' : s.num}
                 </div>
 
                 {/* Subtitle / Title */}
-                <div className={`absolute -bottom-8 w-24 text-center whitespace-nowrap transition-all duration-300 font-inter ${
-                   isActive ? 'font-bold text-[10px] lg:text-[11px] opacity-100 translate-y-0' 
-                   : 'text-[#4E7A96] font-semibold text-[10px] opacity-0 lg:opacity-60 -translate-y-1'
+                <div className={`absolute -bottom-10 w-24 text-center whitespace-nowrap transition-all duration-300 font-inter ${
+                   isActive ? 'font-bold text-[14px] lg:text-[15px] opacity-100 translate-y-0' 
+                   : 'text-[#64748B] font-semibold text-[13px] opacity-0 lg:opacity-60 -translate-y-1'
                 }`} style={{ color: isActive ? colors[s.num] : '#4E7A96' }}>
                    {s.label}
                 </div>
@@ -75,7 +75,7 @@ const ProvStepper = ({ activeStep = 1 }) => {
       </div>
       
       {/* Divider */}
-      <div className="h-px bg-white/10 mx-2 mb-12 mt-12 hidden lg:block shadow-sm" />
+      <div className="h-px bg-[#E2E8F0] mx-2 mb-6 mt-6 hidden lg:block shadow-sm" />
     </div>
   );
 };
