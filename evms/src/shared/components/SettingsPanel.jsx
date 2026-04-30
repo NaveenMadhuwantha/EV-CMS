@@ -94,22 +94,26 @@ const SettingsPanel = ({ isOpen, onClose, onOpenHelp }) => {
   return (
     <div 
       ref={panelRef}
-      className="absolute top-full right-0 mt-4 w-[360px] bg-[#0a1628]/95 border border-white/10 rounded-[32px] shadow-2xl z-[100] overflow-hidden animate-fade-up backdrop-blur-3xl font-inter"
+      className="absolute top-full right-0 mt-4 w-[360px] bg-white border border-[#E2E8F0] rounded-[32px] shadow-2xl z-[100] overflow-hidden animate-fade-up backdrop-blur-3xl font-inter"
     >
       {/* Header */}
-      <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+      <div className="p-8 border-b border-[#E2E8F0] bg-[#F8FAFC]">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#00d2b4] to-[#0094ff] p-0.5">
-            <div className="w-full h-full rounded-[14px] bg-[#0a1628] flex items-center justify-center font-manrope font-black text-white text-lg">
-              {profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'U'}
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-blue-600 p-0.5 shadow-sm">
+            <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-manrope font-black text-[#0F172A] text-lg overflow-hidden relative">
+              {profile?.photoURL ? (
+                <img src={profile.photoURL} alt="P" className="w-full h-full object-cover" />
+              ) : (
+                profile?.fullName?.charAt(0) || profile?.businessName?.charAt(0) || 'U'
+              )}
             </div>
           </div>
           <div>
-            <h3 className="font-manrope font-extrabold text-white text-[17px] leading-none mb-1">
-              {profile?.fullName || profile?.businessName || t('settings')}
+            <h3 className="font-manrope font-black text-[#0F172A] text-[17px] leading-none mb-1.5 uppercase tracking-tighter">
+               {profile?.fullName || profile?.businessName || t('settings')}
             </h3>
-            <p className="text-[#4E7A96] text-[10px] font-black uppercase tracking-[2px] opacity-70">
-              {role || 'Member'} Access
+            <p className="text-[#94A3B8] text-[10px] font-black uppercase tracking-[2px]">
+               {role || 'Member'} Access
             </p>
           </div>
         </div>
@@ -119,7 +123,7 @@ const SettingsPanel = ({ isOpen, onClose, onOpenHelp }) => {
       <div className="p-4 max-h-[500px] overflow-y-auto custom-scrollbar space-y-6">
         {menuItems.map((section, idx) => (
           <div key={idx} className="space-y-2">
-            <h4 className="text-[10px] font-black text-[#4E7A96] uppercase tracking-[3px] px-4 mb-3 opacity-40">
+            <h4 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[3px] px-4 mb-3">
               {section.title}
             </h4>
             {section.items.map((item, i) => (
@@ -135,34 +139,34 @@ const SettingsPanel = ({ isOpen, onClose, onOpenHelp }) => {
                   }
                 }}
                 className={`flex items-center gap-4 p-4 rounded-2xl transition-all group ${
-                  (item.path || item.onClick) ? 'hover:bg-white/[0.03] cursor-pointer' : 'cursor-default'
+                  (item.path || item.onClick) ? 'hover:bg-[#F8FAFC] cursor-pointer' : 'cursor-default'
                 }`}
               >
-                <div className="w-10 h-10 rounded-xl bg-white/[0.03] flex items-center justify-center text-[#4E7A96] group-hover:text-[#00d2b4] group-hover:bg-[#00d2b4]/5 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#F8FAFC] flex items-center justify-center text-[#94A3B8] group-hover:text-[#3B82F6] group-hover:bg-blue-50 transition-all border border-black/5 shadow-sm">
                   <item.icon className="w-4.5 h-4.5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-white group-hover:text-[#00d2b4] transition-colors font-manrope">
+                    <span className="text-[13px] font-black text-[#0F172A] group-hover:text-[#3B82F6] transition-colors font-manrope uppercase tracking-tight">
                       {item.label}
                     </span>
                     {item.type === 'toggle' && (
-                      <div className={`w-8 h-4 rounded-full relative transition-colors ${item.active ? 'bg-[#00d2b4]' : 'bg-white/10'}`}>
-                        <div className={`absolute top-1 w-2 h-2 rounded-full bg-white transition-all ${item.active ? 'right-1' : 'left-1'}`} />
+                      <div className={`w-10 h-5 rounded-full relative transition-colors border ${item.active ? 'bg-[#3B82F6] border-[#3B82F6]' : 'bg-[#E2E8F0] border-[#E2E8F0]'}`}>
+                        <div className={`absolute top-1 w-2.5 h-2.5 rounded-full bg-white transition-all shadow-sm ${item.active ? 'right-1' : 'left-1'}`} />
                       </div>
                     )}
                   </div>
                   {item.desc && (
-                    <p className="text-[11px] text-[#4E7A96] font-medium mt-0.5 opacity-60 truncate">
+                    <p className="text-[11px] text-[#64748B] font-medium mt-0.5 truncate">
                       {item.desc}
                     </p>
                   )}
                 </div>
                 {item.type === 'dropdown' && (
-                  <ChevronRight className={`w-4 h-4 text-[#4E7A96] transition-transform ${isLangDropdownOpen ? 'rotate-90' : ''}`} />
+                  <ChevronRight className={`w-4 h-4 text-[#94A3B8] transition-transform ${isLangDropdownOpen ? 'rotate-90' : ''}`} />
                 )}
                 {item.path && (
-                  <ChevronRight className="w-4 h-4 text-[#1e2e42] group-hover:text-[#00d2b4] transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-[#E2E8F0] group-hover:text-[#3B82F6] transition-colors" />
                 )}
               </div>
             ))}
@@ -175,8 +179,8 @@ const SettingsPanel = ({ isOpen, onClose, onOpenHelp }) => {
                       setLanguage(key);
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-[12px] font-bold uppercase tracking-widest transition-all ${
-                      language === key ? 'bg-[#00d2b4]/10 text-[#00d2b4]' : 'text-[#4E7A96] hover:bg-white/5 hover:text-white'
+                    className={`w-full text-left px-6 py-3.5 rounded-2xl text-[12px] font-black uppercase tracking-widest transition-all ${
+                      language === key ? 'bg-blue-50 text-[#3B82F6] border border-blue-100 shadow-sm' : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
                     }`}
                   >
                     {label}
@@ -189,13 +193,13 @@ const SettingsPanel = ({ isOpen, onClose, onOpenHelp }) => {
       </div>
 
       {/* Footer / Logout */}
-      <div className="p-4 bg-white/[0.02] border-t border-white/5">
+      <div className="p-6 bg-[#F8FAFC] border-t border-[#E2E8F0]">
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 text-red-400 transition-all group border border-red-500/5 hover:border-red-500/20"
+          className="w-full flex items-center justify-center gap-3 py-5 rounded-3xl bg-red-50 hover:bg-red-600 text-red-600 hover:text-white transition-all group border border-red-100 shadow-sm"
         >
-          <LogOut className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
-          <span className="text-[12px] font-black uppercase tracking-[2px]">{t('signOut')}</span>
+          <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="text-[12px] font-black uppercase tracking-[3px]">{t('signOut')}</span>
         </button>
       </div>
     </div>

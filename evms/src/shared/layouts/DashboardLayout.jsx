@@ -8,11 +8,11 @@ const DashboardLayout = ({ children, title }) => {
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050c14] text-[#e2eaf8] font-inter selection:bg-[#00d2b4]/30 overflow-x-hidden flex">
+    <div className="min-h-screen bg-[#FDF8EE] text-[#475569] font-inter selection:bg-[#3B82F6]/30 overflow-x-hidden flex">
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 pointer-events-none opacity-40 overflow-hidden z-0">
-        <div className="absolute -top-[100px] -right-[100px] w-[600px] h-[500px] bg-[#00d2b4]/5 blur-[140px]" />
-        <div className="absolute bottom-0 left-[300px] w-[500px] h-[500px] bg-[#0094ff]/3 blur-[140px]" />
+        <div className="absolute -top-[100px] -right-[100px] w-[600px] h-[500px] bg-[#3B82F6]/10 blur-[140px]" />
+        <div className="absolute bottom-0 left-[300px] w-[500px] h-[500px] bg-[#10B981]/10 blur-[140px]" />
       </div>
 
       {/* Persistent Sidebar */}

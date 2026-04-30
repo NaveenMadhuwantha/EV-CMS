@@ -8,22 +8,22 @@ const RegisterStep3 = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-[#F0F6FF] font-inter bg-[#050F1C] overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row min-h-screen text-[#0F172A] font-inter bg-[#FDF8EE] overflow-x-hidden">
       <RegSidebar 
         image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=1000"
-        title={<><span className="text-white">Configure Your</span><br /><span className="text-amber-500">Hardware</span><br /><span className="text-white">Station</span></>}
+        title={<><span className="text-[#0F172A]">Configure Your</span><br /><span className="text-amber-500">Hardware</span><br /><span className="text-[#0F172A]">Station</span></>}
         stepTag="Vehicle Configuration"
-        tagColor="text-amber-500"
-        tagBg="bg-amber-500/10"
+        tagColor="text-amber-600"
+        tagBg="bg-amber-50"
         tagBorder="border-amber-500/20"
         description="Register your electric vehicle to optimize charging schedules and find compatible power ports."
       />
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col items-center pt-10 pb-20 px-6 lg:pl-[500px] lg:pr-12 lg:pt-16 min-h-screen relative z-0">
-        <div className="w-full max-w-[500px] animate-fade-in shadow-sm">
+        <div className="w-full max-w-[500px] animate-fade-in">
           {/* Stepper Header */}
-          <div className="mb-14">
+          <div className="mb-6">
             <RegStepper currentStep={3} />
           </div>
 

@@ -90,7 +90,7 @@ function App() {
   return (
     <Router>
       <div 
-        className={`min-h-screen bg-[#050F1C] ${showDevBar ? 'dev-mode-active pt-8' : ''}`}
+        className={`min-h-screen bg-[#0F172A] ${showDevBar ? 'dev-mode-active pt-8' : ''}`}
         style={{ '--dev-bar-offset': showDevBar ? '32px' : '0px' }}
       >
         <DevSwitcher currentRole={activeRole} />

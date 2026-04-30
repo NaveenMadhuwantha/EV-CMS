@@ -25,7 +25,7 @@ const Navbar = () => {
   if (!user) return null;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#050F1C]/60 backdrop-blur-3xl border-b border-white/5 lg:px-12 px-6 py-5 selection:bg-blue-500/30 font-inter shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#0F172A]/60 backdrop-blur-3xl border-b border-white/5 lg:px-12 px-6 py-5 selection:bg-blue-500/30 font-inter shadow-sm">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
         
         {/* Brand System */}
@@ -90,7 +90,7 @@ const Navbar = () => {
           {showDropdown && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)}></div>
-              <div className="absolute right-0 mt-5 w-64 rounded-3xl bg-[#0a1628]/95 border border-white/10 shadow-2xl p-3 z-50 animate-fade-up backdrop-blur-3xl overflow-hidden font-manrope">
+              <div className="absolute right-0 mt-5 w-64 rounded-3xl bg-[#1E293B]/95 border border-white/10 shadow-2xl p-3 z-50 animate-fade-up backdrop-blur-3xl overflow-hidden font-manrope">
                 <Link 
                   to="/profile" 
                   className="flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/[0.05] transition-all text-[#8AAFC8] hover:text-white group"
@@ -115,8 +115,8 @@ const Navbar = () => {
 
       {/* Logout Confirmation */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-8 bg-[#050F1C]/95 backdrop-blur-2xl animate-fade-in font-inter">
-          <div className="bg-[#0a1628]/80 border-2 border-dashed border-white/10 rounded-[3rem] p-12 max-w-sm w-full shadow-2xl animate-fade-up">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-8 bg-[#0F172A]/95 backdrop-blur-2xl animate-fade-in font-inter">
+          <div className="bg-[#1E293B]/80 border-2 border-dashed border-white/10 rounded-[3rem] p-12 max-w-sm w-full shadow-2xl animate-fade-up">
             <div className="w-20 h-20 rounded-[2.5rem] bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-10 shadow-inner group relative">
                <Power className="w-10 h-10 group-hover:animate-pulse transition-all" strokeWidth={2.5} />
                <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full -z-10 animate-pulse"></div>

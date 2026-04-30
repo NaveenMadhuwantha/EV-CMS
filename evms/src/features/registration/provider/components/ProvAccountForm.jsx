@@ -73,28 +73,30 @@ const ProvAccountForm = () => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-10 p-8 rounded-3xl bg-white/[0.03] border border-white/5 relative overflow-hidden shadow-sm">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent pointer-events-none"></div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mb-3 text-blue-400 opacity-80">Phase 01 · Provider Authentication</div>
-        <h2 className="font-manrope text-3xl font-extrabold text-white mb-3 tracking-tight leading-none uppercase">ACCESS GATE</h2>
-        <p className="text-[15px] text-[#8AAFC8] font-medium leading-relaxed opacity-80">Establish your enterprise credentials to manage the power grid.</p>
+      <div className="mb-6 p-10 rounded-[40px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-3xl pointer-events-none group-hover:bg-blue-500/10 transition-all duration-700"></div>
+        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 blur-2xl pointer-events-none"></div>
+        <div className="text-[14px] font-bold uppercase tracking-[4px] mb-4 text-blue-600/60 font-manrope">Phase 01 · Provider Authentication</div>
+        <h2 className="font-manrope text-5xl font-extrabold text-[#0F172A] mb-4 tracking-tighter leading-tight uppercase">ACCESS GATE</h2>
+        <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mb-6"></div>
+        <p className="text-[18px] text-slate-500 font-medium leading-relaxed max-w-sm">Secure your portal to Sri Lanka's largest electric infrastructure network.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8 pb-10">
         {fbError && (
-          <div className="p-4 rounded-2xl bg-rose-500/10 border-2 border-rose-500/20 text-rose-400 text-[13px] font-bold animate-shake flex items-center gap-3 shadow-lg">
+          <div className="p-4 rounded-2xl bg-rose-500/10 border-2 border-rose-500/20 text-rose-400 text-[15px] font-bold animate-shake flex items-center gap-3 shadow-lg">
             <span className="text-lg">❌</span> {fbError}
           </div>
         )}
 
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Corporate Entity Email</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Corporate Entity Email</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🏢</div>
             <input
               id="email" type="email" placeholder="company@voltway.lk"
-              className={`w-full py-4.5 px-6 pl-14 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all duration-300
-                ${errors.email ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
+              className={`w-full py-4.5 px-6 pl-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+                ${errors.email ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
               value={formData.email} onChange={handleChange}
             />
@@ -103,13 +105,13 @@ const ProvAccountForm = () => {
         </div>
 
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Master Password</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Master Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
               id="password" type={showPass ? 'text' : 'password'} placeholder="Secure Password"
-              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all duration-300
-                ${errors.password ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
+              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+                ${errors.password ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
               value={formData.password} onChange={handleChange}
             />
@@ -120,7 +122,7 @@ const ProvAccountForm = () => {
           {formData.password && !errors.password && (
             <div className="px-2 mt-4">
               <div className="flex gap-1.5 h-1.5 mb-2.5">
-                {[1, 2, 3, 4].map(i => <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? levels[strength].c : 'bg-white/5'}`}></div>)}
+                {[1, 2, 3, 4].map(i => <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? levels[strength].c : 'bg-[#F8FAFC]'}`}></div>)}
               </div>
               <p className={`text-[10px] font-bold uppercase tracking-widest ${levels[strength].t}`}>{levels[strength].l} Entropy Level</p>
             </div>
@@ -129,13 +131,13 @@ const ProvAccountForm = () => {
         </div>
 
         <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-[#4E7A96]">Verify Password</label>
+          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Verify Password</label>
           <div className="relative group font-inter">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
               id="confirm" type={showConfirm ? 'text' : 'password'} placeholder="Repeat Password"
-              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-white/5 border-2 rounded-2xl text-white font-bold outline-none transition-all duration-300
-                ${errors.confirm ? 'border-red-500/30 bg-red-500/5' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
+              className={`w-full py-4.5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all duration-300
+                ${errors.confirm ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5 shadow-sm'}
               `}
               value={formData.confirm} onChange={handleChange}
             />
@@ -148,15 +150,15 @@ const ProvAccountForm = () => {
 
         <div className="p-6 rounded-3xl bg-blue-500/5 border border-blue-500/20 flex items-start gap-4 animate-fade-in shadow-sm">
            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-xl shrink-0">🤝</div>
-           <p className="text-[12px] font-bold text-[#8AAFC8] leading-relaxed italic opacity-80">
-             Provider entities undergo a rigorous <span className="text-white font-bold opacity-100">24-hour verification</span> cycle to maintain the integrity of the Sri Lankan EV Network ecosystem.
+           <p className="text-[12px] font-bold text-slate-600 leading-relaxed italic opacity-80">
+             Provider entities undergo a rigorous <span className="text-[#0F172A] font-bold opacity-100">24-hour verification</span> cycle to maintain the integrity of the Sri Lankan EV Network ecosystem.
            </p>
         </div>
 
         <div className="pt-6 font-manrope">
-          <button type="submit" disabled={loading} className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 group flex items-center justify-center gap-4">
+          <button type="submit" disabled={loading} className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 group flex items-center justify-center gap-4">
             {loading ? (
-               <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+               <div className="w-6 h-6 border-4 border-[#E2E8F0] border-t-white rounded-full animate-spin"></div>
             ) : (
                <>REGISTER ENTITY <span className="group-hover:translate-x-2 transition-transform duration-300">→</span></>
             )}
@@ -166,15 +168,15 @@ const ProvAccountForm = () => {
 
       {/* VERIFICATION OVERLAY */}
       {showVerification && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#050F1C]/95 backdrop-blur-2xl animate-fade-in">
-           <div className="w-full max-w-[500px] bg-[#0A1628] rounded-[40px] border border-blue-500/20 p-10 shadow-2xl relative overflow-hidden">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#FCFCFC]/95 backdrop-blur-2xl animate-fade-in">
+           <div className="w-full max-w-[500px] bg-white rounded-[40px] border border-blue-500/20 p-10 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 blur-[80px] -z-10"></div>
               
               <div className="text-center mb-10">
                  <div className="w-20 h-20 rounded-[28px] bg-blue-500/10 flex items-center justify-center text-4xl mb-6 mx-auto border border-blue-500/20 animate-pulse">🏛️</div>
-                 <h3 className="font-manrope text-3xl font-extrabold text-white mb-3 uppercase tracking-tight">ENTITY AUTH</h3>
-                 <p className="text-[#8AAFC8] text-[15px] font-medium leading-relaxed">
-                    A security key has been dispatched to <span className="text-white font-bold">{formData.email}</span>. Authorize this entity to establish Charging Stations.
+                 <h3 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 uppercase tracking-tight">ENTITY AUTH</h3>
+                 <p className="text-slate-600 text-[15px] font-medium leading-relaxed">
+                    A security key has been dispatched to <span className="text-[#0F172A] font-bold">{formData.email}</span>. Authorize this entity to establish Charging Stations.
                  </p>
                  <p className="text-[10px] text-blue-400/60 font-bold uppercase tracking-widest mt-4 italic">
                     Development Bypass Key: 123456
@@ -200,8 +202,8 @@ const ProvAccountForm = () => {
                              e.target.previousSibling.focus();
                           }
                        }}
-                       className={`w-full aspect-square bg-white/5 border-2 rounded-2xl text-center text-2xl font-black text-white outline-none transition-all
-                          ${otpError ? 'border-rose-500/30' : 'border-white/5 focus:border-blue-400 focus:bg-blue-400/5'}`
+                       className={`w-full aspect-square bg-[#F8FAFC] border-2 rounded-2xl text-center text-2xl font-black text-[#0F172A] outline-none transition-all
+                          ${otpError ? 'border-rose-500/30' : 'border-[#E2E8F0] focus:border-blue-400 focus:bg-blue-400/5'}`
                        }
                     />
                  ))}
@@ -220,7 +222,7 @@ const ProvAccountForm = () => {
                        setTimeout(() => setOtpError(false), 2000);
                     }
                  }}
-                 className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30"
+                 className="w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30"
               >
                  ESTABLISH AUTHORITY →
               </button>
@@ -228,7 +230,7 @@ const ProvAccountForm = () => {
               <div className="mt-8 text-center">
                  <button 
                   onClick={() => setShowVerification(false)}
-                  className="text-[11px] font-bold text-[#4E7A96] uppercase tracking-[3px] hover:text-blue-400 transition-colors"
+                  className="text-[11px] font-bold text-slate-600 uppercase tracking-[3px] hover:text-blue-400 transition-colors"
                  >
                     ← RE-ENTER DOMAIN
                  </button>
