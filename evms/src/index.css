@@ -61,7 +61,7 @@ h1, h2, h3, h4 {
 
 @layer base {
   input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px #1E293B inset !important;
-    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0 1000px #F8FAFC inset !important;
+    -webkit-text-fill-color: #0F172A !important;
   }
 }

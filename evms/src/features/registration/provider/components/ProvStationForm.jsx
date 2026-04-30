@@ -62,86 +62,84 @@ const ProvStationForm = () => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-6 p-10 rounded-[40px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-3xl pointer-events-none group-hover:bg-amber-500/10 transition-all duration-700"></div>
-        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-orange-500/5 blur-2xl pointer-events-none"></div>
-        <div className="text-[14px] font-bold uppercase tracking-[4px] mb-4 text-amber-600/60 font-manrope">Phase 03 · Infrastructure Station</div>
-        <h2 className="font-manrope text-5xl font-extrabold text-[#0F172A] mb-4 tracking-tighter leading-tight uppercase">Station Setup</h2>
+      <div className="mb-5 px-7 py-5 rounded-[28px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
+        <div className="text-[15px] font-bold uppercase tracking-[4px] mb-4 text-amber-600 font-manrope">Phase 03 · Infrastructure Station</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tighter leading-tight uppercase">Station Setup</h2>
         <div className="h-1 w-20 bg-gradient-to-r from-amber-500 to-transparent rounded-full mb-6"></div>
-        <p className="text-[18px] text-slate-500 font-medium leading-relaxed max-w-sm">Define your physical charging location and hardware specifications.</p>
+        <p className="text-[16px] text-slate-600 font-medium leading-relaxed max-w-sm">Define your physical charging location and hardware specifications.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-10 pb-10">
+      <form onSubmit={handleSubmit} className="space-y-6 pb-8">
         
         {/* Basic Identity */}
-        <div className="space-y-6">
+        <div className="space-y-5">
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Name</label>
-                 <input name="stationName" type="text" placeholder="e.g. Wattala Super Station" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.stationName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stationName} onChange={handleChange} />
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Name</label>
+                 <input name="stationName" type="text" placeholder="e.g. Wattala Super Station" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.stationName ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stationName} onChange={handleChange} />
               </div>
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Charging Slots</label>
-                 <input name="slots" type="number" placeholder="4" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.slots ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.slots} onChange={handleChange} />
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Charging Slots</label>
+                 <input name="slots" type="number" placeholder="4" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.slots ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.slots} onChange={handleChange} />
               </div>
            </div>
 
-           <div className="space-y-3">
-              <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Description</label>
-              <textarea name="description" placeholder="Describe accessibility, security, and unique features of your hub..." rows="3" className="w-full py-4.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-3xl text-[#0F172A] font-bold outline-none focus:border-amber-500 transition-all resize-none font-inter" value={formData.description} onChange={handleChange} />
+           <div className="space-y-2">
+              <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Description</label>
+              <textarea name="description" placeholder="Describe accessibility, security, and unique features of your hub..." rows="3" className="w-full py-3.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-3xl text-[#0F172A] text-[17px] font-bold outline-none focus:border-amber-500 transition-all resize-none font-inter" value={formData.description} onChange={handleChange} />
            </div>
         </div>
 
         {/* Energy Architecture */}
-        <div className="space-y-4">
-           <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Type</label>
-           <div className="grid grid-cols-1 xs:grid-cols-3 gap-3 font-manrope">
+        <div className="space-y-3">
+           <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Type</label>
+           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-manrope">
               {[
-                { id: 'DC Fast', icon: '⚡', l: 'Public DC Fast', s: '50-350kW' },
-                { id: 'AC Level 2', icon: '🔌', l: 'AC Level 2', s: '7-22kW' },
-                { id: 'AC Level 1', icon: '🔋', l: 'AC Level 1', s: '2.3-7kW' }
+                { id: 'DC Fast', icon: '⚡', l: 'DC Fast Charging', s: '25-150kW' },
+                { id: 'AC Level 2', icon: '🔌', l: 'AC Fast (Level 2)', s: '7-22kW' },
+                { id: 'AC Level 1', icon: '🔋', l: 'Standard AC', s: '2.3-3.6kW' }
               ].map(t => (
                 <div key={t.id} onClick={() => { setFormData({...formData, chargeType: t.id}); setErrors({...errors, chargeType: ''}); }}
                   className={`py-6 px-4 rounded-3xl border-2 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center shadow-sm
                     ${formData.chargeType === t.id ? 'border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/10' : 'border-[#E2E8F0] bg-white/[0.02] hover:border-amber-500/30'}
                   `}>
                   <div className="text-3xl mb-3">{t.icon}</div>
-                  <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#0F172A] leading-tight mb-1.5">{t.l}</div>
-                  <div className="text-[10px] font-bold text-slate-600 tracking-tight">{t.s}</div>
+                  <div className="text-[13px] font-extrabold uppercase tracking-widest text-[#0F172A] leading-tight mb-1.5">{t.l}</div>
+                  <div className="text-[11px] font-bold text-slate-600 tracking-tight">{t.s}</div>
                 </div>
               ))}
            </div>
-           {errors.chargeType && <p className="ml-2 text-[11px] font-bold text-red-400">Station type selection required</p>}
+           {errors.chargeType && <p className="ml-2 text-[12px] font-bold text-rose-500">Station type selection required</p>}
         </div>
 
         {/* Port Standards */}
-        <div className="space-y-4">
-           <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Connectors Available</label>
+        <div className="space-y-3">
+           <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Connectors Available</label>
            <div className="flex flex-wrap gap-2.5 font-manrope">
-              {[{ id: 'Type 2', icon: '⚡' }, { id: 'CCS2', icon: '🔌' }, { id: 'CHAdeMO', icon: '🔋' }, { id: 'Type 1', icon: '🔆' }, { id: 'GBT', icon: '🔷' }].map(c => (
-                <div key={c.id} onClick={() => toggleArrayItem('connectors', c.id)} className={`px-6 py-3.5 rounded-2xl border-2 cursor-pointer transition-all text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-3 shadow-sm ${formData.connectors.includes(c.id) ? 'border-amber-500 bg-amber-500/15 text-amber-500' : 'border-[#E2E8F0] bg-white/[0.02] text-slate-600 hover:border-[#3B82F6]/30'}`}>
+              {[{ id: 'Type 2', icon: '⚡' }, { id: 'CCS2', icon: '🔌' }, { id: 'CHAdeMO', icon: '🔋' }, { id: 'Type 1', icon: '🔆' }, { id: 'GBT', icon: '🔷' }, { id: 'Other', icon: '🔌'}].map(c => (
+                <div key={c.id} onClick={() => toggleArrayItem('connectors', c.id)} className={`px-6 py-3.5 rounded-2xl border-2 cursor-pointer transition-all text-[13px] font-extrabold uppercase tracking-widest flex items-center gap-3 shadow-sm ${formData.connectors.includes(c.id) ? 'border-amber-500 bg-amber-500/15 text-amber-500' : 'border-[#E2E8F0] bg-white/[0.02] text-slate-600 hover:border-[#3B82F6]/30'}`}>
                   <span className="text-sm">{c.icon}</span> {c.id}
                 </div>
               ))}
            </div>
-           {errors.connectors && <p className="ml-2 text-[11px] font-bold text-red-400">Select at least one connector</p>}
+           {errors.connectors && <p className="ml-2 text-[12px] font-bold text-rose-500">Select at least one connector</p>}
         </div>
 
         {/* Geospatial Setup */}
-        <div className="space-y-6">
-           <div className="space-y-3">
-              <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Address</label>
-              <input name="stAddress" type="text" placeholder="No.45, Galle Road, Colombo 03" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.stAddress ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stAddress} onChange={handleChange} />
+        <div className="space-y-5">
+           <div className="space-y-2">
+              <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Address</label>
+              <input name="stAddress" type="text" placeholder="No.45, Galle Road, Colombo 03" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.stAddress ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stAddress} onChange={handleChange} />
            </div>
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">City</label>
-                 <input name="stCity" type="text" placeholder="Colombo" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none transition-all ${errors.stCity ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stCity} onChange={handleChange} />
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">City</label>
+                 <input name="stCity" type="text" placeholder="Colombo" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all ${errors.stCity ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stCity} onChange={handleChange} />
               </div>
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">District</label>
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">District</label>
                  <div className="relative group font-inter">
-                    <select name="stDistrict" className={`w-full py-4.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] font-bold outline-none appearance-none transition-all ${errors.stDistrict ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stDistrict} onChange={handleChange}>
+                    <select name="stDistrict" className={`w-full py-3.5 px-6 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none appearance-none transition-all ${errors.stDistrict ? 'border-red-500/30 bg-red-500/5' : 'border-[#E2E8F0] focus:border-amber-500 focus:bg-amber-500/5'}`} value={formData.stDistrict} onChange={handleChange}>
                        <option value="" className="bg-[#FCFCFC]">Select District</option>
                        {districts.map(d => <option key={d} value={d} className="bg-[#FCFCFC]">{d}</option>)}
                     </select>
@@ -151,20 +149,20 @@ const ProvStationForm = () => {
            </div>
            
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Latitude (Optional)</label>
-                 <input name="lat" type="text" placeholder="6.9271" className="w-full py-4.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] font-bold outline-none focus:border-amber-500 transition-all font-inter" value={formData.lat} onChange={handleChange} />
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Latitude (Optional)</label>
+                 <input name="lat" type="text" placeholder="6.9271" className="w-full py-3.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none focus:border-amber-500 transition-all font-inter" value={formData.lat} onChange={handleChange} />
               </div>
-              <div className="space-y-3">
-                 <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Longitude (Optional)</label>
-                 <input name="lng" type="text" placeholder="79.8612" className="w-full py-4.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] font-bold outline-none focus:border-amber-500 transition-all font-inter" value={formData.lng} onChange={handleChange} />
+              <div className="space-y-2">
+                 <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Longitude (Optional)</label>
+                 <input name="lng" type="text" placeholder="79.8612" className="w-full py-3.5 px-6 bg-[#F8FAFC] border-2 border-[#E2E8F0] rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none focus:border-amber-500 transition-all font-inter" value={formData.lng} onChange={handleChange} />
               </div>
            </div>
         </div>
 
         {/* Visual Verification */}
-        <div className="space-y-4">
-           <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Photo</label>
+        <div className="space-y-3">
+           <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Photo</label>
            <div className="relative h-64 rounded-3xl border-2 border-dashed border-[#E2E8F0] bg-white/[0.02] flex flex-col items-center justify-center overflow-hidden hover:border-amber-500/30 transition-all group font-manrope">
               {formData.stPhotoUrl ? (
                  <>
@@ -191,11 +189,11 @@ const ProvStationForm = () => {
         </div>
 
         {/* Amenities */}
-        <div className="space-y-4">
-           <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Station Amenities</label>
+        <div className="space-y-3">
+           <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Station Amenities</label>
            <div className="flex flex-wrap gap-2.5 font-manrope">
               {[{ id: 'Washroom', icon: '🚻' }, { id: 'Cafe', icon: '☕' }, { id: 'Wifi', icon: '📶' }, { id: 'Shopping', icon: '🛍' }, { id: 'CCTV', icon: '📹' }].map(a => (
-                <div key={a.id} onClick={() => toggleArrayItem('amenities', a.id)} className={`px-6 py-3 rounded-2xl border-2 cursor-pointer transition-all text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-3 shadow-sm ${formData.amenities.includes(a.id) ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400' : 'border-[#E2E8F0] bg-white/[0.02] text-slate-600 hover:border-[#3B82F6]/30'}`}>
+                <div key={a.id} onClick={() => toggleArrayItem('amenities', a.id)} className={`px-6 py-3 rounded-2xl border-2 cursor-pointer transition-all text-[13px] font-extrabold uppercase tracking-widest flex items-center gap-3 shadow-sm ${formData.amenities.includes(a.id) ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400' : 'border-[#E2E8F0] bg-white/[0.02] text-slate-600 hover:border-[#3B82F6]/30'}`}>
                   <span>{a.icon}</span> {a.id}
                 </div>
               ))}
@@ -204,8 +202,8 @@ const ProvStationForm = () => {
 
         {/* Actions */}
          <div className="flex flex-col sm:flex-row gap-5 pt-8 font-manrope">
-            <button type="button" onClick={() => navigate('/provider/register/step2')} className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[12px]">← PREV</button>
-            <button type="submit" className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 group flex items-center justify-center gap-4 text-[15px]">
+            <button type="button" onClick={() => navigate('/provider/register/step2')} className="order-2 sm:order-1 px-10 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-white border border-[#E2E8F0] text-[#7a9bbf] hover:text-[#0F172A] hover:bg-[#F8FAFC] shadow-sm text-[14px]">← PREV</button>
+            <button type="submit" className="order-1 sm:order-2 flex-1 py-4.5 rounded-2xl font-extrabold uppercase tracking-widest transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 group flex items-center justify-center gap-4 text-[16px]">
                Proceed to Pricing Model <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
             </button>
          </div>
@@ -215,3 +213,8 @@ const ProvStationForm = () => {
 };
 
 export default ProvStationForm;
+
+
+
+
+

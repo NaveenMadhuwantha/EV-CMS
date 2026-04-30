@@ -21,8 +21,14 @@ const AccountForm = ({ onNext }) => {
   const checkEmail = (val) => {
     setEmail(val);
     setFbError('');
-    if (!val) { setEmailStatus('none'); return; }
-    setEmailStatus(/\S+@\S+\.\S+/.test(val) ? 'ok' : 'err');
+    if (emailStatus === 'err' && /\S+@\S+\.\S+/.test(val)) {
+      setEmailStatus('ok');
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (!email) setEmailStatus('none');
+    else setEmailStatus(/\S+@\S+\.\S+/.test(email) ? 'ok' : 'err');
   };
 
   const checkStrength = (pw) => {
@@ -30,13 +36,26 @@ const AccountForm = ({ onNext }) => {
     if (!pw) { setStrength(0); setPassStatus('none'); return; }
     const checks = [pw.length >= 8, /[A-Z]/.test(pw), /[0-9]/.test(pw), /[^A-Za-z0-9]/.test(pw)];
     setStrength(checks.filter(Boolean).length);
-    setPassStatus(pw.length >= 8 ? 'ok' : 'err');
+    if (passStatus === 'err' && pw.length >= 8) {
+      setPassStatus('ok');
+    }
+  };
+
+  const handlePassBlur = () => {
+    if (!password) setPassStatus('none');
+    else setPassStatus(password.length >= 8 ? 'ok' : 'err');
   };
 
   const checkMatch = (val) => {
     setConfirm(val);
-    if (!val) { setMatchStatus('none'); return; }
-    setMatchStatus(val === password ? 'ok' : 'err');
+    if (matchStatus === 'err' && val === password) {
+      setMatchStatus('ok');
+    }
+  };
+
+  const handleMatchBlur = () => {
+    if (!confirm) setMatchStatus('none');
+    else setMatchStatus(confirm === password ? 'ok' : 'err');
   };
 
   useEffect(() => { if (confirm) checkMatch(confirm); }, [password]);
@@ -79,90 +98,93 @@ const AccountForm = ({ onNext }) => {
 
   return (
     <div className="w-full animate-fade-up font-inter">
-      <div className="mb-6 p-10 rounded-[40px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
+      <div className="mb-5 px-7 py-5 rounded-[28px] bg-white border border-slate-100 relative overflow-hidden group shadow-[0_20px_50px_-20px_rgba(15,23,42,0.1)] transition-all hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.15)]">
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/5 blur-3xl pointer-events-none"></div>
-        <div className="text-[14px] font-bold uppercase tracking-widest mb-3 text-blue-600">Phase 01 · Authentication</div>
-        <h2 className="font-manrope text-4xl font-extrabold text-[#0F172A] mb-3 tracking-tight leading-none">CREATE ACCOUNT</h2>
-        <p className="text-[18px] text-slate-600 font-medium leading-relaxed">Secure your access to Sri Lanka's premier EV ecosystem.</p>
+        <div className="text-[15px] font-bold uppercase tracking-[4px] mb-4 text-blue-700 font-manrope">Phase 01 · Authentication</div>
+        <h2 className="font-manrope text-3xl font-extrabold text-[#0F172A] mb-3 tracking-tighter leading-tight uppercase">CREATE ACCOUNT</h2>
+        <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-transparent rounded-full mb-6"></div>
+        <p className="text-[16px] text-slate-600 font-medium leading-relaxed max-w-sm">Secure your access to Sri Lanka's premier EV ecosystem.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 pb-10">
+      <form onSubmit={handleSubmit} className="space-y-6 pb-8">
         {fbError && (
           <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[15px] font-bold animate-shake flex items-center gap-3 shadow-lg">
             <span className="text-lg">⚠</span> {fbError}
           </div>
         )}
 
-        {/* Email Input */}
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Institutional Email</label>
+        {/* Email */}
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Email Address</label>
           <div className="relative group">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">📧</div>
             <input
               type="email"
               placeholder="name@example.com"
-              className={`w-full py-5 px-6 pl-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none transition-all duration-300
+              className={`w-full py-4 px-6 pl-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${emailStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-[#E2E8F0] focus:border-blue-500 focus:bg-blue-600/5 shadow-sm'}
               `}
               value={email}
               onChange={(e) => checkEmail(e.target.value)}
+              onBlur={handleEmailBlur}
             />
           </div>
-          {emailStatus === 'err' && <p className="ml-2 text-[11px] font-bold text-rose-400">Invalid account format</p>}
+          {emailStatus === 'err' && <p className="ml-2 text-[12px] font-bold text-rose-500">Invalid email format</p>}
         </div>
 
-        {/* Password Input */}
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Security Password</label>
+        {/* Security Password - full width */}
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Security Password</label>
           <div className="relative group">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🔒</div>
             <input
               type={showPass ? 'text' : 'password'}
               placeholder="Minimum 8 characters"
-              className={`w-full py-5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none transition-all duration-300
+              className={`w-full py-4 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${passStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-[#E2E8F0] focus:border-blue-500 focus:bg-blue-600/5 shadow-sm'}
               `}
               value={password}
               onChange={(e) => checkStrength(e.target.value)}
+              onBlur={handlePassBlur}
             />
             <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity p-2">
               {showPass ? '🙈' : '👁'}
             </button>
           </div>
-          
           {password && (
-            <div className="px-2 mt-4">
-              <div className="flex gap-1.5 h-1.5 mb-2.5">
+            <div className="flex items-center gap-3 px-2 mt-2">
+              <div className="flex gap-1.5 h-1 flex-1">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? colors[strength] : 'bg-[#F8FAFC]'}`}></div>
+                  <div key={i} className={`flex-1 rounded-full transition-all duration-500 ${i <= strength ? colors[strength] : 'bg-[#E2E8F0]'}`}></div>
                 ))}
               </div>
-              <p className={`text-[10px] font-bold uppercase tracking-widest ${strength >= 3 ? 'text-blue-600' : 'text-slate-500'}`}>
-                {labels[strength]} Security Score
+              <p className={`text-[11px] font-bold uppercase tracking-widest shrink-0 ${strength >= 3 ? 'text-blue-700' : 'text-slate-400'}`}>
+                {labels[strength]}
               </p>
             </div>
           )}
         </div>
 
-        {/* Confirm Password Input */}
-        <div className="space-y-3">
-          <label className="block text-[11px] font-bold uppercase tracking-widest ml-2 text-slate-600">Verify Password</label>
+        {/* Verify Password - full width */}
+        <div className="space-y-2">
+          <label className="block text-[13px] font-bold uppercase tracking-widest ml-2 text-[#0F172A]">Verify Password</label>
           <div className="relative group">
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-30 group-focus-within:opacity-100 transition-opacity">🛡️</div>
             <input
               type={showConfirm ? 'text' : 'password'}
-              placeholder="Repeat Password"
-              className={`w-full py-5 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[15px] font-bold outline-none transition-all duration-300
+              placeholder="Repeat your password"
+              className={`w-full py-4 px-6 pl-14 pr-14 bg-[#F8FAFC] border-2 rounded-2xl text-[#0F172A] text-[17px] font-bold outline-none transition-all duration-300
                 ${matchStatus === 'err' ? 'border-rose-500/30 bg-rose-500/5' : 'border-[#E2E8F0] focus:border-blue-500 focus:bg-blue-600/5 shadow-sm'}
               `}
               value={confirm}
               onChange={(e) => checkMatch(e.target.value)}
+              onBlur={handleMatchBlur}
             />
             <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity p-2">
               {showConfirm ? '🙈' : '👁'}
             </button>
           </div>
-          {matchStatus === 'err' && confirm && <p className="ml-2 text-[11px] font-bold text-rose-400">Passwords do not match</p>}
+          {matchStatus === 'err' && confirm && <p className="ml-2 text-[12px] font-bold text-rose-500">Passwords do not match</p>}
         </div>
 
         {/* Action Button */}
@@ -170,7 +192,7 @@ const AccountForm = ({ onNext }) => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-5 rounded-2xl text-[14px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-br from-blue-500 to-blue-400 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/20 flex items-center justify-center gap-3 relative overflow-hidden group
+            className={`w-full py-5 rounded-2xl text-[16px] font-extrabold uppercase tracking-widest transition-all bg-gradient-to-br from-blue-600 to-blue-500 text-white hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-blue-500/30 flex items-center justify-center gap-3 relative overflow-hidden group
               ${loading ? 'opacity-70 cursor-not-allowed' : ''}
             `}
           >
@@ -260,3 +282,8 @@ const AccountForm = ({ onNext }) => {
 };
 
 export default AccountForm;
+
+
+
+
+

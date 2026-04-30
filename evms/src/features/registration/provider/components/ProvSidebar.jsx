@@ -23,7 +23,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
   const rgb = step === 2 ? "16,185,129" : step === 3 ? "245,158,11" : step === 4 ? "139,92,246" : "59,130,246";
 
   return (
-    <aside className="relative lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[520px] w-full overflow-hidden bg-white shrink-0 z-10 lg:z-20 border-r border-[#E2E8F0] selection:bg-blue-500/10 font-inter text-[#0F172A]">
+    <aside className="relative lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[400px] w-full overflow-hidden bg-white shrink-0 z-10 lg:z-20 border-r border-[#E2E8F0] selection:bg-blue-500/10 font-inter text-[#0F172A]">
       <div className="absolute inset-0">
         <img src="https://images.unsplash.com/photo-1486006920555-c77dcf18193c?auto=format&fit=crop&q=80&w=1200"
              className="absolute inset-0 w-full h-full object-cover opacity-10" alt="Provider BG"/>
@@ -33,7 +33,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
 
       <div className="absolute top-1/2 -right-20 w-[400px] h-[400px] rounded-full blur-[120px] pointer-events-none opacity-20" style={{ background: `radial-gradient(circle,rgba(${rgb},0.5) 0%,transparent 70%)` }}></div>
 
-      <div className="relative flex flex-col h-full px-10 py-12 lg:px-16 lg:py-20 justify-between items-center lg:items-start text-center lg:text-left min-h-[400px] lg:min-h-screen">
+      <div className="relative flex flex-col h-full px-8 py-10 lg:px-10 lg:py-14 justify-between items-center lg:items-start text-center lg:text-left min-h-[400px] lg:min-h-screen">
         
         {/* Brand System */}
         <div className="flex items-center gap-4 group cursor-pointer lg:scale-100 scale-90 mb-14 lg:mb-0">
@@ -54,7 +54,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
               {content.dot}
            </div>
            
-           <h1 className="font-manrope text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0F172A] mb-8 uppercase border-l-4 border-[#E2E8F0] pl-8 transition-all duration-700">
+           <h1 className="font-manrope text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight text-[#0F172A] mb-6 uppercase border-l-4 border-[#E2E8F0] pl-6 transition-all duration-700">
              {title ? title : content.title}
            </h1>
            
@@ -73,7 +73,7 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
                       <div className="w-1.5 h-1.5 rounded-full bg-current shadow-[0_0_8px_currentColor]"></div>
                       Profit Model X1
                    </div>
-                   <div className="space-y-4">
+                   <div className="space-y-3">
                       <div className="flex justify-between text-[14px]"><span className="text-[#64748B] font-medium">Revenue Target</span><span className="text-[#0F172A] font-bold font-manrope">LKR X / HR</span></div>
                       <div className="flex justify-between text-[14px]"><span className="text-[#64748B] font-medium">Network Levy</span><span className="text-red-400 font-bold font-manrope">- 15%</span></div>
                       <div className="h-px bg-[#F8FAFC] my-4"></div>
@@ -125,3 +125,8 @@ const ProvSidebar = ({ activeStep = 1, title, description }) => {
 };
 
 export default ProvSidebar;
+
+
+
+
+
